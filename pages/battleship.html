@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link href="style/style.css" rel="stylesheet" type="text/css" />
+  <title>Cahier des Charges - Bataille Navale</title>
+  <style>
+    body {
+      font-family: "Lucida Console", Courier, monospace !important;
+      background-color: #000 !important;
+      margin: 0;
+      padding: 0;
+      transition: background-color 0.3s, color 0.3s;
+    }
+
+    /* Mode clair */
+    body.light-theme {
+      background-color: #f0f0f0 !important;
+      color: #111;
+    }
+
+    body.light-theme p,
+    body.light-theme ul,
+    body.light-theme li {
+      color: #111;
+    }
+
+    body.light-theme a {
+      color: #0077b6;
+    }
+
+    body.light-theme section {
+      background-color: #fff;
+      box-shadow: 0 0 10px rgba(30, 210, 190, 0.4);
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+
+    h1,
+    h2,
+    h3 {
+      color: rgb(30, 210, 190);
+      margin-top: 2rem;
+    }
+
+    body.light-theme h1,
+    body.light-theme h2,
+    body.light-theme h3 {
+      color: #0077b6;
+    }
+
+    p,
+    ul,
+    li {
+      color: white;
+      line-height: 1.6;
+    }
+
+    a {
+      color: rgb(30, 210, 190);
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    .back-button {
+      display: inline-block;
+      background-color: rgb(30, 210, 190);
+      color: black;
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      font-weight: bold;
+      margin-bottom: 2rem;
+      transition: background-color 0.3s;
+    }
+
+    .back-button:hover {
+      background-color: rgb(20, 180, 170);
+    }
+
+    body.light-theme .back-button {
+      background-color: #0077b6;
+      color: #f0f0f0;
+    }
+
+    body.light-theme .back-button:hover {
+      background-color: #023e8a;
+      color: #fff;
+    }
+
+    section {
+      background-color: #1a1a1a;
+      padding: 1.5rem;
+      border-radius: 10px;
+      margin-bottom: 2rem;
+      box-shadow: 0 0 10px rgba(30, 210, 190, 0.2);
+    }
+
+    /* ------------------------------ */
+    /* Nouveau bouton switch moderne  */
+    /* ------------------------------ */
+
+    .theme-switch {
+      width: 60px;
+      height: 30px;
+      background: rgb(30, 210, 190);
+      border-radius: 30px;
+      border: none;
+      position: fixed;
+      top: 1rem;
+      right: 1rem;
+      cursor: pointer;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      overflow: hidden;
+      transition: background-color 0.3s;
+      z-index: 1000;
+    }
+
+    .theme-switch .icon {
+      width: 30px;
+      height: 30px;
+      font-size: 1.2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.3s;
+    }
+
+    /* Position par défaut : sombre */
+    .theme-switch .sun {
+      transform: translateX(0);
+    }
+
+    .theme-switch .moon {
+      transform: translateX(100%);
+    }
+
+    /* Mode clair */
+    body.light-theme .theme-switch {
+      background: #0077b6;
+    }
+
+    body.light-theme .theme-switch .sun {
+      transform: translateX(-100%);
+    }
+
+    body.light-theme .theme-switch .moon {
+      transform: translateX(0);
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Nouveau bouton theme -->
+  <button id="themeToggle" class="theme-switch">
+    <span class="icon sun">☀️</span>
+    <span class="icon moon">🌙</span>
+  </button>
+
+  <div class="container">
+    <a class="back-button" href="../main.html">← Retour à l'accueil</a>
+    <h1>Cahier des Charges - Projet Bataille Navale</h1>
+
+    <p><a href="https://github.com/RibotMael/BattleShip">GitHub - Battle Navale</a></p>
+
+    <section>
+      <h2><a href="SectionBattleShip/introduction.html">1. Introduction</a></h2>
+      <ul>
+        <li><strong>Contexte :</strong> Jeu de bataille navale (RQM Studio), jouable en ligne via web app, solo ou multijoueur (2 à ∞).</li>
+        <li><strong>Objectifs :</strong> Compatibilité Windows/macOS/Linux, interface simple, gestion via BDD (utilisateurs, parties, stats).</li>
+        <li><strong>Périmètre :</strong> Modes public/privé/Battle Royale, grille 10x10, modes "Français" (5 bateaux) et "Belge" (10 bateaux), cosmétiques déblocables, pas de matchmaking classé.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2><a href="SectionBattleShip/presentation.html">2. Présentation du Projet</a></h2>
+      <ul>
+        <li><strong>Fonctionnalités :</strong> Compte utilisateur, choix mode, création/rejoindre partie (mode/joueurs), placement bateaux, tours de 8s, fin (victoire/défaite/égalité), cosmétiques, profil modifiable, amis, règles, crédits.</li>
+        <li><strong>Public cible :</strong> Tout public (débutants, amateurs), solo/multi avec variantes modernes.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2><a href="SectionBattleShip/contraintes.html">4. Contraintes</a></h2>
+      <ul>
+        <li><strong>Délais :</strong> Durée estimée : 2 ans.</li>
+        <li><strong>Budget :</strong> Aucun budget initial.</li>
+        <li><strong>Ressources humaines :</strong> 3 développeurs Fullstack.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2><a href="SectionBattleShip/organisation.html">5. Organisation du Projet</a></h2>
+      <ul>
+        <li><strong>Méthodologie :</strong> Agile.</li>
+        <li><strong>Phases clés :</strong>
+          <ul>
+            <li>Rédaction et validation du cahier des charges</li>
+            <li>Mise en place des CRUD (utilisateurs, parties, statistiques)</li>
+            <li>Croquis et maquettage des interfaces</li>
+            <li>Développement de l’API et intégration des fonctionnalités</li>
+            <li>Programmation du jeu</li>
+            <li>Tests internes et bêta fermée</li>
+            <li>Déploiement officiel</li>
+          </ul>
+        </li>
+      </ul>
+    </section>
+
+    <section>
+      <h2><a href="SectionBattleShip/livrables.html">6. Livrables attendus</a></h2>
+      <ul>
+        <li>Code source propre, documenté et commenté</li>
+        <li>Application compilée avec installeur ou exécutable</li>
+        <li>Rapport de tests (fonctionnels, unitaires et sécurité)</li>
+        <li>Guide utilisateur clair et accessible</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2><a href="SectionBattleShip/criteres.html">7. Critères d'Acceptation</a></h2>
+      <ul>
+        <li>Code source documenté</li>
+        <li>Logiciel fonctionnel</li>
+        <li>Rapport de tests</li>
+        <li>Documentation technique complète</li>
+      </ul>
+    </section>
+  </div>
+
+  <script>
+    const themeToggle = document.getElementById('themeToggle');
+
+    // Applique le thème au chargement
+    window.addEventListener('DOMContentLoaded', () => {
+      const savedTheme = localStorage.getItem('theme') || 'dark';
+      if (savedTheme === 'light') {
+        document.body.classList.add('light-theme');
+      }
+    });
+
+    // Toggle au clic
+    themeToggle.addEventListener('click', () => {
+      const isLight = document.body.classList.toggle('light-theme');
+      localStorage.setItem('theme', isLight ? 'light' : 'dark');
+    });
+  </script>
+
+</body>
+</html>

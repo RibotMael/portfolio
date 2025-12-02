@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Portfolio - Ribot Maël</title>
+
+  <!-- Bootstrap -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+  <style>
+    :root {
+      --cyan: rgb(30, 210, 190);
+      --dark-bg: #000;
+      --dark-box: #1a1a1a;
+      --light-bg: #f0f0f0;
+      --light-box: #fff;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: var(--dark-bg);
+      font-family: "Lucida Console", monospace;
+      color: white;
+      overflow-x: hidden;
+      transition: background-color 0.4s, color 0.4s;
+    }
+
+    body.light-theme {
+      background-color: var(--light-bg);
+      color: #111;
+    }
+
+    a {
+      text-decoration: none;
+      color: var(--cyan);
+      transition: 0.3s;
+    }
+
+    a:hover { opacity: 0.7; }
+
+    /* HERO */
+    .hero {
+      height: 60vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+      text-align: center;
+      padding: 40px;
+      animation: fadeIn 1.2s ease forwards;
+    }
+
+    .hero-content h1 .intro-text {
+      color: white;
+    }
+
+    body.light-theme .hero-content h1 .intro-text { color: #111; }
+
+    .hero-content h1 a { color: var(--cyan); }
+    body.light-theme .hero-content h1 a { color: #0077b6; }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.97); }
+      to   { opacity: 1; transform: scale(1); }
+    }
+
+    #cursor-bg {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: -1;
+      transition: background 0.15s ease-out;
+    }
+
+    /* THEME SWITCH */
+    .theme-switch {
+      width: 60px;
+      height: 30px;
+      background: var(--cyan);
+      border-radius: 30px;
+      border: none;
+      position: fixed;
+      top: 1rem;
+      right: 1rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      overflow: hidden;
+      padding: 0;
+      z-index: 1000;
+      transition: background-color 0.3s;
+    }
+
+    .theme-switch .icon {
+      width: 30px;
+      height: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      transition: transform 0.3s;
+    }
+
+    .theme-switch .sun { transform: translateX(0); }
+    .theme-switch .moon { transform: translateX(100%); }
+
+    body.light-theme .theme-switch { background: #0077b6; }
+    body.light-theme .theme-switch .sun { transform: translateX(-100%); }
+    body.light-theme .theme-switch .moon { transform: translateX(0); }
+
+    /* SECTIONS */
+    .section-wrapper {
+      margin-bottom: 1.5rem;
+      background: var(--dark-box);
+      border-radius: 12px;
+      padding: 0;
+      overflow: hidden;
+      transition: background 0.4s, box-shadow 0.4s;
+      box-shadow: 0 0 10px rgba(30, 210, 190, 0.2);
+    }
+
+    body.light-theme .section-wrapper {
+      background: var(--light-box);
+      box-shadow: 0 0 10px rgba(30, 210, 190, 0.4);
+    }
+
+    .section-header {
+      padding: 14px 20px;
+      cursor: pointer;
+      background: rgba(255,255,255,0.03);
+      transition: 0.3s;
+    }
+
+    .section-header:hover { background: rgba(255,255,255,0.05); }
+    .section-header h3 { margin: 0; color: var(--cyan); }
+    body.light-theme .section-header h3 { color: #0077b6; }
+
+    .section-content {
+      max-height: 0;
+      overflow: hidden;
+      padding: 0 20px;
+      transition: max-height 0.5s ease, padding 0.3s ease;
+    }
+
+    .section-content.open { padding: 20px; }
+
+    /* COMPÉTENCES – cartes flip */
+    .skills-carousel {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+      justify-content: center;
+      padding: 20px 0;
+    }
+
+    .skill-card {
+      width: 160px;
+      height: 160px;
+      background: transparent;
+      border-radius: 12px;
+      perspective: 1000px;
+    }
+
+    .card-inner {
+      width: 100%;
+      height: 100%;
+      position: relative;
+      transition: transform 0.8s;
+      transform-style: preserve-3d;
+      cursor: pointer;
+    }
+
+    .skill-card:hover .card-inner { transform: rotateY(180deg); }
+
+    .card-front, .card-back {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      font-weight: bold;
+      backface-visibility: hidden;
+      background: var(--dark-box);
+      box-shadow: 0 0 10px rgba(30, 210, 190, 0.3);
+      transition: background 0.3s, color 0.3s;
+    }
+
+    body.light-theme .card-front,
+    body.light-theme .card-back { background: var(--light-box); }
+
+    .card-back { transform: rotateY(180deg); }
+
+    /* FORMATIONS – frise chronologique */
+    .timeline {
+      display: flex;
+      justify-content: space-between;
+      position: relative;
+      margin: 40px 0;
+      padding: 20px 0;
+    }
+
+    .timeline::before {
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: var(--cyan);
+      transform: translateY(-50%);
+      border-radius: 2px;
+    }
+
+    .timeline-item {
+      position: relative;
+      flex: 1;
+      text-align: center;
+    }
+
+    .timeline-item::before {
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 16px;
+      height: 16px;
+      background: var(--cyan);
+      border-radius: 50%;
+      z-index: 1;
+      transition: transform 0.3s;
+    }
+
+    .timeline-item:hover::before {
+      transform: translate(-50%, -50%) scale(1.3);
+    }
+
+    .timeline-content {
+      position: relative;
+      margin-top: 30px;
+    }
+
+    .timeline-date {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 20px;
+      color: var(--cyan);
+    }
+
+    body.light-theme .timeline::before,
+    body.light-theme .timeline-item::before,
+    body.light-theme .timeline-date { color: #0077b6; }
+
+    footer {
+      background: var(--dark-box);
+      padding: 40px 20px;
+      margin-top: 40px;
+      transition: 0.4s;
+    }
+
+    body.light-theme footer { background: var(--light-box); }
+
+
+    /* Bouton CV - thème sombre */
+    .cv-btn {
+      border: 2px solid var(--cyan);
+      color: var(--cyan);
+      transition: 0.3s;
+    }
+
+    .cv-btn:hover {
+      background: var(--cyan);
+      color: black;
+    }
+
+    /* Bouton CV - thème clair */
+    body.light-theme .cv-btn {
+      border-color: #0077b6;
+      color: #0077b6;
+    }
+
+    body.light-theme .cv-btn:hover {
+      background: #0077b6;
+      color: white;
+    }
+
+  </style>
+</head>
+
+<body>
+<div id="cursor-bg"></div>
+
+<header class="hero">
+  <button id="themeToggle" class="theme-switch">
+    <span class="icon sun">☀️</span>
+    <span class="icon moon">🌙</span>
+  </button>
+
+  <div class="hero-content">
+    <h1>
+      <span class="intro-text">Bonjour, je suis</span>
+      <a href="https://fr.linkedin.com/in/ma%C3%ABl-ribot-80b9b7257" target="_blank">Ribot Maël</a>
+    </h1>
+    <p class="h5 mt-3"
+       data-rotate='["Développeur junior de 21 ans, motivé et prêt à relever de nouveaux défis."]'
+       data-period="2000"
+       id="typing"></p>
+  </div>
+</header>
+
+<main class="container my-5">
+
+  <!-- FORMATIONS -->
+  <div class="section-wrapper">
+    <section class="section-header" onclick="toggleSection(this)">
+      <h3>📁 Formations</h3>
+    </section>
+    <div class="section-content">
+      <div class="timeline">
+        <div class="timeline-item">
+          <div class="timeline-content">
+            <span class="timeline-date">2022</span>
+            <p>Baccalauréat (Maths, NSI)</p>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-content">
+            <span class="timeline-date">2022 - 2023</span>
+            <p>Prépa NUM'SUP – CRÉATIVE</p>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-content">
+            <span class="timeline-date">2024 - 2026</span>
+            <p>BTS SIO SLAM – E2SE Caen (Alternance DGFIP)</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- EXPERIENCES -->
+  <div class="section-wrapper">
+    <section class="section-header" onclick="toggleSection(this)">
+      <h3>📁 Expériences professionnelles</h3>
+    </section>
+    <div class="section-content">
+      <h4>Stages</h4>
+      <ul>
+        <li>Développeur web – Pack Digital (2023)</li>
+        <li>Webdesigner – Pack Digital (2022)</li>
+        <li>WEBEL (2018)</li>
+      </ul>
+      <h4>Emplois saisonniers</h4>
+      <ul>
+        <li>Avril – Juillet 2024 (CapOcean + La Poste)</li>
+        <li>Octobre – Janvier 2023 (La Poste)</li>
+        <li>Juillet – Août 2023 (La Poste)</li>
+        <li>Août 2022 (Vendange)</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- COMPETENCES -->
+  <div class="section-wrapper">
+    <section class="section-header" onclick="toggleSection(this)">
+      <h3>📁 Compétences</h3>
+    </section>
+    <div class="section-content">
+      <div class="skills-carousel">
+        <div class="skill-card"><div class="card-inner"><div class="card-front">HTML</div><div class="card-back">CSS</div></div></div>
+        <div class="skill-card"><div class="card-inner"><div class="card-front">JavaScript</div><div class="card-back">Vue.js</div></div></div>
+        <div class="skill-card"><div class="card-inner"><div class="card-front">SQL</div><div class="card-back">PhpMyAdmin</div></div></div>
+        <div class="skill-card"><div class="card-inner"><div class="card-front">Java</div><div class="card-back">POO</div></div></div>
+        <div class="skill-card"><div class="card-inner"><div class="card-front">GitHub</div><div class="card-back">GitHub</div></div></div>
+        <div class="skill-card"><div class="card-inner"><div class="card-front">Modélisation</div><div class="card-back">UML, MLD</div></div></div>
+        <div class="skill-card"><div class="card-inner"><div class="card-front">VM</div><div class="card-back">Oracle/VMware</div></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PROJETS -->
+  <div class="section-wrapper">
+    <section class="section-header" onclick="toggleSection(this)">
+      <h3>📁 Projets</h3>
+    </section>
+    <div class="section-content text-center">
+      <h3><a href="https://github.com/RibotMael" target="_blank">Mon GitHub</a></h3>
+      <p><a href="pages/battleship.html">Battleship</a></p>
+      <p><a href="pages/JavaBataille.html">Jeu de bataille (JAVA)</a></p>
+    </div>
+  </div>
+
+  <!-- HOBBIES -->
+  <div class="section-wrapper">
+    <section class="section-header" onclick="toggleSection(this)">
+      <h3>📁 Hobbies</h3>
+    </section>
+    <div class="section-content">
+      <p>
+        Passionné par les <strong class="cyan">mangas</strong> et <strong class="cyan">animes</strong>, je pratique le 
+        <strong class="cyan">basketball</strong> après avoir testé de nombreux sports.  
+        J’aime également les <strong class="cyan">jeux vidéo</strong> en solo ou multijoueurs.  
+        Amateur de sensations fortes, j’ai expérimenté la <strong class="cyan">parapente</strong>, le 
+        <strong class="cyan">saut en parachute</strong> et récemment un <strong class="cyan">saut à l’élastique</strong> !  
+        En parallèle, j’adore regarder des <strong class="cyan">films</strong> et <strong class="cyan">séries</strong>, et 
+        écouter de la <strong class="cyan">musique</strong> pendant que je travaille.
+      </p>
+    </div>
+  </div>
+<!--
+  <a href="file:///C:/Users/ribot/Downloads/CV%20RIBOT%20Maël.pdf" class="cv-btn btn" download>
+    Télécharger mon CV
+  </a>
+-->
+</main>
+
+<footer class="text-center">
+  <h3>Contact</h3>
+  <p><a href="tel:0632542419">06.32.54.24.19</a></p>
+  <p><a href="mailto:ribotmael18@gmail.com">ribotmael18@gmail.com</a></p>
+</footer>
+
+<script>
+  // Thème
+  const themeToggle = document.getElementById("themeToggle");
+  window.addEventListener("DOMContentLoaded", () => {
+    if (localStorage.getItem("theme") === "light") {
+      document.body.classList.add("light-theme");
+    }
+  });
+  themeToggle.addEventListener("click", () => {
+    const isLight = document.body.classList.toggle("light-theme");
+    localStorage.setItem("theme", isLight ? "light" : "dark");
+  });
+
+  // Curseur dynamique
+  const cursorBg = document.getElementById("cursor-bg");
+  document.addEventListener("mousemove", (e) => {
+    const x = (e.clientX / window.innerWidth) * 100;
+    const y = (e.clientY / window.innerHeight) * 100;
+    cursorBg.style.background = `radial-gradient(circle at ${x}% ${y}%, ${
+      document.body.classList.contains("light-theme") ? "rgba(0,150,255,0.4)" : "rgba(0,255,255,0.15)"
+    }, transparent 60%)`;
+  });
+
+  // Typing effect
+  function typeEffect() {
+    const el = document.getElementById("typing");
+    const phrases = JSON.parse(el.getAttribute("data-rotate"));
+    const txt = phrases[0];
+    let idx = 0;
+    function type() {
+      el.textContent = txt.substring(0, idx);
+      idx++;
+      if (idx <= txt.length) setTimeout(type, 30);
+    }
+    type();
+  }
+  typeEffect();
+
+  // Toggle section
+  function toggleSection(header) {
+    const content = header.nextElementSibling;
+    const isOpen = content.classList.contains("open");
+
+    document.querySelectorAll(".section-content.open").forEach(el => {
+      if (el !== content) {
+        el.classList.remove("open");
+        el.style.maxHeight = "0";
+      }
+    });
+
+    if (isOpen) {
+      content.classList.remove("open");
+      content.style.maxHeight = "0";
+    } else {
+      content.classList.add("open");
+      content.style.maxHeight = content.scrollHeight + 20 + "px";
+    }
+  }
+</script>
+
+</body>
+</html>
