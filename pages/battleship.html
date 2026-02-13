@@ -1,261 +1,444 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link href="style/style.css" rel="stylesheet" type="text/css" />
-  <title>Cahier des Charges - Bataille Navale</title>
-  <style>
-    body {
-      font-family: "Lucida Console", Courier, monospace !important;
-      background-color: #000 !important;
-      margin: 0;
-      padding: 0;
-      transition: background-color 0.3s, color 0.3s;
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Projet Battleship – BTS SIO</title>
 
-    /* Mode clair */
-    body.light-theme {
-      background-color: #f0f0f0 !important;
-      color: #111;
-    }
+<!-- Import Polices Google (Look Militaire & Tech) -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Black+Ops+One&family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
 
-    body.light-theme p,
-    body.light-theme ul,
-    body.light-theme li {
-      color: #111;
-    }
+<style>
+:root {
+  --primary-color: #00f2ff; /* Cyan Néon */
+  --secondary-color: #0077cc; /* Bleu Océan */
+  --text-color: #ffffff;
+  --glass-bg: rgba(0, 15, 30, 0.9); /* Fond très opaque pour la lisibilité */
+  --glass-border: 1px solid rgba(0, 242, 255, 0.3);
+}
 
-    body.light-theme a {
-      color: #0077b6;
-    }
+html, body {
+  margin: 0;
+  padding: 0;
+  min-height: 100%;
+  font-family: 'Rajdhani', sans-serif;
+  overflow-x: hidden;
+  cursor: crosshair;
+}
 
-    body.light-theme section {
-      background-color: #fff;
-      box-shadow: 0 0 10px rgba(30, 210, 190, 0.4);
-    }
+/* ===== FOND D'ÉCRAN FIXE ===== */
+body {
+  background: url("../images/BackGroundAccueil.png") no-repeat center center fixed;
+  background-size: cover;
+  color: var(--text-color);
+  position: relative;
+}
 
-    .container {
-      max-width: 900px;
-      margin: 0 auto;
-      padding: 2rem;
-    }
+/* ===== VIGNETTE SOMBRE FIXE (Correction du bug de scroll) ===== */
+body::before {
+  content: "";
+  position: fixed;
+  top: 0; 
+  left: 0; 
+  width: 100%; 
+  height: 100%;
+  background: radial-gradient(circle, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.9) 100%);
+  z-index: -1;
+  pointer-events: none;
+}
 
-    h1,
-    h2,
-    h3 {
-      color: rgb(30, 210, 190);
-      margin-top: 2rem;
-    }
+/* ===== BARRE SUPÉRIEURE ===== */
+.top-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem 2rem;
+  z-index: 100;
+  position: relative;
+}
 
-    body.light-theme h1,
-    body.light-theme h2,
-    body.light-theme h3 {
-      color: #0077b6;
-    }
+.hud-btn {
+  background: rgba(0, 0, 0, 0.7);
+  border: 1px solid var(--secondary-color);
+  padding: 0.5rem 1.2rem;
+  border-radius: 4px;
+  color: var(--primary-color);
+  font-family: 'Black Ops One', cursive;
+  letter-spacing: 1px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  text-shadow: 0 0 5px rgba(0,0,0,1);
+}
 
-    p,
-    ul,
-    li {
-      color: white;
-      line-height: 1.6;
-    }
+.hud-btn:hover {
+  background: var(--secondary-color);
+  color: white;
+  box-shadow: 0 0 15px var(--primary-color);
+}
 
-    a {
-      color: rgb(30, 210, 190);
-      text-decoration: none;
-    }
+/* ===== INFOS UTILISATEUR ===== */
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  cursor: pointer;
+  padding: 5px 15px;
+  border-radius: 30px;
+  border: 1px solid transparent;
+  transition: 0.3s;
+  background: rgba(0,0,0,0.6);
+}
 
-    a:hover {
-      text-decoration: underline;
-    }
+.user-info:hover {
+  border-color: var(--primary-color);
+  background: rgba(0,0,0,0.9);
+}
 
-    .back-button {
-      display: inline-block;
-      background-color: rgb(30, 210, 190);
-      color: black;
-      padding: 0.5rem 1rem;
-      border-radius: 8px;
-      font-weight: bold;
-      margin-bottom: 2rem;
-      transition: background-color 0.3s;
-    }
+.user-text {
+  font-weight: 700;
+  font-size: 1.2rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  text-shadow: 1px 1px 2px black;
+}
 
-    .back-button:hover {
-      background-color: rgb(20, 180, 170);
-    }
+.avatar {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  border: 2px solid var(--primary-color);
+  box-shadow: 0 0 10px var(--primary-color);
+  object-fit: cover;
+}
 
-    body.light-theme .back-button {
-      background-color: #0077b6;
-      color: #f0f0f0;
-    }
+/* ===== MENU DÉROULANT ===== */
+.user-dropdown {
+  position: absolute;
+  top: 80px;
+  right: 2rem;
+  background: var(--glass-bg);
+  backdrop-filter: blur(12px);
+  border: var(--glass-border);
+  border-radius: 8px;
+  overflow: hidden;
+  display: none;
+  flex-direction: column;
+  min-width: 180px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.9);
+  z-index: 1000;
+}
 
-    body.light-theme .back-button:hover {
-      background-color: #023e8a;
-      color: #fff;
-    }
+.user-dropdown button {
+  background: none;
+  border: none;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+  color: white;
+  padding: 15px;
+  text-align: left;
+  cursor: pointer;
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 1.1rem;
+  font-weight: bold;
+  transition: 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
 
-    section {
-      background-color: #1a1a1a;
-      padding: 1.5rem;
-      border-radius: 10px;
-      margin-bottom: 2rem;
-      box-shadow: 0 0 10px rgba(30, 210, 190, 0.2);
-    }
+.user-dropdown button:hover {
+  background: rgba(255, 50, 50, 0.2);
+  color: #ff5555;
+}
 
-    /* ------------------------------ */
-    /* Nouveau bouton switch moderne  */
-    /* ------------------------------ */
+/* ===== MENU CENTRAL ===== */
+.menu-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: calc(100vh - 100px);
+}
 
-    .theme-switch {
-      width: 60px;
-      height: 30px;
-      background: rgb(30, 210, 190);
-      border-radius: 30px;
-      border: none;
-      position: fixed;
-      top: 1rem;
-      right: 1rem;
-      cursor: pointer;
-      padding: 0;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      overflow: hidden;
-      transition: background-color 0.3s;
-      z-index: 1000;
-    }
+.menu-buttons {
+  text-align: center;
+  margin-top: 20px;
+  animation: fadeIn 1s ease;
+  position: relative;
+  z-index: 10;
+  width: 100%;
+}
 
-    .theme-switch .icon {
-      width: 30px;
-      height: 30px;
-      font-size: 1.2rem;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: transform 0.3s;
-    }
+.menu-logo {
+  width: 900px;
+  max-width: 85%;
+  margin-bottom: 30px;
+  filter: drop-shadow(0 0 25px rgba(0, 242, 255, 0.4));
+  animation: floatLogo 6s ease-in-out infinite;
+}
 
-    /* Position par défaut : sombre */
-    .theme-switch .sun {
-      transform: translateX(0);
-    }
+/* ===== BOUTONS PRINCIPAUX ===== */
+.main-btn {
+  width: 280px;
+  padding: 1.2rem;
+  margin: 15px auto;
+  border: none;
+  background: rgba(0, 20, 40, 0.85); 
+  border: 1px solid rgba(0, 242, 255, 0.3);
+  border-left: 4px solid var(--secondary-color);
+  border-right: 4px solid var(--secondary-color);
+  color: #ffffff;
+  font-family: 'Black Ops One', cursive;
+  font-size: 1.4rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.3s;
+  position: relative;
+  overflow: hidden;
+  text-shadow: 2px 2px 4px #000000; 
+}
 
-    .theme-switch .moon {
-      transform: translateX(100%);
-    }
+.main-btn::before {
+  content: '';
+  position: absolute;
+  top: 0; left: -100%; width: 100%; height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
+  transition: 0.5s;
+}
 
-    /* Mode clair */
-    body.light-theme .theme-switch {
-      background: #0077b6;
-    }
+.main-btn:hover::before {
+  left: 100%;
+}
 
-    body.light-theme .theme-switch .sun {
-      transform: translateX(-100%);
-    }
+.main-btn:hover {
+  background: rgba(0, 119, 204, 0.9);
+  border-color: var(--primary-color);
+  box-shadow: 0 0 20px rgba(0, 242, 255, 0.5);
+  transform: scale(1.05);
+}
 
-    body.light-theme .theme-switch .moon {
-      transform: translateX(0);
-    }
-  </style>
+.btn-green { border-color: #1abc9c; border-left-color: #1abc9c; border-right-color: #1abc9c; }
+.btn-green:hover { background: rgba(26, 188, 156, 0.9); }
+
+.btn-red { border-color: #e74c3c; border-left-color: #e74c3c; border-right-color: #e74c3c; }
+.btn-red:hover { background: rgba(231, 76, 60, 0.9); }
+
+/* ===== SECTIONS DE CONTENU ===== */
+.section {
+  display: none;
+  max-width: 800px; /* Plus large pour accueillir les nouveaux textes */
+  margin: 40px auto 80px auto;
+  background: var(--glass-bg);
+  backdrop-filter: blur(10px);
+  padding: 40px;
+  border: 1px solid var(--primary-color);
+  border-radius: 4px;
+  box-shadow: 0 0 40px rgba(0, 0, 0, 0.9);
+  animation: hologramIn 0.4s ease forwards;
+  text-align: justify; /* Texte justifié pour les longs paragraphes */
+  position: relative;
+  z-index: 20;
+}
+
+.section h3 {
+  font-family: 'Black Ops One', cursive;
+  color: var(--primary-color);
+  font-size: 2rem;
+  text-align: center;
+  text-transform: uppercase;
+  border-bottom: 1px solid rgba(0, 242, 255, 0.3);
+  padding-bottom: 15px;
+  margin-bottom: 25px;
+}
+
+.section p, .section li {
+  font-size: 1.15rem;
+  line-height: 1.6;
+  color: #e0f7ff;
+  margin-bottom: 15px;
+}
+
+.section strong {
+  color: var(--primary-color);
+}
+
+.section ul {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* Affichage en deux colonnes pour les listes */
+  gap: 10px;
+}
+
+.section li {
+  margin: 0;
+  padding: 10px;
+  background: rgba(255,255,255,0.05);
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+}
+
+.section li::before {
+  content: '⚓';
+  margin-right: 10px;
+  color: var(--primary-color);
+}
+
+/* ===== ANIMATIONS ===== */
+@keyframes fadeIn {
+  from {opacity:0; transform: translateY(20px);}
+  to {opacity:1; transform: translateY(0);}
+}
+
+@keyframes floatLogo {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-15px); }
+  100% { transform: translateY(0px); }
+}
+
+@keyframes hologramIn {
+  0% { opacity: 0; transform: scale(0.98); filter: blur(5px); }
+  100% { opacity: 1; transform: scale(1); filter: blur(0); }
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+  .section ul { grid-template-columns: 1fr; }
+  .section { width: 90%; padding: 20px; }
+}
+</style>
 </head>
 
 <body>
 
-  <!-- Nouveau bouton theme -->
-  <button id="themeToggle" class="theme-switch">
-    <span class="icon sun">☀️</span>
-    <span class="icon moon">🌙</span>
-  </button>
-
-  <div class="container">
-    <a class="back-button" href="../index.html">← Retour à l'accueil</a>
-    <h1>Cahier des Charges - Projet Bataille Navale</h1>
-
-    <p><a href="https://github.com/RibotMael/BattleShip">GitHub - Battle Navale</a></p>
-
-    <section>
-      <h2><a href="SectionBattleShip/introduction.html">1. Introduction</a></h2>
-      <ul>
-        <li><strong>Contexte :</strong> Jeu de bataille navale (RQM Studio), jouable en ligne via web app, solo ou multijoueur (2 à ∞).</li>
-        <li><strong>Objectifs :</strong> Compatibilité Windows/macOS/Linux, interface simple, gestion via BDD (utilisateurs, parties, stats).</li>
-        <li><strong>Périmètre :</strong> Modes public/privé/Battle Royale, grille 10x10, modes "Français" (5 bateaux) et "Belge" (10 bateaux), cosmétiques déblocables, pas de matchmaking classé.</li>
-      </ul>
-    </section>
-
-    <section>
-      <h2><a href="SectionBattleShip/presentation.html">2. Présentation du Projet</a></h2>
-      <ul>
-        <li><strong>Fonctionnalités :</strong> Compte utilisateur, choix mode, création/rejoindre partie (mode/joueurs), placement bateaux, tours de 8s, fin (victoire/défaite/égalité), cosmétiques, profil modifiable, amis, règles, crédits.</li>
-        <li><strong>Public cible :</strong> Tout public (débutants, amateurs), solo/multi avec variantes modernes.</li>
-      </ul>
-    </section>
-
-    <section>
-      <h2><a href="SectionBattleShip/contraintes.html">4. Contraintes</a></h2>
-      <ul>
-        <li><strong>Délais :</strong> Durée estimée : 2 ans.</li>
-        <li><strong>Budget :</strong> Aucun budget initial.</li>
-        <li><strong>Ressources humaines :</strong> 3 développeurs Fullstack.</li>
-      </ul>
-    </section>
-
-    <section>
-      <h2><a href="SectionBattleShip/organisation.html">5. Organisation du Projet</a></h2>
-      <ul>
-        <li><strong>Méthodologie :</strong> Agile.</li>
-        <li><strong>Phases clés :</strong>
-          <ul>
-            <li>Rédaction et validation du cahier des charges</li>
-            <li>Mise en place des CRUD (utilisateurs, parties, statistiques)</li>
-            <li>Croquis et maquettage des interfaces</li>
-            <li>Développement de l’API et intégration des fonctionnalités</li>
-            <li>Programmation du jeu</li>
-            <li>Tests internes et bêta fermée</li>
-            <li>Déploiement officiel</li>
-          </ul>
-        </li>
-      </ul>
-    </section>
-
-    <section>
-      <h2><a href="SectionBattleShip/livrables.html">6. Livrables attendus</a></h2>
-      <ul>
-        <li>Code source propre, documenté et commenté</li>
-        <li>Application compilée avec installeur ou exécutable</li>
-        <li>Rapport de tests (fonctionnels, unitaires et sécurité)</li>
-        <li>Guide utilisateur clair et accessible</li>
-      </ul>
-    </section>
-
-    <section>
-      <h2><a href="SectionBattleShip/criteres.html">7. Critères d'Acceptation</a></h2>
-      <ul>
-        <li>Code source documenté</li>
-        <li>Logiciel fonctionnel</li>
-        <li>Rapport de tests</li>
-        <li>Documentation technique complète</li>
-      </ul>
-    </section>
+<header class="top-bar">
+  <div>
+    <button class="hud-btn" onclick="showSection('teamSection')">👥 RQM Studio</button>
   </div>
 
-  <script>
-    const themeToggle = document.getElementById('themeToggle');
+  <div class="user-info" onclick="toggleUserMenu()">
+    <img src="../images/ppHomme.png" class="avatar" alt="Avatar">
+    <span class="user-text">Projet BTS SIO</span>
 
-    // Applique le thème au chargement
-    window.addEventListener('DOMContentLoaded', () => {
-      const savedTheme = localStorage.getItem('theme') || 'dark';
-      if (savedTheme === 'light') {
-        document.body.classList.add('light-theme');
-      }
-    });
+    <div class="user-dropdown" id="userMenu">
+      <button onclick="quitPage()">⚠️ Déconnexion</button>
+    </div>
+  </div>
+</header>
 
-    // Toggle au clic
-    themeToggle.addEventListener('click', () => {
-      const isLight = document.body.classList.toggle('light-theme');
-      localStorage.setItem('theme', isLight ? 'light' : 'dark');
-    });
-  </script>
+<div class="menu-container">
+  
+  <div class="menu-buttons">
+    <img src="../images/BATTLESHIPLOGO.png" class="menu-logo" alt="Logo Battleship">
+
+    <div id="mainMenu">
+      <button class="main-btn btn-green" onclick="showPlayOptions()">DÉCOUVRIR</button>
+      <button class="main-btn" onclick="showSection('competencesSection')">TECH & SKILLS</button>
+    </div>
+
+    <div id="playOptions" style="display:none;">
+      <button class="main-btn btn-green" onclick="showSection('presentationSection')">PROJET</button>
+      <button class="main-btn" onclick="showSection('conditionsSection')">DÉTAILS</button>
+      <button class="main-btn btn-red" onclick="goBack()">RETOUR</button>
+    </div>
+  </div>
+
+  <!-- Sections -->
+  <div id="presentationSection" class="section">
+    <h3>Présentation du projet</h3>
+    <p>Le projet <strong>Bataille Navale</strong> est une création de <strong>RQM Studio</strong>, une équipe de trois développeurs passionnés. L’objectif est de moderniser ce classique pour proposer une expérience multijoueur riche, accessible sur tout type d’ordinateur et prochainement sur mobiles.</p>
+    <p>Le jeu propose des modes variés : du <strong>1v1 classique</strong> aux combats en <strong>équipe (2v2, 3v3, 4v4)</strong>, jusqu'au mode <strong>Battle Royale</strong> réunissant plusieurs flottes simultanément.</p>
+    <p>Le système de jeu intègre deux variantes de règles : la <strong>version française</strong> (5 bateaux) et la <strong>version belge</strong> (10 bateaux), avec un rythme dynamique imposant 8 secondes de réflexion par tour.</p>
+  </div>
+
+  <div id="competencesSection" class="section">
+    <h3>Stack Technique & Fonctions</h3>
+    <p>L'architecture repose sur une séparation claire entre l'interface utilisateur et la logique métier :</p>
+    <ul>
+      <li><strong>Vue.js</strong> pour le Front-end</li>
+      <li><strong>Node.js & Express</strong> pour l'API</li>
+      <li><strong>Base MySQL</strong> centralisée</li>
+      <li><strong>API REST</strong> structurée</li>
+      <li><strong>Sécurité JWT</strong> & Chiffrement</li>
+      <li><strong>Responsive Design</strong></li>
+      <li><strong>GitHub</strong> (Collaboratif)</li>
+      <li><strong>Méthode Cycle en V</strong></li>
+    </ul>
+    <p style="margin-top:20px; text-align:center">Le projet est structuré en deux dépôts : <strong>Battleship-ui</strong> et <strong>Battleship-api</strong>.</p>
+  </div>
+
+  <div id="conditionsSection" class="section">
+    <h3>Périmètre & Objectifs</h3>
+    <p>Le projet vise à offrir une plateforme stable avec une interface intuitive. Les joueurs peuvent gérer leur profil, une liste d'amis et débloquer des <strong>récompenses cosmétiques</strong>.</p>
+    <ul>
+      <li>Parties publiques & privées</li>
+      <li>Système d'amis & social</li>
+      <li>Chiffrement des données</li>
+      <li>Conformité RGPD</li>
+      <li>Multiplateforme (Win/Lin/Mac)</li>
+      <li>Éléments cosmétiques</li>
+      <li>Mode Battle Royale</li>
+      <li>Temps de jeu limité (8s)</li>
+    </ul>
+    <p style="margin-top:20px;">Développement interne sur une durée estimée à <strong>2 ans</strong>, incluant des phases de bêta fermée et de tests intensifs avant le déploiement officiel.</p>
+  </div>
+
+  <div id="teamSection" class="section">
+    <h3>Équipe RQM Studio</h3>
+    <p>L’ensemble du développement est réalisé en interne par les trois membres fondateurs de <strong>RQM Studio</strong> dans le cadre du cursus <strong>BTS SIO</strong>, chacun utilisant un langage différent.</p>
+    <p>Le public cible est large : des joueurs occasionnels cherchant une partie rapide aux fans de stratégie désirant une version modernisée avec un aspect compétitif.</p>
+  </div>
+
+</div>
+
+<script>
+function showPlayOptions() {
+  document.getElementById("mainMenu").style.display = "none";
+  document.getElementById("playOptions").style.display = "block";
+}
+
+function goBack() {
+  document.getElementById("playOptions").style.display = "none";
+  document.getElementById("mainMenu").style.display = "block";
+  hideAllSections();
+}
+
+function showSection(id) {
+  const section = document.getElementById(id);
+  const isAlreadyVisible = (section.style.display === "block");
+  hideAllSections();
+  if (!isAlreadyVisible) {
+    section.style.display = "block";
+    setTimeout(() => {
+      section.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }, 50);
+  }
+}
+
+function hideAllSections() {
+  document.querySelectorAll(".section").forEach(s => s.style.display = "none");
+}
+
+function toggleUserMenu() {
+  const menu = document.getElementById("userMenu");
+  menu.style.display = menu.style.display === "flex" ? "none" : "flex";
+}
+
+document.addEventListener('click', function(event) {
+  const userInfo = document.querySelector('.user-info');
+  const menu = document.getElementById("userMenu");
+  if (!userInfo.contains(event.target)) {
+    menu.style.display = "none";
+  }
+});
+
+function quitPage() {
+    window.location.href = "../index.html";
+}
+</script>
 
 </body>
 </html>

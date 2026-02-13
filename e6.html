@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Projets – Ribot Maël</title>
+
+    <!-- Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --cyan: #1ed2be;
+            --dark-bg: #0f172a;
+            --dark-card: #1e293b;
+            --light-bg: #f8fafc;
+            --light-card: #ffffff;
+            --text-main: #f1f5f9;
+            --text-muted: #94a3b8;
+            --nav-bg: rgba(15, 23, 42, 0.9);
+            --burger-filter: invert(1);
+            --transition: all 0.3s ease;
+        }
+
+        body.light-theme {
+            --dark-bg: var(--light-bg);
+            --dark-card: var(--light-card);
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --nav-bg: rgba(248, 250, 252, 0.9);
+            --burger-filter: invert(0);
+        }
+
+        body {
+            margin: 0;
+            padding-top: 100px;
+            background-color: var(--dark-bg);
+            font-family: 'Inter', sans-serif;
+            color: var(--text-main);
+            transition: var(--transition);
+            overflow-x: hidden;
+        }
+
+        code, .mono {
+            font-family: 'Fira Code', monospace;
+        }
+
+        .custom-muted {
+            color: var(--text-muted);
+        }
+
+        /* NAVBAR */
+        .navbar {
+            backdrop-filter: blur(12px);
+            background: var(--nav-bg);
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            transition: var(--transition);
+        }
+
+        body.light-theme .navbar {
+            border-bottom: 1px solid rgba(0,0,0,0.1);
+        }
+
+        .nav-link {
+            color: var(--text-main) !important;
+            font-weight: 500;
+            margin: 0 10px;
+        }
+
+        .nav-link:hover { color: var(--cyan) !important; }
+
+        .navbar-toggler-icon {
+            filter: var(--burger-filter);
+        }
+
+        /* PROJECT CARDS */
+        .project-card {
+            background: var(--dark-card);
+            border-radius: 16px;
+            padding: 30px;
+            max-width: 800px;
+            margin: 0 auto 40px;
+            border: 1px solid rgba(255,255,255,0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        body.light-theme .project-card {
+            border: 1px solid rgba(0,0,0,0.05);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+        }
+
+        .project-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 40px rgba(30, 210, 190, 0.15);
+        }
+
+        .project-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .project-header h3 {
+            margin: 0;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+        .project-tag {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.75rem;
+            padding: 6px 14px;
+            border-radius: 30px;
+            background: rgba(30, 210, 190, 0.1);
+            color: var(--cyan);
+            border: 1px solid rgba(30, 210, 190, 0.3);
+            text-transform: uppercase;
+        }
+
+        .project-desc {
+            font-size: 1.05rem;
+            line-height: 1.6;
+            color: var(--text-muted);
+            margin-bottom: 25px;
+        }
+
+        /* THEME SWITCH TOGGLE */
+        .theme-toggle-wrapper {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            z-index: 1000;
+        }
+
+        .theme-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: none;
+            background: var(--cyan);
+            color: white;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(30, 210, 190, 0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            transition: var(--transition);
+        }
+
+        .theme-btn:hover { transform: scale(1.1) rotate(15deg); }
+
+        /* BUTTONS */
+        .btn-outline-cyan {
+            border: 2px solid var(--cyan);
+            color: var(--cyan);
+            font-weight: 600;
+            padding: 10px 25px;
+            border-radius: 8px;
+            transition: var(--transition);
+        }
+
+        .btn-outline-cyan:hover {
+            background: var(--cyan);
+            color: white;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .section-title h2 {
+            font-weight: 800;
+            font-size: 2.5rem;
+        }
+
+        .section-title span {
+            color: var(--cyan);
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="theme-toggle-wrapper">
+    <button id="themeToggle" class="theme-btn" title="Changer de mode">
+        <span id="themeIcon">🌙</span>
+    </button>
+</div>
+
+<nav class="navbar navbar-expand-lg fixed-top">
+    <div class="container">
+        <a class="navbar-brand fw-bold" href="index.html" style="color: var(--cyan)">
+            <span class="mono">&lt;Maël /&gt;</span>
+        </a>
+
+        <button class="navbar-toggler border-0 shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="mainNav">
+            <ul class="navbar-nav ms-auto text-center">
+                <li class="nav-item"><a class="nav-link" href="index.html">Accueil</a></li>
+                <li class="nav-item"><a class="nav-link" href="cv.html">Mon parcours</a></li>
+                <li class="nav-item"><a class="nav-link active" href="e6.html">Épreuve E6</a></li>
+                <li class="nav-item"><a class="nav-link" href="alternance.html">Alternance</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<main class="container py-5">
+    <div class="section-title">
+        <h2>Mes <span>Projets</span></h2>
+        <p class="custom-muted mono">Dossier technique - Épreuve E6</p>
+    </div>
+
+    <!-- Projet 1 -->
+    <div class="project-card">
+        <div class="project-header">
+            <h3>Battleship</h3>
+            <span class="project-tag">Multi-User Web App</span>
+        </div>
+
+        <p class="project-desc">
+            Développement complet d'une application de bataille navale en ligne. 
+            Ce projet réalisé durant mon BTS SIO met l'accent sur les communications en temps réel et la logique de jeu complexe.
+        </p>
+
+        <div class="d-flex justify-content-end">
+            <a href="pages/battleship.html" class="btn btn-outline-cyan">
+                Détails du projet
+            </a>
+        </div>
+    </div>
+
+    <!-- Projet 2 -->
+    <div class="project-card">
+        <div class="project-header">
+            <h3>MesAP</h3>
+            <span class="project-tag">Security & Ticketing</span>
+        </div>
+
+        <p class="project-desc">
+            Travail sur une messagerie sécurisée incluant la maintenance applicative via un système de ticketing. 
+            Analyse et correction de bugs sur une infrastructure existante.
+        </p>
+
+        <div class="d-flex justify-content-end">
+            <a href="pages/mesap.html" class="btn btn-outline-cyan">
+                Détails du projet
+            </a>
+        </div>
+    </div>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    const themeToggle = document.getElementById('themeToggle');
+    const themeIcon = document.getElementById('themeIcon');
+    const body = document.body;
+
+    themeToggle.addEventListener('click', () => {
+        body.classList.toggle('light-theme');
+        const isLight = body.classList.contains('light-theme');
+        themeIcon.textContent = isLight ? '☀️' : '🌙';
+        localStorage.setItem('theme', isLight ? 'light' : 'dark');
+    });
+
+    if (localStorage.getItem('theme') === 'light') {
+        body.classList.add('light-theme');
+        themeIcon.textContent = '☀️';
+    }
+</script>
+
+</body>
+</html>

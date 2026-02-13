@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Alternance – Ribot Maël</title>
+
+    <!-- Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --cyan: #1ed2be;
+            --dark-bg: #0f172a;
+            --dark-card: #1e293b;
+            --light-bg: #f8fafc;
+            --light-card: #ffffff;
+            --text-main: #f1f5f9;
+            --text-muted: #94a3b8;
+            --nav-bg: rgba(15, 23, 42, 0.9);
+            --burger-filter: invert(1);
+            --transition: all 0.3s ease;
+        }
+
+        body.light-theme {
+            --dark-bg: var(--light-bg);
+            --dark-card: var(--light-card);
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --nav-bg: rgba(248, 250, 252, 0.9);
+            --burger-filter: invert(0);
+        }
+
+        body {
+            margin: 0;
+            padding-top: 100px;
+            background-color: var(--dark-bg);
+            font-family: 'Inter', sans-serif;
+            color: var(--text-main);
+            transition: var(--transition);
+            overflow-x: hidden;
+        }
+
+        code, .mono {
+            font-family: 'Fira Code', monospace;
+        }
+
+        .custom-muted {
+            color: var(--text-muted);
+        }
+
+        /* NAVBAR */
+        .navbar {
+            backdrop-filter: blur(12px);
+            background: var(--nav-bg);
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            transition: var(--transition);
+        }
+
+        body.light-theme .navbar {
+            border-bottom: 1px solid rgba(0,0,0,0.1);
+        }
+
+        .nav-link {
+            color: var(--text-main) !important;
+            font-weight: 500;
+            margin: 0 10px;
+        }
+
+        .nav-link:hover { color: var(--cyan) !important; }
+
+        .navbar-toggler-icon {
+            filter: var(--burger-filter);
+        }
+
+        /* ALT CARD */
+        .alt-card {
+            background: var(--dark-card);
+            border-radius: 16px;
+            padding: 40px;
+            max-width: 900px;
+            margin: 0 auto 40px;
+            border: 1px solid rgba(255,255,255,0.05);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            transition: var(--transition);
+        }
+
+        body.light-theme .alt-card {
+            border: 1px solid rgba(0,0,0,0.05);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+        }
+
+        .alt-section {
+            margin-bottom: 40px;
+        }
+
+        .alt-section:last-child {
+            margin-bottom: 0;
+        }
+
+        .alt-section h3 {
+            font-weight: 700;
+            font-size: 1.25rem;
+            color: var(--cyan);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .alt-section p {
+            line-height: 1.7;
+            color: var(--text-muted);
+        }
+
+        /* LISTS */
+        .alt-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 15px;
+        }
+
+        .alt-list li {
+            padding: 12px 15px;
+            background: rgba(255,255,255,0.03);
+            border-radius: 8px;
+            border-left: 3px solid var(--cyan);
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            transition: var(--transition);
+        }
+
+        body.light-theme .alt-list li {
+            background: rgba(0,0,0,0.02);
+        }
+
+        .alt-list li:hover {
+            transform: translateX(5px);
+            background: rgba(30, 210, 190, 0.05);
+        }
+
+        /* THEME SWITCH TOGGLE */
+        .theme-toggle-wrapper {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            z-index: 1000;
+        }
+
+        .theme-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: none;
+            background: var(--cyan);
+            color: white;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(30, 210, 190, 0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            transition: var(--transition);
+        }
+
+        .theme-btn:hover { transform: scale(1.1) rotate(15deg); }
+
+        .page-header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .page-header h1 {
+            font-weight: 800;
+            font-size: 3rem;
+            margin-bottom: 10px;
+        }
+
+        .page-header span {
+            color: var(--cyan);
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="theme-toggle-wrapper">
+    <button id="themeToggle" class="theme-btn" title="Changer de mode">
+        <span id="themeIcon">🌙</span>
+    </button>
+</div>
+
+<nav class="navbar navbar-expand-lg fixed-top">
+    <div class="container">
+        <a class="navbar-brand fw-bold" href="index.html" style="color: var(--cyan)">
+            <span class="mono">&lt;Maël /&gt;</span>
+        </a>
+
+        <button class="navbar-toggler border-0 shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="mainNav">
+            <ul class="navbar-nav ms-auto text-center">
+                <li class="nav-item"><a class="nav-link" href="index.html">Accueil</a></li>
+                <li class="nav-item"><a class="nav-link" href="cv.html">Mon parcours</a></li>
+                <li class="nav-item"><a class="nav-link" href="e6.html">Épreuve E6</a></li>
+                <li class="nav-item"><a class="nav-link active" href="alternance.html">Alternance</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<main class="container py-5">
+    <header class="page-header">
+        <h1>Alternance <span>DGFIP</span></h1>
+        <p class="custom-muted mono">BTS SIO SLAM – Développement applicatif</p>
+    </header>
+
+    <div class="alt-card">
+        <section class="alt-section">
+            <h3><span class="mono">01.</span> Présentation de l’institution</h3>
+            <p>
+                La Direction Générale des Finances Publiques (DGFIP) est une administration centrale 
+                chargée de la gestion budgétaire, comptable et fiscale de l’État. Évoluer au sein de cette 
+                structure offre une immersion dans un environnement informatique à grande échelle.
+            </p>
+        </section>
+
+        <section class="alt-section">
+            <h3><span class="mono">02.</span> Contexte & Enjeux</h3>
+            <p>
+                Ma mission s'inscrit dans la modernisation des outils internes. Travailler pour la DGFIP 
+                implique une rigueur absolue concernant la <strong>sécurité des données</strong>, 
+                le respect des normes de développement et la continuité de service pour les utilisateurs métiers.
+            </p>
+        </section>
+
+        <section class="alt-section">
+            <h3><span class="mono">03.</span> Missions principales</h3>
+            <ul class="alt-list">
+                <li>Conception et développement d'outils internes</li>
+                <li>Maintenance corrective et évolutive du parc applicatif</li>
+                <li>Diagnostic précis et résolution d'anomalies (bugs)</li>
+                <li>Collaboration agile avec les équipes techniques</li>
+                <li>Rédaction de documentations techniques</li>
+                <li>Optimisation des performances des scripts existants</li>
+            </ul>
+        </section>
+
+        <section class="alt-section">
+            <h3><span class="mono">04.</span> Compétences acquises</h3>
+            <ul class="alt-list">
+                <li>Analyse rigoureuse de cahiers des charges complexes</li>
+                <li>Maîtrise du cycle de vie logiciel en entreprise</li>
+                <li>Application des protocoles de sécurité logicielle</li>
+                <li>Gestion autonome du temps et des priorités</li>
+                <li>Communication efficace en milieu professionnel</li>
+                <li>Utilisation d'outils de versioning (Git/GitLab)</li>
+            </ul>
+        </section>
+    </div>
+</main>
+
+<footer class="text-center py-5">
+    <p class="custom-muted small">&copy; 2024 Maël Ribot • Expérience Professionnelle</p>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    const themeToggle = document.getElementById('themeToggle');
+    const themeIcon = document.getElementById('themeIcon');
+    const body = document.body;
+
+    themeToggle.addEventListener('click', () => {
+        body.classList.toggle('light-theme');
+        const isLight = body.classList.contains('light-theme');
+        themeIcon.textContent = isLight ? '☀️' : '🌙';
+        localStorage.setItem('theme', isLight ? 'light' : 'dark');
+    });
+
+    if (localStorage.getItem('theme') === 'light') {
+        body.classList.add('light-theme');
+        themeIcon.textContent = '☀️';
+    }
+</script>
+
+</body>
+</html>

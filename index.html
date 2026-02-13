@@ -1,491 +1,320 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Portfolio - Ribot Maël</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Portfolio – Ribot Maël</title>
 
-  <!-- Bootstrap -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --cyan: #1ed2be;
+            --dark-bg: #0f172a;
+            --dark-card: #1e293b;
+            --light-bg: #f8fafc;
+            --text-main: #f1f5f9;
+            --text-muted: #94a3b8;
+            --nav-bg: rgba(15, 23, 42, 0.9);
+            --burger-filter: invert(1); /* Par défaut blanc pour fond sombre */
+            --transition: all 0.3s ease;
+        }
 
-  <style>
-    :root {
-      --cyan: rgb(30, 210, 190);
-      --dark-bg: #000;
-      --dark-box: #1a1a1a;
-      --light-bg: #f0f0f0;
-      --light-box: #fff;
-    }
+        body.light-theme {
+            --dark-bg: var(--light-bg);
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --nav-bg: rgba(248, 250, 252, 0.9);
+            --burger-filter: invert(0); /* Noir pour fond clair */
+        }
 
-    body {
-      margin: 0;
-      padding: 0;
-      background-color: var(--dark-bg);
-      font-family: "Lucida Console", monospace;
-      color: white;
-      overflow-x: hidden;
-      transition: background-color 0.4s, color 0.4s;
-    }
+        body {
+            margin: 0;
+            padding-top: 80px;
+            background-color: var(--dark-bg);
+            font-family: 'Inter', sans-serif;
+            color: var(--text-main);
+            transition: var(--transition);
+            overflow-x: hidden;
+        }
 
-    body.light-theme {
-      background-color: var(--light-bg);
-      color: #111;
-    }
+        code, .mono {
+            font-family: 'Fira Code', monospace;
+        }
 
-    a {
-      text-decoration: none;
-      color: var(--cyan);
-      transition: 0.3s;
-    }
+        .custom-muted {
+            color: var(--text-muted);
+        }
 
-    a:hover { opacity: 0.7; }
+        a {
+            text-decoration: none;
+            color: var(--cyan);
+            transition: var(--transition);
+        }
 
-    /* HERO */
-    .hero {
-      height: 60vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      position: relative;
-      text-align: center;
-      padding: 40px;
-      animation: fadeIn 1.2s ease forwards;
-    }
+        a:hover { color: #fff; filter: brightness(1.2); }
 
-    .hero-content h1 .intro-text {
-      color: white;
-    }
+        /* NAVBAR */
+        .navbar {
+            backdrop-filter: blur(12px);
+            background: var(--nav-bg);
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            transition: var(--transition);
+        }
 
-    body.light-theme .hero-content h1 .intro-text { color: #111; }
+        body.light-theme .navbar {
+            border-bottom: 1px solid rgba(0,0,0,0.1);
+        }
 
-    .hero-content h1 a { color: var(--cyan); }
-    body.light-theme .hero-content h1 a { color: #0077b6; }
+        .nav-link {
+            color: var(--text-main) !important;
+            font-weight: 500;
+            margin: 0 10px;
+        }
 
-    @keyframes fadeIn {
-      from { opacity: 0; transform: scale(0.97); }
-      to   { opacity: 1; transform: scale(1); }
-    }
+        .nav-link:hover {
+            color: var(--cyan) !important;
+        }
 
-    #cursor-bg {
-      position: fixed;
-      inset: 0;
-      pointer-events: none;
-      z-index: -1;
-      transition: background 0.15s ease-out;
-    }
+        /* Correction Visibilité Burger */
+        .navbar-toggler-icon {
+            filter: var(--burger-filter);
+            transition: var(--transition);
+        }
 
-    /* THEME SWITCH */
-    .theme-switch {
-      width: 60px;
-      height: 30px;
-      background: var(--cyan);
-      border-radius: 30px;
-      border: none;
-      position: fixed;
-      top: 1rem;
-      right: 1rem;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      overflow: hidden;
-      padding: 0;
-      z-index: 1000;
-      transition: background-color 0.3s;
-    }
+        /* HERO SECTION */
+        .hero {
+            min-height: 75vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 40px 20px;
+        }
 
-    .theme-switch .icon {
-      width: 30px;
-      height: 30px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.2rem;
-      transition: transform 0.3s;
-    }
+        .hero h1 {
+            font-weight: 800;
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+        }
 
-    .theme-switch .sun { transform: translateX(0); }
-    .theme-switch .moon { transform: translateX(100%); }
+        .hero h1 span {
+            font-size: 1.2rem;
+            display: block;
+            color: var(--cyan);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+        }
 
-    body.light-theme .theme-switch { background: #0077b6; }
-    body.light-theme .theme-switch .sun { transform: translateX(-100%); }
-    body.light-theme .theme-switch .moon { transform: translateX(0); }
+        #typing {
+            min-height: 1.5em;
+            color: var(--cyan);
+            font-weight: 600;
+        }
 
-    /* SECTIONS */
-    .section-wrapper {
-      margin-bottom: 1.5rem;
-      background: var(--dark-box);
-      border-radius: 12px;
-      padding: 0;
-      overflow: hidden;
-      transition: background 0.4s, box-shadow 0.4s;
-      box-shadow: 0 0 10px rgba(30, 210, 190, 0.2);
-    }
+        /* THEME SWITCH TOGGLE */
+        .theme-toggle-wrapper {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            z-index: 1000;
+        }
 
-    body.light-theme .section-wrapper {
-      background: var(--light-box);
-      box-shadow: 0 0 10px rgba(30, 210, 190, 0.4);
-    }
+        .theme-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: none;
+            background: var(--cyan);
+            color: white;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(30, 210, 190, 0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            transition: var(--transition);
+        }
 
-    .section-header {
-      padding: 14px 20px;
-      cursor: pointer;
-      background: rgba(255,255,255,0.03);
-      transition: 0.3s;
-    }
+        .theme-btn:hover {
+            transform: scale(1.1) rotate(15deg);
+        }
 
-    .section-header:hover { background: rgba(255,255,255,0.05); }
-    .section-header h3 { margin: 0; color: var(--cyan); }
-    body.light-theme .section-header h3 { color: #0077b6; }
+        /* BUTTONS CUSTOM */
+        .btn-custom {
+            padding: 12px 30px;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: var(--transition);
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+        }
 
-    .section-content {
-      max-height: 0;
-      overflow: hidden;
-      padding: 0 20px;
-      transition: max-height 0.5s ease, padding 0.3s ease;
-    }
+        .btn-outline-cyan {
+            border: 2px solid var(--cyan);
+            color: var(--cyan);
+        }
 
-    .section-content.open { padding: 20px; }
+        .btn-outline-cyan:hover {
+            background: var(--cyan);
+            color: #fff;
+        }
 
-    /* COMPÉTENCES – cartes flip */
-    .skills-carousel {
-      display: flex;
-      gap: 20px;
-      flex-wrap: wrap;
-      justify-content: center;
-      padding: 20px 0;
-    }
+        /* FOOTER */
+        footer {
+            padding: 60px 20px;
+            background: rgba(0,0,0,0.05);
+            margin-top: 50px;
+        }
 
-    .skill-card {
-      width: 160px;
-      height: 160px;
-      background: transparent;
-      border-radius: 12px;
-      perspective: 1000px;
-    }
+        .contact-info {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
 
-    .card-inner {
-      width: 100%;
-      height: 100%;
-      position: relative;
-      transition: transform 0.8s;
-      transform-style: preserve-3d;
-      cursor: pointer;
-    }
+        /* ANIMATIONS */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
 
-    .skill-card:hover .card-inner { transform: rotateY(180deg); }
+        .animate-fade {
+            animation: fadeIn 0.8s ease-out forwards;
+        }
 
-    .card-front, .card-back {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      border-radius: 12px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.1rem;
-      font-weight: bold;
-      backface-visibility: hidden;
-      background: var(--dark-box);
-      box-shadow: 0 0 10px rgba(30, 210, 190, 0.3);
-      transition: background 0.3s, color 0.3s;
-    }
-
-    body.light-theme .card-front,
-    body.light-theme .card-back { background: var(--light-box); }
-
-    .card-back { transform: rotateY(180deg); }
-
-    /* FORMATIONS – frise chronologique */
-    .timeline {
-      display: flex;
-      justify-content: space-between;
-      position: relative;
-      margin: 40px 0;
-      padding: 20px 0;
-    }
-
-    .timeline::before {
-      content: "";
-      position: absolute;
-      top: 50%;
-      left: 0;
-      width: 100%;
-      height: 4px;
-      background: var(--cyan);
-      transform: translateY(-50%);
-      border-radius: 2px;
-    }
-
-    .timeline-item {
-      position: relative;
-      flex: 1;
-      text-align: center;
-    }
-
-    .timeline-item::before {
-      content: "";
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      width: 16px;
-      height: 16px;
-      background: var(--cyan);
-      border-radius: 50%;
-      z-index: 1;
-      transition: transform 0.3s;
-    }
-
-    .timeline-item:hover::before {
-      transform: translate(-50%, -50%) scale(1.3);
-    }
-
-    .timeline-content {
-      position: relative;
-      margin-top: 30px;
-    }
-
-    .timeline-date {
-      display: block;
-      font-weight: bold;
-      margin-bottom: 20px;
-      color: var(--cyan);
-    }
-
-    body.light-theme .timeline::before,
-    body.light-theme .timeline-item::before,
-    body.light-theme .timeline-date { color: #0077b6; }
-
-    footer {
-      background: var(--dark-box);
-      padding: 40px 20px;
-      margin-top: 40px;
-      transition: 0.4s;
-    }
-
-    body.light-theme footer { background: var(--light-box); }
-
-
-    /* Bouton CV - thème sombre */
-    .cv-btn {
-      border: 2px solid var(--cyan);
-      color: var(--cyan);
-      transition: 0.3s;
-    }
-
-    .cv-btn:hover {
-      background: var(--cyan);
-      color: black;
-    }
-
-    /* Bouton CV - thème clair */
-    body.light-theme .cv-btn {
-      border-color: #0077b6;
-      color: #0077b6;
-    }
-
-    body.light-theme .cv-btn:hover {
-      background: #0077b6;
-      color: white;
-    }
-
-  </style>
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2.5rem; }
+        }
+    </style>
 </head>
 
 <body>
-<div id="cursor-bg"></div>
 
-<header class="hero">
-  <button id="themeToggle" class="theme-switch">
-    <span class="icon sun">☀️</span>
-    <span class="icon moon">🌙</span>
-  </button>
+<div class="theme-toggle-wrapper">
+    <button id="themeToggle" class="theme-btn" title="Changer de mode">
+        <span id="themeIcon">🌙</span>
+    </button>
+</div>
 
-  <div class="hero-content">
-    <h1>
-      <span class="intro-text">Bonjour, je suis</span>
-      <a href="https://fr.linkedin.com/in/ma%C3%ABl-ribot-80b9b7257" target="_blank">Ribot Maël</a>
-    </h1>
-    <p class="h5 mt-3"
-       data-rotate='["Développeur junior de 21 ans, motivé et prêt à relever de nouveaux défis."]'
-       data-period="2000"
-       id="typing"></p>
-  </div>
+<nav class="navbar navbar-expand-lg fixed-top">
+    <div class="container">
+        <a class="navbar-brand fw-bold" href="#" style="color: var(--cyan)">
+            <span class="mono">&lt;Maël /&gt;</span>
+        </a>
+
+        <button class="navbar-toggler border-0 shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="mainNav">
+            <ul class="navbar-nav ms-auto text-center">
+                <li class="nav-item"><a class="nav-link" href="#">Accueil</a></li>
+                <li class="nav-item"><a class="nav-link" href="cv.html">Mon parcours</a></li>
+                <li class="nav-item"><a class="nav-link" href="e6.html">Épreuve E6</a></li>
+                <li class="nav-item"><a class="nav-link" href="alternance.html">Alternance</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<header class="hero container">
+    <div class="animate-fade">
+        <h1>
+            <span>Développeur passionné</span>
+            <a href="https://fr.linkedin.com/in/ma%C3%ABl-ribot-80b9b7257" target="_blank">
+                Maël Ribot
+            </a>
+        </h1>
+
+        <div class="fs-4 mono mb-4">
+            <span id="typing"></span><span class="cursor">|</span>
+        </div>
+
+        <p class="custom-muted mb-5 mx-auto fs-5" style="max-width: 650px;">
+            Étudiant en BTS SIO option SLAM. Spécialisé dans le développement d'applications web modernes et robustes.
+        </p>
+
+        <div class="d-flex flex-column flex-sm-row justify-content-center gap-3">
+            <a href="e6.html" class="btn btn-custom btn-outline-cyan">Découvrir mes projets</a>
+            <a href="presentation.html" class="btn btn-custom btn-outline-secondary" style="color: var(--text-main); border-color: var(--text-main)">Mon parcours</a>
+        </div>
+    </div>
 </header>
 
-<main class="container my-5">
-
-  <!-- FORMATIONS -->
-  <div class="section-wrapper">
-    <section class="section-header" onclick="toggleSection(this)">
-      <h3>📁 Formations</h3>
-    </section>
-    <div class="section-content">
-      <div class="timeline">
-        <div class="timeline-item">
-          <div class="timeline-content">
-            <span class="timeline-date">2022</span>
-            <p>Baccalauréat (Maths, NSI)</p>
-          </div>
-        </div>
-        <div class="timeline-item">
-          <div class="timeline-content">
-            <span class="timeline-date">2022 - 2023</span>
-            <p>Prépa NUM'SUP – CRÉATIVE</p>
-          </div>
-        </div>
-        <div class="timeline-item">
-          <div class="timeline-content">
-            <span class="timeline-date">2024 - 2026</span>
-            <p>BTS SIO SLAM – E2SE Caen (Alternance DGFIP)</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- EXPERIENCES -->
-  <div class="section-wrapper">
-    <section class="section-header" onclick="toggleSection(this)">
-      <h3>📁 Expériences professionnelles</h3>
-    </section>
-    <div class="section-content">
-      <h4>Stages</h4>
-      <ul>
-        <li>Développeur web – Pack Digital (2023)</li>
-        <li>Webdesigner – Pack Digital (2022)</li>
-        <li>WEBEL (2018)</li>
-      </ul>
-      <h4>Emplois saisonniers</h4>
-      <ul>
-        <li>Avril – Juillet 2024 (CapOcean + La Poste)</li>
-        <li>Octobre – Janvier 2023 (La Poste)</li>
-        <li>Juillet – Août 2023 (La Poste)</li>
-        <li>Août 2022 (Vendange)</li>
-      </ul>
-    </div>
-  </div>
-
-  <!-- COMPETENCES -->
-  <div class="section-wrapper">
-    <section class="section-header" onclick="toggleSection(this)">
-      <h3>📁 Compétences</h3>
-    </section>
-    <div class="section-content">
-      <div class="skills-carousel">
-        <div class="skill-card"><div class="card-inner"><div class="card-front">HTML</div><div class="card-back">CSS</div></div></div>
-        <div class="skill-card"><div class="card-inner"><div class="card-front">JavaScript</div><div class="card-back">Vue.js</div></div></div>
-        <div class="skill-card"><div class="card-inner"><div class="card-front">SQL</div><div class="card-back">PhpMyAdmin</div></div></div>
-        <div class="skill-card"><div class="card-inner"><div class="card-front">Java</div><div class="card-back">POO</div></div></div>
-        <div class="skill-card"><div class="card-inner"><div class="card-front">GitHub</div><div class="card-back">GitHub</div></div></div>
-        <div class="skill-card"><div class="card-inner"><div class="card-front">Modélisation</div><div class="card-back">UML, MLD</div></div></div>
-        <div class="skill-card"><div class="card-inner"><div class="card-front">VM</div><div class="card-back">Oracle/VMware</div></div></div>
-      </div>
-    </div>
-  </div>
-
-  <!-- PROJETS -->
-  <div class="section-wrapper">
-    <section class="section-header" onclick="toggleSection(this)">
-      <h3>📁 Projets</h3>
-    </section>
-    <div class="section-content text-center">
-      <h3><a href="https://github.com/RibotMael" target="_blank">Mon GitHub</a></h3>
-      <p><a href="pages/battleship.html">Battleship</a></p>
-      <p><a href="pages/JavaBataille.html">Jeu de bataille (JAVA)</a></p>
-    </div>
-  </div>
-
-  <!-- HOBBIES -->
-  <div class="section-wrapper">
-    <section class="section-header" onclick="toggleSection(this)">
-      <h3>📁 Hobbies</h3>
-    </section>
-    <div class="section-content">
-      <p>
-        Passionné par les <strong class="cyan">mangas</strong> et <strong class="cyan">animes</strong>, je pratique le 
-        <strong class="cyan">basketball</strong> après avoir testé de nombreux sports.  
-        J’aime également les <strong class="cyan">jeux vidéo</strong> en solo ou multijoueurs.  
-        Amateur de sensations fortes, j’ai expérimenté la <strong class="cyan">parapente</strong>, le 
-        <strong class="cyan">saut en parachute</strong> et récemment un <strong class="cyan">saut à l’élastique</strong> !  
-        En parallèle, j’adore regarder des <strong class="cyan">films</strong> et <strong class="cyan">séries</strong>, et 
-        écouter de la <strong class="cyan">musique</strong> pendant que je travaille.
-      </p>
-    </div>
-  </div>
-<!--
-  <a href="file:///C:/Users/ribot/Downloads/CV%20RIBOT%20Maël.pdf" class="cv-btn btn" download>
-    Télécharger mon CV
-  </a>
--->
-</main>
-
 <footer class="text-center">
-  <h3>Contact</h3>
-  <p><a href="tel:0632542419">06.32.54.24.19</a></p>
-  <p><a href="mailto:ribotmael18@gmail.com">ribotmael18@gmail.com</a></p>
+    <div class="container">
+        <div class="contact-info mb-4">
+            <a href="mailto:ribotmael18@gmail.com" class="mono">
+                📧 ribotmael18@gmail.com
+            </a>
+            <a href="tel:0632542419" class="mono">
+                📞 06 32 54 24 19
+            </a>
+        </div>
+        <p class="small custom-muted opacity-75">&copy; 2024 Maël Ribot • Tous droits réservés</p>
+    </div>
 </footer>
 
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>
-  // Thème
-  const themeToggle = document.getElementById("themeToggle");
-  window.addEventListener("DOMContentLoaded", () => {
-    if (localStorage.getItem("theme") === "light") {
-      document.body.classList.add("light-theme");
-    }
-  });
-  themeToggle.addEventListener("click", () => {
-    const isLight = document.body.classList.toggle("light-theme");
-    localStorage.setItem("theme", isLight ? "light" : "dark");
-  });
+    // --- MODE SOMBRE / CLAIR ---
+    const themeToggle = document.getElementById('themeToggle');
+    const themeIcon = document.getElementById('themeIcon');
+    const body = document.body;
 
-  // Curseur dynamique
-  const cursorBg = document.getElementById("cursor-bg");
-  document.addEventListener("mousemove", (e) => {
-    const x = (e.clientX / window.innerWidth) * 100;
-    const y = (e.clientY / window.innerHeight) * 100;
-    cursorBg.style.background = `radial-gradient(circle at ${x}% ${y}%, ${
-      document.body.classList.contains("light-theme") ? "rgba(0,150,255,0.4)" : "rgba(0,255,255,0.15)"
-    }, transparent 60%)`;
-  });
-
-  // Typing effect
-  function typeEffect() {
-    const el = document.getElementById("typing");
-    const phrases = JSON.parse(el.getAttribute("data-rotate"));
-    const txt = phrases[0];
-    let idx = 0;
-    function type() {
-      el.textContent = txt.substring(0, idx);
-      idx++;
-      if (idx <= txt.length) setTimeout(type, 30);
-    }
-    type();
-  }
-  typeEffect();
-
-  // Toggle section
-  function toggleSection(header) {
-    const content = header.nextElementSibling;
-    const isOpen = content.classList.contains("open");
-
-    document.querySelectorAll(".section-content.open").forEach(el => {
-      if (el !== content) {
-        el.classList.remove("open");
-        el.style.maxHeight = "0";
-      }
+    themeToggle.addEventListener('click', () => {
+        body.classList.toggle('light-theme');
+        const isLight = body.classList.contains('light-theme');
+        themeIcon.textContent = isLight ? '☀️' : '🌙';
+        localStorage.setItem('theme', isLight ? 'light' : 'dark');
     });
 
-    if (isOpen) {
-      content.classList.remove("open");
-      content.style.maxHeight = "0";
-    } else {
-      content.classList.add("open");
-      content.style.maxHeight = content.scrollHeight + 20 + "px";
+    if (localStorage.getItem('theme') === 'light') {
+        body.classList.add('light-theme');
+        themeIcon.textContent = '☀️';
     }
-  }
+
+    // --- EFFET MACHINE À ÉCRIRE ---
+    const textElement = document.getElementById('typing');
+    const phrases = ["Développeur Web", "BTS SIO SLAM", "Passionné de Code", "Apprenti Alternant"];
+    let phraseIndex = 0;
+    let charIndex = 0;
+    let isDeleting = false;
+    let typeSpeed = 100;
+
+    function typeEffect() {
+        const currentPhrase = phrases[phraseIndex];
+        
+        if (isDeleting) {
+            textElement.textContent = currentPhrase.substring(0, charIndex - 1);
+            charIndex--;
+            typeSpeed = 50;
+        } else {
+            textElement.textContent = currentPhrase.substring(0, charIndex + 1);
+            charIndex++;
+            typeSpeed = 150;
+        }
+
+        if (!isDeleting && charIndex === currentPhrase.length) {
+            isDeleting = true;
+            typeSpeed = 2000;
+        } else if (isDeleting && charIndex === 0) {
+            isDeleting = false;
+            phraseIndex = (phraseIndex + 1) % phrases.length;
+            typeSpeed = 500;
+        }
+
+        setTimeout(typeEffect, typeSpeed);
+    }
+
+    document.addEventListener('DOMContentLoaded', typeEffect);
 </script>
 
 </body>

@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Présentation – Ribot Maël</title>
+
+    <!-- Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --cyan: #1ed2be;
+            --dark-bg: #0f172a;
+            --dark-card: #1e293b;
+            --light-bg: #f8fafc;
+            --light-card: #ffffff;
+            --text-main: #f1f5f9;
+            --text-muted: #94a3b8;
+            --nav-bg: rgba(15, 23, 42, 0.9);
+            --burger-filter: invert(1);
+            --transition: all 0.3s ease;
+        }
+
+        body.light-theme {
+            --dark-bg: var(--light-bg);
+            --dark-card: var(--light-card);
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --nav-bg: rgba(248, 250, 252, 0.9);
+            --burger-filter: invert(0);
+        }
+
+        body {
+            margin: 0;
+            padding-top: 100px;
+            background-color: var(--dark-bg);
+            font-family: 'Inter', sans-serif;
+            color: var(--text-main);
+            transition: var(--transition);
+            overflow-x: hidden;
+        }
+
+        code, .mono {
+            font-family: 'Fira Code', monospace;
+        }
+
+        /* NAVBAR */
+        .navbar {
+            backdrop-filter: blur(12px);
+            background: var(--nav-bg);
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            transition: var(--transition);
+        }
+
+        body.light-theme .navbar {
+            border-bottom: 1px solid rgba(0,0,0,0.1);
+        }
+
+        .nav-link {
+            color: var(--text-main) !important;
+            font-weight: 500;
+            margin: 0 10px;
+        }
+
+        .nav-link:hover { color: var(--cyan) !important; }
+
+        /* PROFILE SECTION */
+        .profile-card {
+            background: var(--dark-card);
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 1000px;
+            margin: 0 auto 40px;
+            border: 1px solid rgba(255,255,255,0.05);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            display: flex;
+            align-items: center;
+            gap: 40px;
+            transition: var(--transition);
+        }
+
+        body.light-theme .profile-card {
+            border: 1px solid rgba(0,0,0,0.05);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+        }
+
+        .profile-img {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--cyan), #3b82f6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3.5rem;
+            color: white;
+            flex-shrink: 0;
+            border: 4px solid rgba(30, 210, 190, 0.2);
+        }
+
+        .profile-text h2 {
+            font-weight: 800;
+            margin-bottom: 5px;
+        }
+
+        .contact-info {
+            font-size: 0.85rem;
+            color: var(--cyan);
+            margin-bottom: 15px;
+        }
+
+        /* GRID SECTIONS */
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 25px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .info-box {
+            background: var(--dark-card);
+            padding: 30px;
+            border-radius: 16px;
+            border: 1px solid rgba(255,255,255,0.05);
+            transition: var(--transition);
+        }
+
+        .info-box h4 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--cyan);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-bottom: 1px solid rgba(30, 210, 190, 0.2);
+            padding-bottom: 10px;
+        }
+
+        .experience-item {
+            margin-bottom: 15px;
+            padding-left: 15px;
+            border-left: 2px solid rgba(30, 210, 190, 0.3);
+        }
+
+        .experience-date {
+            font-size: 0.75rem;
+            color: var(--cyan);
+            font-family: 'Fira Code', monospace;
+            display: block;
+        }
+
+        /* TAGS */
+        .skill-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            list-style: none;
+            padding: 0;
+        }
+
+        .skill-tag {
+            background: rgba(30, 210, 190, 0.1);
+            color: var(--cyan);
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            border: 1px solid rgba(30, 210, 190, 0.2);
+            font-family: 'Fira Code', monospace;
+        }
+
+        /* THEME SWITCH TOGGLE */
+        .theme-toggle-wrapper {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            z-index: 1000;
+        }
+
+        .theme-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: none;
+            background: var(--cyan);
+            color: white;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(30, 210, 190, 0.4);
+            display: flex;
+            align-items: center; justify-content: center;
+            font-size: 1.5rem; transition: var(--transition);
+        }
+
+        @media (max-width: 768px) {
+            .profile-card { flex-direction: column; text-align: center; }
+            .info-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="theme-toggle-wrapper">
+    <button id="themeToggle" class="theme-btn" title="Changer de mode">
+        <span id="themeIcon">🌙</span>
+    </button>
+</div>
+
+<nav class="navbar navbar-expand-lg fixed-top">
+    <div class="container">
+        <a class="navbar-brand fw-bold" href="index.html" style="color: var(--cyan)">
+            <span class="mono">&lt;Maël /&gt;</span>
+        </a>
+        <div class="collapse navbar-collapse" id="mainNav">
+            <ul class="navbar-nav ms-auto text-center">
+                <li class="nav-item"><a class="nav-link" href="index.html">Accueil</a></li>
+                <li class="nav-item"><a class="nav-link" href="cv.html">Mon parcours</a></li>
+                <li class="nav-item"><a class="nav-link" href="e6.html">Épreuve E6</a></li>
+                <li class="nav-item"><a class="nav-link" href="alternance.html">Alternance</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<main class="container py-5">
+    <!-- Profil Principal -->
+    <div class="profile-card">
+        <div class="profile-img">MR</div>
+        <div class="profile-text">
+            <h2 class="mono">Maël RIBOT</h2>
+            <div class="contact-info mono">
+                ribotmael18@gmail.com • 06 32 54 24 19 • Bougy, 14210
+            </div>
+            <p style="color: var(--text-muted); line-height: 1.6;">
+                Étudiant né le 18/05/2004, actuellement en <strong>BTS SIO option SLAM</strong> en alternance à la <strong>DGFIP</strong>. 
+                Titulaire du permis B, je suis mobile et passionné par le développement logiciel.
+            </p>
+        </div>
+    </div>
+
+    <div class="info-grid">
+        <!-- Compétences Informatiques -->
+        <div class="info-box">
+            <h4><span class="mono">01.</span> Stack Technique</h4>
+            <div class="skill-list">
+                <span class="skill-tag">HTML / CSS</span>
+                <span class="skill-tag">Javascript / Vue.js</span>
+                <span class="skill-tag">JAVA</span>
+                <span class="skill-tag">Python</span>
+                <span class="skill-tag">SQL</span>
+            </div>
+            <h4 class="mt-4"><span class="mono">02.</span> Savoir-être</h4>
+            <div class="skill-list">
+                <span class="skill-tag">Patient</span>
+                <span class="skill-tag">Ponctuel</span>
+                <span class="skill-tag">Adaptabilité</span>
+            </div>
+        </div>
+
+        <!-- Expériences Professionnelles -->
+        <div class="info-box">
+            <h4><span class="mono">02.</span> Expériences</h4>
+            <div class="experience-item">
+                <span class="experience-date">2024 - 2026</span>
+                <strong>Alternance (DGFIP)</strong>
+                <p class="small mb-0">Développement au sein de la Direction Générale des Finances Publiques.</p>
+            </div>
+            <div class="experience-item">
+                <span class="experience-date">Juin - Juillet 2023</span>
+                <strong>Développeur web - Pack Digital (Caen)</strong>
+            </div>
+            <div class="experience-item">
+                <span class="experience-date">Nov. - Déc. 2022</span>
+                <strong>Webdesigner - Pack Digital (Caen)</strong>
+            </div>
+        </div>
+
+        <!-- Formations -->
+        <div class="info-box">
+            <h4><span class="mono">03.</span> Formations</h4>
+            <div class="experience-item">
+                <span class="experience-date">2024 - 2026</span>
+                <strong>E2SE : BTS SIO option SLAM</strong>
+            </div>
+            <div class="experience-item">
+                <span class="experience-date">2022 - 2023</span>
+                <strong>CRÉATIVE : Année préparatoire "NUM'SUP"</strong>
+            </div>
+            <div class="experience-item">
+                <span class="experience-date">2022</span>
+                <strong>Baccalauréat</strong>
+                <p class="small mb-0">Spécialités : Mathématiques, NSI (Numérique et Sciences Informatiques).</p>
+            </div>
+        </div>
+
+        <!-- Hobbies -->
+        <div class="info-box">
+            <h4><span class="mono">04.</span> Hobbies</h4>
+            <div class="skill-list">
+                <span class="skill-tag">⚽ Sports</span>
+                <span class="skill-tag">📖 Lecture</span>
+                <span class="skill-tag">🎨 Dessin</span>
+                <span class="skill-tag">🎮 Jeux vidéos</span>
+            </div>
+        </div>
+    </div>
+</main>
+
+<footer class="text-center py-5">
+    <p class="small mono" style="color: var(--text-muted)">&copy; 2024 Maël Ribot • Portfolio Professionnel</p>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    const themeToggle = document.getElementById('themeToggle');
+    const themeIcon = document.getElementById('themeIcon');
+    const body = document.body;
+
+    themeToggle.addEventListener('click', () => {
+        body.classList.toggle('light-theme');
+        const isLight = body.classList.contains('light-theme');
+        themeIcon.textContent = isLight ? '☀️' : '🌙';
+        localStorage.setItem('theme', isLight ? 'light' : 'dark');
+    });
+
+    if (localStorage.getItem('theme') === 'light') {
+        body.classList.add('light-theme');
+        themeIcon.textContent = '☀️';
+    }
+</script>
+
+</body>
+</html>
