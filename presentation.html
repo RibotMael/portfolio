@@ -3,7 +3,12 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Parcours académique et professionnel de Maël Ribot, développeur en alternance à la DGFIP.">
     <title>Présentation – Ribot Maël</title>
+
+    <!-- Préconnexion pour la performance (LCP) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
     <!-- Bootstrap 5 -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
@@ -12,13 +17,13 @@
     
     <style>
         :root {
-            --cyan: #1ed2be;
+            --cyan: #14b8a6; /* Version contrastée pour accessibilité */
             --dark-bg: #0f172a;
             --dark-card: #1e293b;
             --light-bg: #f8fafc;
             --light-card: #ffffff;
             --text-main: #f1f5f9;
-            --text-muted: #94a3b8;
+            --text-muted: #cbd5e1;
             --nav-bg: rgba(15, 23, 42, 0.9);
             --burger-filter: invert(1);
             --transition: all 0.3s ease;
@@ -27,8 +32,8 @@
         body.light-theme {
             --dark-bg: var(--light-bg);
             --dark-card: var(--light-card);
-            --text-main: #1e293b;
-            --text-muted: #64748b;
+            --text-main: #0f172a;
+            --text-muted: #475569; /* Gris plus foncé pour le contraste sur blanc */
             --nav-bg: rgba(248, 250, 252, 0.9);
             --burger-filter: invert(0);
         }
@@ -41,6 +46,7 @@
             color: var(--text-main);
             transition: var(--transition);
             overflow-x: hidden;
+            line-height: 1.6;
         }
 
         code, .mono {
@@ -50,13 +56,9 @@
         /* NAVBAR */
         .navbar {
             backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
             background: var(--nav-bg);
             border-bottom: 1px solid rgba(255,255,255,0.05);
-            transition: var(--transition);
-        }
-
-        body.light-theme .navbar {
-            border-bottom: 1px solid rgba(0,0,0,0.1);
         }
 
         .nav-link {
@@ -88,26 +90,21 @@
         }
 
         .profile-img {
-            width: 150px;
-            height: 150px;
+            width: 120px;
+            height: 120px;
             border-radius: 50%;
             background: linear-gradient(135deg, var(--cyan), #3b82f6);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 3.5rem;
+            font-size: 2.5rem;
             color: white;
             flex-shrink: 0;
-            border: 4px solid rgba(30, 210, 190, 0.2);
-        }
-
-        .profile-text h2 {
-            font-weight: 800;
-            margin-bottom: 5px;
+            font-weight: bold;
         }
 
         .contact-info {
-            font-size: 0.85rem;
+            font-size: 0.9rem;
             color: var(--cyan);
             margin-bottom: 15px;
         }
@@ -126,54 +123,54 @@
             padding: 30px;
             border-radius: 16px;
             border: 1px solid rgba(255,255,255,0.05);
-            transition: var(--transition);
+            height: 100%;
         }
 
-        .info-box h4 {
-            font-size: 1.1rem;
+        .info-box h3 {
+            font-size: 1.15rem;
             font-weight: 700;
             color: var(--cyan);
             margin-bottom: 20px;
             display: flex;
             align-items: center;
             gap: 10px;
-            border-bottom: 1px solid rgba(30, 210, 190, 0.2);
+            border-bottom: 1px solid rgba(20, 184, 166, 0.2);
             padding-bottom: 10px;
         }
 
         .experience-item {
-            margin-bottom: 15px;
+            margin-bottom: 20px;
             padding-left: 15px;
-            border-left: 2px solid rgba(30, 210, 190, 0.3);
+            border-left: 2px solid var(--cyan);
         }
 
         .experience-date {
-            font-size: 0.75rem;
+            font-size: 0.8rem;
             color: var(--cyan);
-            font-family: 'Fira Code', monospace;
+            font-weight: 600;
             display: block;
         }
 
-        /* TAGS */
+        /* SKILLS */
         .skill-list {
             display: flex;
             flex-wrap: wrap;
-            gap: 8px;
+            gap: 10px;
             list-style: none;
             padding: 0;
         }
 
         .skill-tag {
-            background: rgba(30, 210, 190, 0.1);
+            background: rgba(20, 184, 166, 0.1);
             color: var(--cyan);
-            padding: 4px 10px;
-            border-radius: 6px;
+            padding: 5px 12px;
+            border-radius: 20px;
             font-size: 0.8rem;
-            border: 1px solid rgba(30, 210, 190, 0.2);
-            font-family: 'Fira Code', monospace;
+            font-weight: 600;
+            border: 1px solid rgba(20, 184, 166, 0.2);
         }
 
-        /* THEME SWITCH TOGGLE */
+        /* THEME TOGGLE */
         .theme-toggle-wrapper {
             position: fixed;
             bottom: 2rem;
@@ -189,14 +186,14 @@
             background: var(--cyan);
             color: white;
             cursor: pointer;
-            box-shadow: 0 4px 15px rgba(30, 210, 190, 0.4);
+            box-shadow: 0 4px 15px rgba(20, 184, 166, 0.4);
             display: flex;
             align-items: center; justify-content: center;
             font-size: 1.5rem; transition: var(--transition);
         }
 
         @media (max-width: 768px) {
-            .profile-card { flex-direction: column; text-align: center; }
+            .profile-card { flex-direction: column; text-align: center; padding: 30px 20px; }
             .info-grid { grid-template-columns: 1fr; }
         }
     </style>
@@ -205,7 +202,7 @@
 <body>
 
 <div class="theme-toggle-wrapper">
-    <button id="themeToggle" class="theme-btn" title="Changer de mode">
+    <button id="themeToggle" class="theme-btn" title="Changer de mode" aria-label="Changer le thème">
         <span id="themeIcon">🌙</span>
     </button>
 </div>
@@ -215,10 +212,13 @@
         <a class="navbar-brand fw-bold" href="index.html" style="color: var(--cyan)">
             <span class="mono">&lt;Maël /&gt;</span>
         </a>
+        <button class="navbar-toggler border-0 shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-label="Menu">
+            <span class="navbar-toggler-icon"></span>
+        </button>
         <div class="collapse navbar-collapse" id="mainNav">
             <ul class="navbar-nav ms-auto text-center">
                 <li class="nav-item"><a class="nav-link" href="index.html">Accueil</a></li>
-                <li class="nav-item"><a class="nav-link" href="cv.html">Mon parcours</a></li>
+                <li class="nav-item"><a class="nav-link active" href="#" aria-current="page">Mon parcours</a></li>
                 <li class="nav-item"><a class="nav-link" href="e6.html">Épreuve E6</a></li>
                 <li class="nav-item"><a class="nav-link" href="alternance.html">Alternance</a></li>
             </ul>
@@ -228,109 +228,122 @@
 
 <main class="container py-5">
     <!-- Profil Principal -->
-    <div class="profile-card">
-        <div class="profile-img">MR</div>
+    <article class="profile-card">
+        <div class="profile-img" aria-hidden="true">MR</div>
         <div class="profile-text">
-            <h2 class="mono">Maël RIBOT</h2>
+            <h1 class="h2 mono mb-2">Maël RIBOT</h1>
             <div class="contact-info mono">
                 ribotmael18@gmail.com • 06 32 54 24 19 • Bougy, 14210
             </div>
-            <p style="color: var(--text-muted); line-height: 1.6;">
+            <p class="custom-muted">
                 Étudiant né le 18/05/2004, actuellement en <strong>BTS SIO option SLAM</strong> en alternance à la <strong>DGFIP</strong>. 
-                Titulaire du permis B, je suis mobile et passionné par le développement logiciel.
+                Titulaire du permis B, je suis mobile et passionné par le développement de solutions logicielles performantes.
             </p>
         </div>
-    </div>
+    </article>
 
     <div class="info-grid">
-        <!-- Compétences Informatiques -->
-        <div class="info-box">
-            <h4><span class="mono">01.</span> Stack Technique</h4>
+        <!-- Stack Technique -->
+        <section class="info-box">
+            <h3><span class="mono" aria-hidden="true">01.</span> Stack Technique</h3>
             <div class="skill-list">
-                <span class="skill-tag">HTML / CSS</span>
-                <span class="skill-tag">Javascript / Vue.js</span>
-                <span class="skill-tag">JAVA</span>
+                <span class="skill-tag">HTML5 / CSS3</span>
+                <span class="skill-tag">Javascript (ES6+)</span>
+                <span class="skill-tag">Vue.js</span>
+                <span class="skill-tag">Java</span>
                 <span class="skill-tag">Python</span>
-                <span class="skill-tag">SQL</span>
+                <span class="skill-tag">SQL (PostgreSQL)</span>
+                <span class="skill-tag">Git / GitHub</span>
             </div>
-            <h4 class="mt-4"><span class="mono">02.</span> Savoir-être</h4>
+            <h3 class="mt-4"><span class="mono" aria-hidden="true">02.</span> Soft Skills</h3>
             <div class="skill-list">
-                <span class="skill-tag">Patient</span>
-                <span class="skill-tag">Ponctuel</span>
+                <span class="skill-tag">Rigueur</span>
                 <span class="skill-tag">Adaptabilité</span>
+                <span class="skill-tag">Travail d'équipe</span>
+                <span class="skill-tag">Autonomie</span>
             </div>
-        </div>
+        </section>
 
         <!-- Expériences Professionnelles -->
-        <div class="info-box">
-            <h4><span class="mono">02.</span> Expériences</h4>
+        <section class="info-box">
+            <h3><span class="mono" aria-hidden="true">03.</span> Expériences</h3>
             <div class="experience-item">
-                <span class="experience-date">2024 - 2026</span>
-                <strong>Alternance (DGFIP)</strong>
-                <p class="small mb-0">Développement au sein de la Direction Générale des Finances Publiques.</p>
+                <span class="experience-date">Sept. 2024 - Présent</span>
+                <strong>Développeur Apprenti (DGFIP)</strong>
+                <p class="small mb-0 opacity-75">Maintenance et évolution d'applications internes au sein du ministère des Finances.</p>
             </div>
             <div class="experience-item">
-                <span class="experience-date">Juin - Juillet 2023</span>
-                <strong>Développeur web - Pack Digital (Caen)</strong>
+                <span class="experience-date">Juin - Juil. 2023</span>
+                <strong>Développeur Web - Pack Digital</strong>
+                <p class="small mb-0 opacity-75">Stage : Intégration de maquettes et développement front-end.</p>
             </div>
             <div class="experience-item">
                 <span class="experience-date">Nov. - Déc. 2022</span>
-                <strong>Webdesigner - Pack Digital (Caen)</strong>
+                <strong>Webdesigner - Pack Digital</strong>
+                <p class="small mb-0 opacity-75">Stage : Création de chartes graphiques et logos.</p>
             </div>
-        </div>
+        </section>
 
         <!-- Formations -->
-        <div class="info-box">
-            <h4><span class="mono">03.</span> Formations</h4>
+        <section class="info-box">
+            <h3><span class="mono" aria-hidden="true">04.</span> Formations</h3>
             <div class="experience-item">
                 <span class="experience-date">2024 - 2026</span>
                 <strong>E2SE : BTS SIO option SLAM</strong>
+                <p class="small mb-0 opacity-75">Solutions Logicielles et Applications Métier.</p>
             </div>
             <div class="experience-item">
                 <span class="experience-date">2022 - 2023</span>
-                <strong>CRÉATIVE : Année préparatoire "NUM'SUP"</strong>
+                <strong>NUM'SUP - École Créative</strong>
+                <p class="small mb-0 opacity-75">Année préparatoire aux métiers du numérique.</p>
             </div>
             <div class="experience-item">
                 <span class="experience-date">2022</span>
-                <strong>Baccalauréat</strong>
-                <p class="small mb-0">Spécialités : Mathématiques, NSI (Numérique et Sciences Informatiques).</p>
+                <strong>Baccalauréat Général</strong>
+                <p class="small mb-0 opacity-75">Spécialités : Mathématiques & NSI.</p>
             </div>
-        </div>
+        </section>
 
         <!-- Hobbies -->
-        <div class="info-box">
-            <h4><span class="mono">04.</span> Hobbies</h4>
+        <section class="info-box">
+            <h3><span class="mono" aria-hidden="true">05.</span> Intérêts</h3>
             <div class="skill-list">
-                <span class="skill-tag">⚽ Sports</span>
-                <span class="skill-tag">📖 Lecture</span>
-                <span class="skill-tag">🎨 Dessin</span>
-                <span class="skill-tag">🎮 Jeux vidéos</span>
+                <span class="skill-tag">⚽ Football</span>
+                <span class="skill-tag">📖 Tech Watch</span>
+                <span class="skill-tag">🎨 UI/UX Design</span>
+                <span class="skill-tag">🎮 Gaming</span>
             </div>
-        </div>
+        </section>
     </div>
 </main>
 
 <footer class="text-center py-5">
-    <p class="small mono" style="color: var(--text-muted)">&copy; 2024 Maël Ribot • Portfolio Professionnel</p>
+    <p class="small mono opacity-50">&copy; 2024 Maël Ribot • Portfolio Professionnel</p>
 </footer>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" defer></script>
 <script>
     const themeToggle = document.getElementById('themeToggle');
     const themeIcon = document.getElementById('themeIcon');
     const body = document.body;
 
+    const applyTheme = (theme) => {
+        if (theme === 'light') {
+            body.classList.add('light-theme');
+            themeIcon.textContent = '☀️';
+        } else {
+            body.classList.remove('light-theme');
+            themeIcon.textContent = '🌙';
+        }
+    };
+
     themeToggle.addEventListener('click', () => {
-        body.classList.toggle('light-theme');
-        const isLight = body.classList.contains('light-theme');
+        const isLight = body.classList.toggle('light-theme');
         themeIcon.textContent = isLight ? '☀️' : '🌙';
         localStorage.setItem('theme', isLight ? 'light' : 'dark');
     });
 
-    if (localStorage.getItem('theme') === 'light') {
-        body.classList.add('light-theme');
-        themeIcon.textContent = '☀️';
-    }
+    if (localStorage.getItem('theme') === 'light') applyTheme('light');
 </script>
 
 </body>

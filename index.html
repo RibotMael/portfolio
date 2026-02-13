@@ -3,32 +3,34 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Portfolio de Maël Ribot, étudiant en BTS SIO SLAM. Développeur web passionné spécialisé en applications modernes.">
     <title>Portfolio – Ribot Maël</title>
 
-    <!-- Bootstrap 5 -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
-    <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Inter:wght@400;700&display=swap" rel="stylesheet">
     
     <style>
         :root {
-            --cyan: #1ed2be;
+            --cyan: #14b8a6; /* Un poil plus sombre pour l'accessibilité (contraste) */
             --dark-bg: #0f172a;
             --dark-card: #1e293b;
             --light-bg: #f8fafc;
             --text-main: #f1f5f9;
-            --text-muted: #94a3b8;
+            --text-muted: #cbd5e1; /* Plus clair pour le mode sombre, meilleur contraste */
             --nav-bg: rgba(15, 23, 42, 0.9);
-            --burger-filter: invert(1); /* Par défaut blanc pour fond sombre */
+            --burger-filter: invert(1);
             --transition: all 0.3s ease;
         }
 
         body.light-theme {
             --dark-bg: var(--light-bg);
-            --text-main: #1e293b;
-            --text-muted: #64748b;
+            --text-main: #0f172a;
+            --text-muted: #475569; /* Plus sombre pour le mode clair (contraste) */
             --nav-bg: rgba(248, 250, 252, 0.9);
-            --burger-filter: invert(0); /* Noir pour fond clair */
+            --burger-filter: invert(0);
         }
 
         body {
@@ -39,6 +41,7 @@
             color: var(--text-main);
             transition: var(--transition);
             overflow-x: hidden;
+            line-height: 1.6; /* Améliore la lisibilité */
         }
 
         code, .mono {
@@ -55,18 +58,14 @@
             transition: var(--transition);
         }
 
-        a:hover { color: #fff; filter: brightness(1.2); }
+        a:hover { filter: brightness(1.2); text-decoration: underline; }
 
         /* NAVBAR */
         .navbar {
             backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
             background: var(--nav-bg);
             border-bottom: 1px solid rgba(255,255,255,0.05);
-            transition: var(--transition);
-        }
-
-        body.light-theme .navbar {
-            border-bottom: 1px solid rgba(0,0,0,0.1);
         }
 
         .nav-link {
@@ -75,19 +74,15 @@
             margin: 0 10px;
         }
 
-        .nav-link:hover {
-            color: var(--cyan) !important;
-        }
+        .nav-link:hover { color: var(--cyan) !important; }
 
-        /* Correction Visibilité Burger */
         .navbar-toggler-icon {
             filter: var(--burger-filter);
-            transition: var(--transition);
         }
 
         /* HERO SECTION */
         .hero {
-            min-height: 75vh;
+            min-height: calc(100vh - 150px);
             display: flex;
             justify-content: center;
             align-items: center;
@@ -97,12 +92,12 @@
 
         .hero h1 {
             font-weight: 800;
-            font-size: 3.5rem;
+            font-size: clamp(2rem, 8vw, 3.5rem); /* Responsive fluide */
             margin-bottom: 1rem;
         }
 
         .hero h1 span {
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             display: block;
             color: var(--cyan);
             letter-spacing: 2px;
@@ -132,7 +127,7 @@
             background: var(--cyan);
             color: white;
             cursor: pointer;
-            box-shadow: 0 4px 15px rgba(30, 210, 190, 0.4);
+            box-shadow: 0 4px 15px rgba(20, 184, 166, 0.4);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -140,11 +135,7 @@
             transition: var(--transition);
         }
 
-        .theme-btn:hover {
-            transform: scale(1.1) rotate(15deg);
-        }
-
-        /* BUTTONS CUSTOM */
+        /* BOUTONS */
         .btn-custom {
             padding: 12px 30px;
             border-radius: 8px;
@@ -162,35 +153,22 @@
 
         .btn-outline-cyan:hover {
             background: var(--cyan);
-            color: #fff;
+            color: #fff !important;
         }
 
-        /* FOOTER */
         footer {
-            padding: 60px 20px;
+            padding: 40px 20px;
             background: rgba(0,0,0,0.05);
-            margin-top: 50px;
         }
 
-        .contact-info {
-            display: flex;
-            justify-content: center;
-            gap: 30px;
-            flex-wrap: wrap;
-        }
-
-        /* ANIMATIONS */
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
+        /* ANIMATION (Optimisée pour éviter les sauts de layout) */
         .animate-fade {
-            animation: fadeIn 0.8s ease-out forwards;
+            animation: fadeIn 0.6s ease-out forwards;
         }
 
-        @media (max-width: 768px) {
-            .hero h1 { font-size: 2.5rem; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
     </style>
 </head>
@@ -198,8 +176,8 @@
 <body>
 
 <div class="theme-toggle-wrapper">
-    <button id="themeToggle" class="theme-btn" title="Changer de mode">
-        <span id="themeIcon">🌙</span>
+    <button id="themeToggle" class="theme-btn" title="Changer de mode" aria-label="Changer le thème de couleur">
+        <span id="themeIcon" aria-hidden="true">🌙</span>
     </button>
 </div>
 
@@ -209,7 +187,7 @@
             <span class="mono">&lt;Maël /&gt;</span>
         </a>
 
-        <button class="navbar-toggler border-0 shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
+        <button class="navbar-toggler border-0 shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
 
@@ -228,13 +206,13 @@
     <div class="animate-fade">
         <h1>
             <span>Développeur passionné</span>
-            <a href="https://fr.linkedin.com/in/ma%C3%ABl-ribot-80b9b7257" target="_blank">
+            <a href="https://fr.linkedin.com/in/ma%C3%ABl-ribot-80b9b7257" target="_blank" rel="noopener">
                 Maël Ribot
             </a>
         </h1>
 
         <div class="fs-4 mono mb-4">
-            <span id="typing"></span><span class="cursor">|</span>
+            <span id="typing"></span><span class="cursor" aria-hidden="true">|</span>
         </div>
 
         <p class="custom-muted mb-5 mx-auto fs-5" style="max-width: 650px;">
@@ -250,61 +228,51 @@
 
 <footer class="text-center">
     <div class="container">
-        <div class="contact-info mb-4">
-            <a href="mailto:ribotmael18@gmail.com" class="mono">
-                📧 ribotmael18@gmail.com
-            </a>
-            <a href="tel:0632542419" class="mono">
-                📞 06 32 54 24 19
-            </a>
+        <div class="contact-info mb-4 d-flex justify-content-center gap-4 flex-wrap">
+            <a href="mailto:ribotmael18@gmail.com" class="mono">📧 ribotmael18@gmail.com</a>
+            <a href="tel:0632542419" class="mono">📞 06 32 54 24 19</a>
         </div>
         <p class="small custom-muted opacity-75">&copy; 2024 Maël Ribot • Tous droits réservés</p>
     </div>
 </footer>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" defer></script>
+
 <script>
-    // --- MODE SOMBRE / CLAIR ---
+    // Thème
     const themeToggle = document.getElementById('themeToggle');
     const themeIcon = document.getElementById('themeIcon');
     const body = document.body;
 
-    themeToggle.addEventListener('click', () => {
-        body.classList.toggle('light-theme');
-        const isLight = body.classList.contains('light-theme');
+    const setTheme = (isLight) => {
+        body.classList.toggle('light-theme', isLight);
         themeIcon.textContent = isLight ? '☀️' : '🌙';
         localStorage.setItem('theme', isLight ? 'light' : 'dark');
-    });
+    };
 
-    if (localStorage.getItem('theme') === 'light') {
-        body.classList.add('light-theme');
-        themeIcon.textContent = '☀️';
-    }
+    themeToggle.addEventListener('click', () => setTheme(!body.classList.contains('light-theme')));
 
-    // --- EFFET MACHINE À ÉCRIRE ---
+    if (localStorage.getItem('theme') === 'light') setTheme(true);
+
+    // Machine à écrire (Optimisée)
     const textElement = document.getElementById('typing');
     const phrases = ["Développeur Web", "BTS SIO SLAM", "Passionné de Code", "Apprenti Alternant"];
     let phraseIndex = 0;
     let charIndex = 0;
     let isDeleting = false;
-    let typeSpeed = 100;
 
     function typeEffect() {
         const currentPhrase = phrases[phraseIndex];
+        const displayContent = currentPhrase.substring(0, isDeleting ? charIndex - 1 : charIndex + 1);
         
-        if (isDeleting) {
-            textElement.textContent = currentPhrase.substring(0, charIndex - 1);
-            charIndex--;
-            typeSpeed = 50;
-        } else {
-            textElement.textContent = currentPhrase.substring(0, charIndex + 1);
-            charIndex++;
-            typeSpeed = 150;
-        }
+        textElement.textContent = displayContent;
+        charIndex = isDeleting ? charIndex - 1 : charIndex + 1;
+
+        let typeSpeed = isDeleting ? 50 : 150;
 
         if (!isDeleting && charIndex === currentPhrase.length) {
             isDeleting = true;
-            typeSpeed = 2000;
+            typeSpeed = 2000; 
         } else if (isDeleting && charIndex === 0) {
             isDeleting = false;
             phraseIndex = (phraseIndex + 1) % phrases.length;
@@ -314,7 +282,7 @@
         setTimeout(typeEffect, typeSpeed);
     }
 
-    document.addEventListener('DOMContentLoaded', typeEffect);
+    window.addEventListener('load', typeEffect);
 </script>
 
 </body>
