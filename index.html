@@ -11,26 +11,32 @@
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
     
     <style>
         :root {
-            --cyan: #14b8a6; /* Un poil plus sombre pour l'accessibilité (contraste) */
-            --dark-bg: #0f172a;
-            --dark-card: #1e293b;
-            --light-bg: #f8fafc;
+            /* Mode Sombre (Défaut) */
+            --cyan: #14b8a6;
+            --cyan-glow: rgba(20, 184, 166, 0.3);
+            --dark-bg: #0b1120;
+            --dark-card: #151f32;
             --text-main: #f1f5f9;
-            --text-muted: #cbd5e1; /* Plus clair pour le mode sombre, meilleur contraste */
-            --nav-bg: rgba(15, 23, 42, 0.9);
-            --burger-filter: invert(1);
-            --transition: all 0.3s ease;
+            --text-muted: #94a3b8;
+            --nav-bg: rgba(11, 17, 32, 0.8);
+            --border-color: rgba(255, 255, 255, 0.1);
+            --transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         body.light-theme {
-            --dark-bg: var(--light-bg);
+            /* Mode Clair Corrigé */
+            --cyan: #0d9488; /* Cyan plus sombre pour le contraste sur blanc */
+            --cyan-glow: rgba(13, 148, 136, 0.2);
+            --dark-bg: #ffffff;
+            --dark-card: #f1f5f9;
             --text-main: #0f172a;
-            --text-muted: #475569; /* Plus sombre pour le mode clair (contraste) */
-            --nav-bg: rgba(248, 250, 252, 0.9);
-            --burger-filter: invert(0);
+            --text-muted: #475569;
+            --nav-bg: rgba(255, 255, 255, 0.85);
+            --border-color: rgba(0, 0, 0, 0.08);
         }
 
         body {
@@ -39,46 +45,33 @@
             background-color: var(--dark-bg);
             font-family: 'Inter', sans-serif;
             color: var(--text-main);
-            transition: var(--transition);
+            transition: background-color 0.3s ease, color 0.3s ease;
             overflow-x: hidden;
-            line-height: 1.6; /* Améliore la lisibilité */
+            line-height: 1.6;
         }
 
-        code, .mono {
-            font-family: 'Fira Code', monospace;
-        }
+        code, .mono { font-family: 'Fira Code', monospace; }
 
-        .custom-muted {
-            color: var(--text-muted);
-        }
-
-        a {
-            text-decoration: none;
-            color: var(--cyan);
-            transition: var(--transition);
-        }
-
-        a:hover { filter: brightness(1.2); text-decoration: underline; }
+        .custom-muted { color: var(--text-muted); }
 
         /* NAVBAR */
         .navbar {
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
             background: var(--nav-bg);
-            border-bottom: 1px solid rgba(255,255,255,0.05);
+            border-bottom: 1px solid var(--border-color);
+            padding: 1rem 0;
+            transition: background 0.3s ease;
         }
 
         .nav-link {
             color: var(--text-main) !important;
             font-weight: 500;
             margin: 0 10px;
+            transition: var(--transition);
         }
 
         .nav-link:hover { color: var(--cyan) !important; }
-
-        .navbar-toggler-icon {
-            filter: var(--burger-filter);
-        }
 
         /* HERO SECTION */
         .hero {
@@ -92,17 +85,26 @@
 
         .hero h1 {
             font-weight: 800;
-            font-size: clamp(2rem, 8vw, 3.5rem); /* Responsive fluide */
-            margin-bottom: 1rem;
+            font-size: clamp(2.5rem, 8vw, 4rem);
+            margin-bottom: 1.5rem;
         }
 
-        .hero h1 span {
+        .hero h1 span.subtitle {
             font-size: 1.1rem;
             display: block;
             color: var(--cyan);
-            letter-spacing: 2px;
+            letter-spacing: 3px;
             text-transform: uppercase;
             margin-bottom: 10px;
+        }
+
+        .hero h1 a {
+            color: inherit;
+            text-decoration: none;
+            position: relative;
+            background: linear-gradient(to right, var(--cyan), #3b82f6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
         #typing {
@@ -111,7 +113,14 @@
             font-weight: 600;
         }
 
-        /* THEME SWITCH TOGGLE */
+        .cursor {
+            color: var(--cyan);
+            animation: blink 1s infinite;
+        }
+
+        @keyframes blink { 50% { opacity: 0; } }
+
+        /* THEME TOGGLE */
         .theme-toggle-wrapper {
             position: fixed;
             bottom: 2rem;
@@ -120,55 +129,70 @@
         }
 
         .theme-btn {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
+            width: 56px; height: 56px;
+            border-radius: 18px;
             border: none;
             background: var(--cyan);
             color: white;
             cursor: pointer;
-            box-shadow: 0 4px 15px rgba(20, 184, 166, 0.4);
+            box-shadow: 0 8px 20px var(--cyan-glow);
             display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
+            align-items: center; justify-content: center;
             transition: var(--transition);
         }
 
+        .theme-btn:hover { transform: scale(1.1) rotate(5deg); }
+
         /* BOUTONS */
         .btn-custom {
-            padding: 12px 30px;
-            border-radius: 8px;
+            padding: 14px 32px;
+            border-radius: 12px;
             font-weight: 600;
             transition: var(--transition);
             text-transform: uppercase;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             letter-spacing: 1px;
         }
 
         .btn-outline-cyan {
             border: 2px solid var(--cyan);
             color: var(--cyan);
+            background: transparent;
         }
 
         .btn-outline-cyan:hover {
             background: var(--cyan);
             color: #fff !important;
+            box-shadow: 0 0 20px var(--cyan-glow);
+        }
+
+        .btn-secondary-custom {
+            border: 2px solid var(--text-muted);
+            color: var(--text-main);
+        }
+
+        .btn-secondary-custom:hover {
+            border-color: var(--text-main);
+            background: rgba(128, 128, 128, 0.1);
         }
 
         footer {
-            padding: 40px 20px;
-            background: rgba(0,0,0,0.05);
+            padding: 60px 20px;
+            border-top: 1px solid var(--border-color);
         }
 
-        /* ANIMATION (Optimisée pour éviter les sauts de layout) */
         .animate-fade {
-            animation: fadeIn 0.6s ease-out forwards;
+            animation: fadeIn 0.8s ease-out forwards;
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
+            from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 768px) {
+            .hero { padding-top: 20px; }
+            .theme-toggle-wrapper { bottom: 1rem; right: 1rem; }
         }
     </style>
 </head>
@@ -176,24 +200,24 @@
 <body>
 
 <div class="theme-toggle-wrapper">
-    <button id="themeToggle" class="theme-btn" title="Changer de mode" aria-label="Changer le thème de couleur">
-        <span id="themeIcon" aria-hidden="true">🌙</span>
+    <button id="themeToggle" class="theme-btn" title="Changer de mode" aria-label="Changer le thème">
+        <i id="themeIcon" data-lucide="moon"></i>
     </button>
 </div>
 
 <nav class="navbar navbar-expand-lg fixed-top">
     <div class="container">
         <a class="navbar-brand fw-bold" href="#" style="color: var(--cyan)">
-            <span class="mono">&lt;Maël /&gt;</span>
+            <span class="mono">&lt;Maël.R /&gt;</span>
         </a>
 
-        <button class="navbar-toggler border-0 shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
+        <button class="navbar-toggler border-0 shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Menu">
+            <i data-lucide="menu" style="color: var(--text-main)"></i>
         </button>
 
         <div class="collapse navbar-collapse" id="mainNav">
             <ul class="navbar-nav ms-auto text-center">
-                <li class="nav-item"><a class="nav-link" href="#">Accueil</a></li>
+                <li class="nav-item"><a class="nav-link" href="index.html">Accueil</a></li>
                 <li class="nav-item"><a class="nav-link" href="presentation.html">Mon parcours</a></li>
                 <li class="nav-item"><a class="nav-link" href="e6.html">Épreuve E6</a></li>
                 <li class="nav-item"><a class="nav-link" href="alternance.html">Alternance</a></li>
@@ -205,8 +229,8 @@
 <header class="hero container">
     <div class="animate-fade">
         <h1>
-            <span>Développeur passionné</span>
-            <a href="https://fr.linkedin.com/in/ma%C3%ABl-ribot-80b9b7257" target="_blank" rel="noopener">
+            <span class="subtitle">Développeur passionné</span>
+            <a href="#" target="_blank" rel="noopener">
                 Maël Ribot
             </a>
         </h1>
@@ -216,12 +240,13 @@
         </div>
 
         <p class="custom-muted mb-5 mx-auto fs-5" style="max-width: 650px;">
-            Étudiant en BTS SIO option SLAM. Spécialisé dans le développement d'applications web modernes et robustes.
+            Étudiant en <strong>BTS SIO option SLAM</strong>. 
+            Je conçois des solutions logicielles modernes, de l'architecture back-end aux interfaces réactives.
         </p>
 
         <div class="d-flex flex-column flex-sm-row justify-content-center gap-3">
             <a href="e6.html" class="btn btn-custom btn-outline-cyan">Découvrir mes projets</a>
-            <a href="presentation.html" class="btn btn-custom btn-outline-secondary" style="color: var(--text-main); border-color: var(--text-main)">Mon parcours</a>
+            <a href="presentation.html" class="btn btn-custom btn-secondary-custom">Mon parcours</a>
         </div>
     </div>
 </header>
@@ -229,8 +254,12 @@
 <footer class="text-center">
     <div class="container">
         <div class="contact-info mb-4 d-flex justify-content-center gap-4 flex-wrap">
-            <a href="mailto:ribotmael18@gmail.com" class="mono">📧 ribotmael18@gmail.com</a>
-            <a href="tel:0632542419" class="mono">📞 06 32 54 24 19</a>
+            <a href="mailto:ribotmael18@gmail.com" class="mono text-decoration-none" style="color: var(--cyan)">
+                <i data-lucide="mail" size="18" class="me-1"></i> ribotmael18@gmail.com
+            </a>
+            <a href="tel:0632542419" class="mono text-decoration-none" style="color: var(--cyan)">
+                <i data-lucide="phone" size="18" class="me-1"></i> 06 32 54 24 19
+            </a>
         </div>
         <p class="small custom-muted opacity-75">&copy; 2024 Maël Ribot • Tous droits réservés</p>
     </div>
@@ -239,24 +268,36 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" defer></script>
 
 <script>
-    // Thème
+    // Initialisation des icônes
+    lucide.createIcons();
+
+    // Gestion du Thème
     const themeToggle = document.getElementById('themeToggle');
     const themeIcon = document.getElementById('themeIcon');
     const body = document.body;
 
+    const updateIcon = (isLight) => {
+        const iconName = isLight ? 'sun' : 'moon';
+        themeIcon.setAttribute('data-lucide', iconName);
+        lucide.createIcons();
+    };
+
     const setTheme = (isLight) => {
         body.classList.toggle('light-theme', isLight);
-        themeIcon.textContent = isLight ? '☀️' : '🌙';
+        updateIcon(isLight);
         localStorage.setItem('theme', isLight ? 'light' : 'dark');
     };
 
     themeToggle.addEventListener('click', () => setTheme(!body.classList.contains('light-theme')));
 
-    if (localStorage.getItem('theme') === 'light') setTheme(true);
+    // Charger le thème sauvegardé ou préférence système
+    const savedTheme = localStorage.getItem('theme');
+    const prefersLight = window.matchMedia('(prefers-color-scheme: light)').matches;
+    if (savedTheme === 'light' || (!savedTheme && prefersLight)) setTheme(true);
 
-    // Machine à écrire (Optimisée)
+    // Effet Machine à écrire
     const textElement = document.getElementById('typing');
-    const phrases = ["Développeur Web", "BTS SIO SLAM", "Passionné de Code", "Apprenti Alternant"];
+    const phrases = ["Développeur Full-Stack", "BTS SIO SLAM", "Apprenti à la DGFIP"];
     let phraseIndex = 0;
     let charIndex = 0;
     let isDeleting = false;
@@ -268,11 +309,11 @@
         textElement.textContent = displayContent;
         charIndex = isDeleting ? charIndex - 1 : charIndex + 1;
 
-        let typeSpeed = isDeleting ? 50 : 150;
+        let typeSpeed = isDeleting ? 40 : 100;
 
         if (!isDeleting && charIndex === currentPhrase.length) {
             isDeleting = true;
-            typeSpeed = 2000; 
+            typeSpeed = 2000; // Pause à la fin
         } else if (isDeleting && charIndex === 0) {
             isDeleting = false;
             phraseIndex = (phraseIndex + 1) % phrases.length;

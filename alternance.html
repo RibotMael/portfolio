@@ -8,29 +8,33 @@
     <!-- Bootstrap 5 -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
     <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
     
     <style>
         :root {
-            --cyan: #1ed2be;
-            --dark-bg: #0f172a;
-            --dark-card: #1e293b;
-            --light-bg: #f8fafc;
-            --light-card: #ffffff;
+            /* Mode Sombre (Défaut) */
+            --cyan: #14b8a6;
+            --cyan-glow: rgba(20, 184, 166, 0.3);
+            --dark-bg: #0b1120;
+            --dark-card: #151f32;
             --text-main: #f1f5f9;
             --text-muted: #94a3b8;
-            --nav-bg: rgba(15, 23, 42, 0.9);
-            --burger-filter: invert(1);
-            --transition: all 0.3s ease;
+            --nav-bg: rgba(11, 17, 32, 0.8);
+            --border-color: rgba(255, 255, 255, 0.05);
+            --transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         body.light-theme {
-            --dark-bg: var(--light-bg);
-            --dark-card: var(--light-card);
-            --text-main: #1e293b;
-            --text-muted: #64748b;
-            --nav-bg: rgba(248, 250, 252, 0.9);
-            --burger-filter: invert(0);
+            /* Mode Clair Harmonisé */
+            --cyan: #0d9488; 
+            --cyan-glow: rgba(13, 148, 136, 0.2);
+            --dark-bg: #ffffff;
+            --dark-card: #f8fafc;
+            --text-main: #0f172a;
+            --text-muted: #475569;
+            --nav-bg: rgba(255, 255, 255, 0.85);
+            --border-color: rgba(0, 0, 0, 0.08);
         }
 
         body {
@@ -39,80 +43,69 @@
             background-color: var(--dark-bg);
             font-family: 'Inter', sans-serif;
             color: var(--text-main);
-            transition: var(--transition);
+            transition: background-color 0.3s ease, color 0.3s ease;
+            line-height: 1.7;
             overflow-x: hidden;
         }
 
-        code, .mono {
-            font-family: 'Fira Code', monospace;
-        }
+        code, .mono { font-family: 'Fira Code', monospace; }
 
-        .custom-muted {
-            color: var(--text-muted);
-        }
+        .custom-muted { color: var(--text-muted); }
 
         /* NAVBAR */
         .navbar {
-            backdrop-filter: blur(12px);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
             background: var(--nav-bg);
-            border-bottom: 1px solid rgba(255,255,255,0.05);
+            border-bottom: 1px solid var(--border-color);
+            padding: 1rem 0;
             transition: var(--transition);
-        }
-
-        body.light-theme .navbar {
-            border-bottom: 1px solid rgba(0,0,0,0.1);
         }
 
         .nav-link {
             color: var(--text-main) !important;
             font-weight: 500;
             margin: 0 10px;
+            transition: var(--transition);
         }
 
         .nav-link:hover { color: var(--cyan) !important; }
-
-        .navbar-toggler-icon {
-            filter: var(--burger-filter);
-        }
+        .nav-link.active { color: var(--cyan) !important; }
 
         /* ALT CARD */
         .alt-card {
             background: var(--dark-card);
-            border-radius: 16px;
-            padding: 40px;
+            border-radius: 24px;
+            padding: 3rem;
             max-width: 900px;
-            margin: 0 auto 40px;
-            border: 1px solid rgba(255,255,255,0.05);
-            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            margin: 0 auto 3rem;
+            border: 1px solid var(--border-color);
             transition: var(--transition);
         }
 
         body.light-theme .alt-card {
-            border: 1px solid rgba(0,0,0,0.05);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.04);
         }
 
         .alt-section {
-            margin-bottom: 40px;
+            margin-bottom: 3.5rem;
         }
 
-        .alt-section:last-child {
-            margin-bottom: 0;
-        }
+        .alt-section:last-child { margin-bottom: 0; }
 
         .alt-section h3 {
             font-weight: 700;
-            font-size: 1.25rem;
+            font-size: 1.35rem;
             color: var(--cyan);
-            margin-bottom: 15px;
+            margin-bottom: 1.25rem;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
         }
 
         .alt-section p {
-            line-height: 1.7;
             color: var(--text-muted);
+            font-size: 1.05rem;
         }
 
         /* LISTS */
@@ -121,30 +114,34 @@
             padding: 0;
             margin: 0;
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 15px;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1rem;
         }
 
         .alt-list li {
-            padding: 12px 15px;
-            background: rgba(255,255,255,0.03);
-            border-radius: 8px;
+            padding: 1rem 1.25rem;
+            background: rgba(255,255,255,0.02);
+            border-radius: 12px;
             border-left: 3px solid var(--cyan);
             font-size: 0.95rem;
             color: var(--text-muted);
             transition: var(--transition);
+            border-top: 1px solid var(--border-color);
+            border-right: 1px solid var(--border-color);
+            border-bottom: 1px solid var(--border-color);
         }
 
         body.light-theme .alt-list li {
-            background: rgba(0,0,0,0.02);
+            background: white;
         }
 
         .alt-list li:hover {
-            transform: translateX(5px);
-            background: rgba(30, 210, 190, 0.05);
+            transform: translateX(8px);
+            background: var(--cyan-glow);
+            border-left-width: 6px;
         }
 
-        /* THEME SWITCH TOGGLE */
+        /* THEME TOGGLE */
         .theme-toggle-wrapper {
             position: fixed;
             bottom: 2rem;
@@ -153,18 +150,15 @@
         }
 
         .theme-btn {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
+            width: 56px; height: 56px;
+            border-radius: 18px;
             border: none;
             background: var(--cyan);
             color: white;
             cursor: pointer;
-            box-shadow: 0 4px 15px rgba(30, 210, 190, 0.4);
+            box-shadow: 0 8px 20px var(--cyan-glow);
             display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
+            align-items: center; justify-content: center;
             transition: var(--transition);
         }
 
@@ -172,18 +166,16 @@
 
         .page-header {
             text-align: center;
-            margin-bottom: 60px;
+            margin-bottom: 4rem;
         }
 
         .page-header h1 {
             font-weight: 800;
-            font-size: 3rem;
-            margin-bottom: 10px;
+            font-size: 3.5rem;
+            margin-bottom: 0.5rem;
         }
 
-        .page-header span {
-            color: var(--cyan);
-        }
+        .page-header span { color: var(--cyan); }
     </style>
 </head>
 
@@ -191,18 +183,18 @@
 
 <div class="theme-toggle-wrapper">
     <button id="themeToggle" class="theme-btn" title="Changer de mode">
-        <span id="themeIcon">🌙</span>
+        <i id="themeIcon" data-lucide="moon"></i>
     </button>
 </div>
 
 <nav class="navbar navbar-expand-lg fixed-top">
     <div class="container">
         <a class="navbar-brand fw-bold" href="index.html" style="color: var(--cyan)">
-            <span class="mono">&lt;Maël /&gt;</span>
+            <span class="mono">&lt;Maël.R /&gt;</span>
         </a>
 
         <button class="navbar-toggler border-0 shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
-            <span class="navbar-toggler-icon"></span>
+            <i data-lucide="menu" style="color: var(--text-main)"></i>
         </button>
 
         <div class="collapse navbar-collapse" id="mainNav">
@@ -218,22 +210,22 @@
 
 <main class="container py-5">
     <header class="page-header">
-        <h1>Alternance <span>DGFIP</span></h1>
+        <h1 class="mono">Alternance <span>DGFIP</span></h1>
         <p class="custom-muted mono">BTS SIO SLAM – Développement applicatif</p>
     </header>
 
     <div class="alt-card">
         <section class="alt-section">
-            <h3><span class="mono">01.</span> Présentation de l’institution</h3>
+            <h3><i data-lucide="building-2"></i> Présentation de l’institution</h3>
             <p>
                 La Direction Générale des Finances Publiques (DGFIP) est une administration centrale 
                 chargée de la gestion budgétaire, comptable et fiscale de l’État. Évoluer au sein de cette 
-                structure offre une immersion dans un environnement informatique à grande échelle.
+                structure offre une immersion dans un environnement informatique important.
             </p>
         </section>
 
         <section class="alt-section">
-            <h3><span class="mono">02.</span> Contexte & Enjeux</h3>
+            <h3><i data-lucide="shield-check"></i> Contexte & Enjeux</h3>
             <p>
                 Ma mission s'inscrit dans la modernisation des outils internes. Travailler pour la DGFIP 
                 implique une rigueur absolue concernant la <strong>sécurité des données</strong>, 
@@ -242,19 +234,17 @@
         </section>
 
         <section class="alt-section">
-            <h3><span class="mono">03.</span> Missions principales</h3>
+            <h3><i data-lucide="terminal"></i> Missions principales</h3>
             <ul class="alt-list">
                 <li>Conception et développement d'outils internes</li>
                 <li>Maintenance corrective et évolutive du parc applicatif</li>
                 <li>Diagnostic précis et résolution d'anomalies (bugs)</li>
                 <li>Collaboration agile avec les équipes techniques</li>
-                <li>Rédaction de documentations techniques</li>
-                <li>Optimisation des performances des scripts existants</li>
             </ul>
         </section>
 
         <section class="alt-section">
-            <h3><span class="mono">04.</span> Compétences acquises</h3>
+            <h3><i data-lucide="award"></i> Compétences acquises</h3>
             <ul class="alt-list">
                 <li>Analyse rigoureuse de cahiers des charges complexes</li>
                 <li>Maîtrise du cycle de vie logiciel en entreprise</li>
@@ -268,26 +258,36 @@
 </main>
 
 <footer class="text-center py-5">
-    <p class="custom-muted small">&copy; 2024 Maël Ribot • Expérience Professionnelle</p>
+    <div class="container">
+        <p class="custom-muted small mono opacity-50">&copy; 2024 Maël Ribot • Expérience Professionnelle</p>
+    </div>
 </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>
+    lucide.createIcons();
+
     const themeToggle = document.getElementById('themeToggle');
     const themeIcon = document.getElementById('themeIcon');
     const body = document.body;
 
-    themeToggle.addEventListener('click', () => {
-        body.classList.toggle('light-theme');
-        const isLight = body.classList.contains('light-theme');
-        themeIcon.textContent = isLight ? '☀️' : '🌙';
-        localStorage.setItem('theme', isLight ? 'light' : 'dark');
-    });
+    const updateIcon = (isLight) => {
+        const iconName = isLight ? 'sun' : 'moon';
+        themeIcon.setAttribute('data-lucide', iconName);
+        lucide.createIcons();
+    };
 
-    if (localStorage.getItem('theme') === 'light') {
-        body.classList.add('light-theme');
-        themeIcon.textContent = '☀️';
-    }
+    const setTheme = (isLight) => {
+        body.classList.toggle('light-theme', isLight);
+        updateIcon(isLight);
+        localStorage.setItem('theme', isLight ? 'light' : 'dark');
+    };
+
+    themeToggle.addEventListener('click', () => setTheme(!body.classList.contains('light-theme')));
+
+    const savedTheme = localStorage.getItem('theme');
+    const prefersLight = window.matchMedia('(prefers-color-scheme: light)').matches;
+    if (savedTheme === 'light' || (!savedTheme && prefersLight)) setTheme(true);
 </script>
 
 </body>

@@ -3,40 +3,44 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Projet MesAP – Ribot Maël</title>
+    <title>MesAP – Système de Communication Sécurisé</title>
 
     <!-- Bootstrap 5 -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
     
     <style>
         :root {
-            --cyan: #1ed2be;
-            --dark-bg: #0f172a;
-            --sidebar-bg: #1e293b;
-            --chat-bg: #0f172a;
-            --bubble-dark: #334155;
-            --bubble-cyan: rgba(30, 210, 190, 0.1);
-            --light-bg: #f1f5f9;
-            --light-sidebar: #ffffff;
-            --text-main: #f1f5f9;
-            --text-muted: #94a3b8;
-            --nav-bg: rgba(15, 23, 42, 0.9);
-            --burger-filter: invert(1);
-            --transition: all 0.3s ease;
+            /* Palette Cyber / Secure Dark */
+            --cyan: #14b8a6;
+            --cyan-glow: rgba(20, 184, 166, 0.15);
+            --dark-bg: #020617;
+            --sidebar-bg: #0f172a;
+            --chat-bg: #020617;
+            --bubble-system: #1e293b;
+            --bubble-user: rgba(20, 184, 166, 0.08);
+            --text-main: #f8fafc;
+            --text-muted: #64748b;
+            --nav-bg: rgba(2, 6, 23, 0.9);
+            --border-color: rgba(255, 255, 255, 0.05);
+            --transition: all 0.25s ease;
         }
 
         body.light-theme {
-            --dark-bg: var(--light-bg);
-            --sidebar-bg: var(--light-sidebar);
+            /* Palette Medical / Clean Light */
+            --cyan: #0d9488; 
+            --cyan-glow: rgba(13, 148, 136, 0.1);
+            --dark-bg: #f1f5f9;
+            --sidebar-bg: #ffffff;
             --chat-bg: #f8fafc;
-            --bubble-dark: #ffffff;
-            --bubble-cyan: #e0fcf9;
-            --text-main: #1e293b;
+            --bubble-system: #ffffff;
+            --bubble-user: #e0fcf9;
+            --text-main: #0f172a;
             --text-muted: #64748b;
             --nav-bg: rgba(248, 250, 252, 0.9);
-            --burger-filter: invert(0);
+            --border-color: rgba(0, 0, 0, 0.06);
         }
 
         body {
@@ -44,138 +48,219 @@
             background-color: var(--dark-bg);
             font-family: 'Inter', sans-serif;
             color: var(--text-main);
-            transition: var(--transition);
             height: 100vh;
             display: flex;
             flex-direction: column;
             overflow: hidden;
+            transition: background-color 0.3s ease;
         }
 
-        code, .mono { font-family: 'Fira Code', monospace; }
+        .mono { font-family: 'Fira Code', monospace; }
 
-        /* NAVBAR EXCEPTIONNELLE POUR CETTE PAGE */
+        /* NAVBAR */
         .navbar {
             backdrop-filter: blur(12px);
             background: var(--nav-bg);
-            border-bottom: 1px solid rgba(255,255,255,0.05);
+            border-bottom: 1px solid var(--border-color);
             z-index: 1050;
+            height: 64px;
         }
-        body.light-theme .navbar { border-bottom: 1px solid rgba(0,0,0,0.1); }
-        .nav-link { color: var(--text-main) !important; font-weight: 500; }
 
-        /* LAYOUT MESSAGERIE */
-        .messenger-container {
+        .btn-back {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 12px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            background: rgba(255, 255, 255, 0.03);
+            color: var(--text-main);
+            text-decoration: none;
+            font-size: 0.85rem;
+            transition: var(--transition);
+        }
+
+        .btn-back:hover {
+            background: var(--cyan-glow);
+            border-color: var(--cyan);
+            color: var(--cyan);
+        }
+
+        /* LAYOUT */
+        .messenger-wrapper {
             display: flex;
             flex: 1;
-            margin-top: 56px; /* Height of navbar */
+            margin-top: 64px;
             overflow: hidden;
         }
 
-        /* SIDEBAR (LISTE DES SECTIONS) */
+        /* SIDEBAR CHANNELS */
         .sidebar {
-            width: 300px;
+            width: 320px;
             background: var(--sidebar-bg);
-            border-right: 1px solid rgba(255,255,255,0.05);
+            border-right: 1px solid var(--border-color);
             display: flex;
             flex-direction: column;
-            transition: var(--transition);
         }
-        body.light-theme .sidebar { border-right: 1px solid rgba(0,0,0,0.1); }
 
         .sidebar-header {
             padding: 20px;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
-        .sidebar-item {
-            padding: 15px 20px;
+
+        .sidebar-scroll {
+            overflow-y: auto;
+            flex: 1;
+        }
+
+        .channel-item {
+            padding: 16px 20px;
             cursor: pointer;
-            border-bottom: 1px solid rgba(255,255,255,0.02);
+            border-left: 3px solid transparent;
             transition: var(--transition);
         }
-        .sidebar-item:hover { background: rgba(30, 210, 190, 0.05); }
-        .sidebar-item.active {
-            background: rgba(30, 210, 190, 0.1);
-            border-left: 4px solid var(--cyan);
+
+        .channel-item:hover { background: rgba(255,255,255,0.02); }
+        .channel-item.active {
+            background: var(--cyan-glow);
+            border-left-color: var(--cyan);
         }
-        .sidebar-item h6 { margin: 0; font-size: 0.9rem; font-weight: 700; }
-        .sidebar-item p { margin: 0; font-size: 0.75rem; color: var(--text-muted); }
 
         /* CHAT AREA */
-        .chat-area {
+        .chat-container {
             flex: 1;
-            background: var(--chat-bg);
             display: flex;
             flex-direction: column;
-            overflow-y: auto;
-            padding: 30px;
-            scroll-behavior: smooth;
-        }
-
-        .message-bubble {
-            max-width: 85%;
-            margin-bottom: 25px;
-            padding: 20px;
-            border-radius: 12px;
-            background: var(--bubble-dark);
+            background: var(--chat-bg);
             position: relative;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            animation: slideIn 0.4s ease-out forwards;
-        }
-        
-        body.light-theme .message-bubble {
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-            border: 1px solid rgba(0,0,0,0.05);
         }
 
-        .message-bubble.cyan {
-            background: var(--bubble-cyan);
-            border-left: 4px solid var(--cyan);
+        .chat-header {
+            padding: 15px 30px;
+            background: var(--nav-bg);
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            gap: 15px;
         }
 
-        .bubble-label {
+        .messages-list {
+            flex: 1;
+            overflow-y: auto;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            gap: 50px; /* Augmenté un peu pour mieux voir l'effet de scroll */
+            scroll-behavior: smooth;
+            position: relative;
+        }
+
+        /* MESSAGE BUBBLES */
+        .message {
+            display: flex;
+            flex-direction: column;
+            max-width: 80%;
+            animation: fadeIn 0.4s ease forwards;
+            /* Scroll Margin pour que le scroll s'arrête un peu avant le message */
+            scroll-margin-top: 100px; 
+        }
+
+        .message.incoming { align-self: flex-start; }
+        .message.outgoing { align-self: flex-end; align-items: flex-end; }
+
+        .message-info {
             font-family: 'Fira Code', monospace;
             font-size: 0.7rem;
-            color: var(--cyan);
-            text-transform: uppercase;
-            margin-bottom: 8px;
-            display: block;
+            color: var(--text-muted);
+            margin-bottom: 6px;
+            display: flex;
+            gap: 10px;
         }
 
-        .message-bubble h4 {
-            font-size: 1.1rem;
+        .bubble {
+            padding: 20px 24px;
+            border-radius: 18px;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            position: relative;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+
+        .incoming .bubble {
+            background: var(--bubble-system);
+            border-bottom-left-radius: 4px;
+        }
+
+        .outgoing .bubble {
+            background: var(--bubble-user);
+            border-bottom-right-radius: 4px;
+            border-color: var(--cyan-glow);
+        }
+
+        .security-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(16, 185, 129, 0.1);
+            color: #10b981;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.65rem;
             font-weight: 700;
-            margin-bottom: 15px;
+            text-transform: uppercase;
+            margin-top: 10px;
+        }
+
+        /* DECORATIONS */
+        .code-block {
+            background: rgba(0,0,0,0.3);
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            margin-top: 12px;
+            border: 1px solid rgba(255,255,255,0.05);
+            color: var(--cyan);
         }
 
         /* THEME TOGGLE */
         .theme-toggle-wrapper {
             position: fixed;
-            bottom: 2rem;
-            right: 2rem;
+            bottom: 25px;
+            right: 25px;
             z-index: 1000;
         }
+        
         .theme-btn {
-            width: 50px; height: 50px; border-radius: 50%; border: none;
-            background: var(--cyan); color: white; cursor: pointer;
+            width: 52px; height: 52px;
+            border-radius: 14px;
+            border: none;
+            background: var(--cyan);
+            color: white;
+            cursor: pointer;
             display: flex; align-items: center; justify-content: center;
-            font-size: 1.5rem; transition: var(--transition);
-            box-shadow: 0 4px 15px rgba(30, 210, 190, 0.4);
+            transition: var(--transition);
+            box-shadow: 0 10px 25px var(--cyan-glow);
         }
 
         /* RESPONSIVE */
         @media (max-width: 768px) {
             .sidebar { display: none; }
-            .message-bubble { max-width: 100%; }
+            .messages-list { padding: 20px; }
+            .message { max-width: 95%; }
+            .btn-back span { display: none; } 
         }
 
-        @keyframes slideIn {
+        @keyframes fadeIn {
             from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
-        .status-dot {
-            width: 8px; height: 8px; background: #22c55e;
-            border-radius: 50%; display: inline-block; margin-right: 5px;
+        .status-indicator {
+            width: 8px; height: 8px; border-radius: 50%; background: #10b981;
         }
     </style>
 </head>
@@ -183,151 +268,269 @@
 <body>
 
 <div class="theme-toggle-wrapper">
-    <button id="themeToggle" class="theme-btn"><span id="themeIcon">🌙</span></button>
+    <button id="themeToggle" class="theme-btn">
+        <i id="themeIcon" data-lucide="moon"></i>
+    </button>
 </div>
 
 <nav class="navbar navbar-expand-lg fixed-top">
     <div class="container-fluid px-4">
-        <a class="navbar-brand fw-bold" href="../index.html" style="color: var(--cyan)">
-            <span class="mono">&lt;MesAP /&gt;</span>
-        </a>
-        <div class="ms-auto d-flex align-items-center">
-            <span class="small mono custom-muted d-none d-md-block">
-                <span class="status-dot"></span> Serveur Sécurisé : Opérationnel
-            </span>
+        <div class="d-flex align-items-center gap-3">
+            <a href="../e6.html" class="btn-back">
+                <i data-lucide="arrow-left" size="18"></i>
+                <span class="mono fw-bold">RETOUR</span>
+            </a>
+            <div class="vr mx-2 opacity-10 d-none d-md-block" style="height: 24px; color: var(--text-main)"></div>
+            <a class="navbar-brand d-flex align-items-center gap-2 m-0" href="../index.html">
+                <i data-lucide="shield-check" style="color: var(--cyan)"></i>
+                <span class="mono fw-bold" style="color: var(--cyan); letter-spacing: -1px;">MesAP_OS</span>
+            </a>
+        </div>
+        
+        <div class="ms-auto d-flex align-items-center gap-3">
+            <div class="d-none d-md-flex flex-column align-items-end">
+                <span class="mono" style="font-size: 0.65rem; color: var(--text-muted)">USER_ID: MAEL_R_92</span>
+                <span class="mono" style="font-size: 0.65rem; color: #10b981">SESSION: ACTIVE</span>
+            </div>
+            <div class="status-indicator"></div>
         </div>
     </div>
 </nav>
 
-<div class="messenger-container">
-    <!-- Sidebar - Menu de navigation du projet -->
+<div class="messenger-wrapper">
+    <!-- Sidebar -->
     <aside class="sidebar">
         <div class="sidebar-header">
-            <h5 class="fw-bold mb-0">Dossier E6</h5>
-            <p class="mb-0">Application MesAP</p>
+            <span class="mono small fw-bold text-uppercase opacity-50">Canaux_Dossier_E6</span>
+            <i data-lucide="plus-square" size="18" class="text-muted"></i>
         </div>
-        <div class="sidebar-item active" onclick="document.getElementById('context').scrollIntoView()">
-            <h6># Présentation</h6>
-            <p>Contexte MOA/MOE/OPS</p>
-        </div>
-        <div class="sidebar-item" onclick="document.getElementById('skills').scrollIntoView()">
-            <h6># Compétences</h6>
-            <p>Java, Vue.js, SQL...</p>
-        </div>
-        <div class="sidebar-item" onclick="document.getElementById('conditions').scrollIntoView()">
-            <h6># Réalisation</h6>
-            <p>Ressources & Environnement</p>
-        </div>
-        <div class="sidebar-item" onclick="document.getElementById('method').scrollIntoView()">
-            <h6># Méthodologie</h6>
-            <p>Analyse & GitLab MR</p>
+        <div class="sidebar-scroll">
+            <!-- Ajout de data-target pour lier au JS -->
+            <div class="channel-item active" data-target="msg-0" onclick="scrollToMsg('msg-0')">
+                <div class="d-flex justify-content-between mb-1">
+                    <span class="fw-bold small"># mission-mesap</span>
+                    <span class="mono opacity-50" style="font-size: 0.6rem">En ligne</span>
+                </div>
+                <p class="mb-0 small text-truncate opacity-70">SRE, DGFIP & Retraites État</p>
+            </div>
+            <div class="channel-item" data-target="msg-1" onclick="scrollToMsg('msg-1')">
+                <div class="d-flex justify-content-between mb-1">
+                    <span class="fw-bold small"># gestion-acteurs</span>
+                    <span class="mono opacity-50" style="font-size: 0.6rem">14:02</span>
+                </div>
+                <p class="mb-0 small text-truncate opacity-70">MOA (Nantes), MOE (Caen), OPS (Lille)</p>
+            </div>
+            <div class="channel-item" data-target="msg-2" onclick="scrollToMsg('msg-2')">
+                <div class="d-flex justify-content-between mb-1">
+                    <span class="fw-bold small"># environnement-technique</span>
+                    <span class="mono opacity-50" style="font-size: 0.6rem">Hier</span>
+                </div>
+                <p class="mb-0 small text-truncate opacity-70">Java 11, Vue.js, PostgreSQL 14.5</p>
+            </div>
+            <div class="channel-item" data-target="msg-4" onclick="scrollToMsg('msg-4')">
+                <div class="d-flex justify-content-between mb-1">
+                    <span class="fw-bold small"># workflow-outils</span>
+                    <span class="mono opacity-50" style="font-size: 0.6rem">02/02</span>
+                </div>
+                <p class="mb-0 small text-truncate opacity-70">GitLab, Jira, Confluence</p>
+            </div>
+            <div class="channel-item" data-target="msg-5" onclick="scrollToMsg('msg-5')">
+                <div class="d-flex justify-content-between mb-1">
+                    <span class="fw-bold small"># présentation-fonctionnelle</span>
+                    <span class="mono opacity-50" style="font-size: 0.6rem">Nouv.</span>
+                </div>
+                <p class="mb-0 small text-truncate opacity-70">Dialogue Usagers / Gestionnaires</p>
+            </div>
         </div>
     </aside>
 
-    <!-- Chat Area - Contenu du projet -->
-    <main class="chat-area">
-        
-        <!-- Section 1 -->
-        <div id="context" class="message-bubble cyan">
-            <span class="bubble-label">Système d'Information // Contexte</span>
-            <h4>Présentation du Projet Professionnel</h4>
-            <p>
-                Ce projet s’inscrit dans le cadre de mon activité en alternance au sein d’une organisation 
-                structurée en mode <strong>Agile</strong>. L'application est un outil critique utilisé quotidiennement par des usagers et des gestionnaires.
-            </p>
-            <div class="mono small p-2 rounded bg-dark text-light mt-3" style="font-size: 0.8rem; opacity: 0.8;">
-                Stack : Back Java 11 / Front Vue.js 2 / DB PostgreSQL
+    <!-- Chat Area -->
+    <main class="chat-container">
+        <header class="chat-header">
+            <i data-lucide="hash" size="20" class="text-cyan"></i>
+            <div>
+                <h6 class="mb-0 fw-bold">dossier-examen-e6</h6>
+                <span class="mono opacity-50" style="font-size: 0.65rem">REF: DGFIP-SRE-2024</span>
             </div>
-        </div>
+        </header>
 
-        <!-- Section 2 -->
-        <div id="skills" class="message-bubble">
-            <span class="bubble-label">Terminal // Compétences</span>
-            <h4>Compétences techniques mobilisées</h4>
-            <div class="row g-3">
-                <div class="col-md-6">
-                    <ul class="list-unstyled mb-0">
-                        <li>✅ <strong>Jira :</strong> Analyse et gestion de tickets</li>
-                        <li>✅ <strong>Java 11 :</strong> Couche métier & batchs</li>
-                        <li>✅ <strong>Vue.js 2 :</strong> Interfaces UI/UX</li>
-                    </ul>
+        <div class="messages-list" id="scrollContainer">
+
+            <!-- MSG 0: MISSION -->
+            <div id="msg-0" class="message incoming">
+                <div class="message-info">
+                    <span>DGFIP_SYSTEM</span>
+                    <span>Direct</span>
                 </div>
-                <div class="col-md-6">
-                    <ul class="list-unstyled mb-0">
-                        <li>✅ <strong>PostgreSQL :</strong> Analyse de données</li>
-                        <li>✅ <strong>GitLab :</strong> Versioning & MR</li>
-                        <li>✅ <strong>Confluence :</strong> Documentation</li>
-                    </ul>
+                <div class="bubble">
+                    <p><strong>La Messagerie sécurisée des Agents Publics (MesAP)</strong></p>
+                    <p>Permet d’échanger avec le <strong>Service des Retraites de l’État (SRE)</strong>, service à compétence nationale de la Direction générale des Finances publiques (DGFIP).</p>
                 </div>
             </div>
-        </div>
+            
+            <!-- MSG 1: ACTEURS -->
+            <div id="msg-1" class="message incoming">
+                <div class="message-info">
+                    <span>MOA_BOT</span>
+                    <span>14:02:11</span>
+                </div>
+                <div class="bubble">
+                    <p><strong>Coordination Inter-Acteurs :</strong></p>
+                    <ul class="mb-3 ps-3 small">
+                        <li><strong>MOA (Nantes) :</strong> Commanditaire (SRE). Recense les besoins, fixe les objectifs et établit les calendriers.</li>
+                        <li><strong>MOE (Caen) :</strong> Équipe de développement. Chargée de développer les fonctionnalités et de corriger les bugs.</li>
+                        <li><strong>OPS (Lille) :</strong> Supervision des tests, surveillance de la qualité et maintien opérationnel.</li>
+                    </ul>
+                    <div class="code-block mono">
+                        MODE_COLLABORATION: Distanciel<br>
+                        REUNIONS: Point mensuel ENSAP / COSUI (Comité de Suivi)
+                    </div>
+                </div>
+            </div>
 
-        <!-- Section 3 -->
-        <div id="conditions" class="message-bubble cyan">
-            <span class="bubble-label">Infrastructure // Réalisation</span>
-            <h4>Conditions de réalisation</h4>
-            <p class="small fw-bold text-uppercase mb-2">Ressources fournies :</p>
-            <ul class="custom-muted mb-4 small">
-                <li>Environnement de dev sécurisé (Eclipse / VSCodium)</li>
-                <li>Accès VPN aux bases de données via DBeaver</li>
-                <li>Documentation fonctionnelle complète sur Confluence</li>
-            </ul>
-            <p class="small fw-bold text-uppercase mb-2">Résultats attendus :</p>
-            <ul class="custom-muted mb-0 small">
-                <li>Code robuste respectant les normes de l'organisation</li>
-                <li>Validation des tests unitaires avant Merge Request</li>
-            </ul>
-        </div>
+            <!-- MSG 2: TECHNIQUE -->
+            <div id="msg-2" class="message outgoing">
+                <div class="message-info">
+                    <span>MAEL_RIBOT</span>
+                    <span>14:05:45</span>
+                </div>
+                <div class="bubble">
+                    <p><strong>Architecture technique de MesAP :</strong></p>
+                    <div class="code-block mono">
+                        [DONNÉES] PostgreSQL 14.5 | DBeaver | PgAdmin<br>
+                        [BACKEND] Java 11 | Eclipse IDE<br>
+                        [FRONTEND] Vue.js 2 | VSCodium
+                    </div>
+                    <div class="security-badge">
+                        <i data-lucide="database" size="10"></i> SQL Server: PostgreSQL_v14.5
+                    </div>
+                </div>
+            </div>
 
-        <!-- Section 4 -->
-        <div id="method" class="message-bubble">
-            <span class="bubble-label">Process // Démarche</span>
-            <h4>Méthodologie de travail</h4>
-            <p>
-                Pour chaque ticket Jira, mon cycle de travail suit une procédure rigoureuse :
-            </p>
-            <ol class="small custom-muted">
-                <li><strong>Analyse :</strong> Compréhension du besoin métier via le ticket.</li>
-                <li><strong>Investigation :</strong> Étude de l'existant dans le code source.</li>
-                <li><strong>Développement :</strong> Implémentation de la solution (Back/Front).</li>
-                <li><strong>Validation :</strong> Auto-tests et création de la Merge Request sur GitLab.</li>
-                <li><strong>Peer-Review :</strong> Relecture par l'équipe avant intégration finale.</li>
-            </ol>
-        </div>
+            <!-- MSG 4: OUTILS -->
+            <div id="msg-4" class="message outgoing">
+                <div class="message-info">
+                    <span>MAEL_RIBOT</span>
+                    <span>02/02, 11:20</span>
+                </div>
+                <div class="bubble">
+                    <p><strong>Outils de gestion et collaboration :</strong></p>
+                    <ul class="ps-3 small">
+                        <li><strong>GitLab :</strong> Gestion du code source (Git) pour un travail collaboratif sans impacter les autres.</li>
+                        <li><strong>Confluence :</strong> Stockage des documentations projet et informations critiques.</li>
+                        <li><strong>Jira :</strong> Suivi des tickets (nouvelles fonctionnalités et corrections de bugs).</li>
+                    </ul>
+                </div>
+            </div>
 
-        <!-- Footer simulé -->
-        <div class="text-center py-4 opacity-50 small mono">
-            --- FIN DE LA TRANSMISSION SÉCURISÉE ---
-        </div>
+            <!-- MSG 5: FONCTIONNEL -->
+            <div id="msg-5" class="message incoming">
+                <div class="message-info">
+                    <span>FONCTIONNEL_EXP</span>
+                    <span>Nouveau message</span>
+                </div>
+                <div class="bubble">
+                    <p><strong>Présentation détaillée du Workflow :</strong></p>
+                    <p>MesAP permet aux <strong>usagers</strong> de dialoguer avec les gestionnaires :</p>
+                    <div class="row g-2 mt-1">
+                        <div class="col-6">
+                            <div class="p-2 border rounded small opacity-80">
+                                <strong>Côté Usager :</strong><br>Écriture de nouveaux messages, réponses au SRE.
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="p-2 border rounded small opacity-80">
+                                <strong>Côté Gestionnaire :</strong><br>Traitement des messages, écrans administratifs, gestion des référentiels.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
+            <div class="text-center py-5 opacity-20 mono" style="font-size: 0.7rem;">
+                --- SCAN RÉALISÉ : AUCUNE MENACE DÉTECTÉE ---
+            </div>
+        </div>
     </main>
 </div>
 
 <script>
+    lucide.createIcons();
+
+    // --- GESTION DU THÈME ---
     const themeToggle = document.getElementById('themeToggle');
     const themeIcon = document.getElementById('themeIcon');
     const body = document.body;
 
-    themeToggle.addEventListener('click', () => {
-        body.classList.toggle('light-theme');
-        const isLight = body.classList.contains('light-theme');
-        themeIcon.textContent = isLight ? '☀️' : '🌙';
+    const updateIcon = (isLight) => {
+        const iconName = isLight ? 'sun' : 'moon';
+        themeIcon.setAttribute('data-lucide', iconName);
+        lucide.createIcons();
+    };
+
+    const setTheme = (isLight) => {
+        body.classList.toggle('light-theme', isLight);
+        updateIcon(isLight);
         localStorage.setItem('theme', isLight ? 'light' : 'dark');
-    });
+    };
 
-    if (localStorage.getItem('theme') === 'light') {
-        body.classList.add('light-theme');
-        themeIcon.textContent = '☀️';
-    }
+    themeToggle.addEventListener('click', () => setTheme(!body.classList.contains('light-theme')));
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'light') setTheme(true);
 
-    // Gestion du scroll sidebar (visuel)
-    const items = document.querySelectorAll('.sidebar-item');
-    items.forEach(item => {
-        item.addEventListener('click', () => {
-            items.forEach(i => i.classList.remove('active'));
-            item.classList.add('active');
+
+    // --- GESTION DU SCROLL ACTIF (SCROLLSPY) ---
+    
+    // On sélectionne le conteneur qui scroll (messages-list)
+    const scrollContainer = document.querySelector('.messages-list');
+    const allChannels = document.querySelectorAll('.channel-item');
+    const allMessages = document.querySelectorAll('.message');
+
+    // On configure l'observateur
+    // root: null signifierait le viewport du navigateur, ici on veut le conteneur .messages-list
+    // rootMargin: '-50% 0px -50% 0px' crée une ligne invisible au milieu de l'écran. 
+    // L'événement se déclenche quand un élément croise cette ligne centrale.
+    const observerOptions = {
+        root: scrollContainer,
+        rootMargin: '-45% 0px -45% 0px', 
+        threshold: 0
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                // 1. On enlève la classe active de tous les canaux
+                allChannels.forEach(ch => ch.classList.remove('active'));
+
+                // 2. On récupère l'ID du message visible (ex: "msg-1")
+                const visibleId = entry.target.id;
+
+                // 3. On cherche le canal qui a le data-target correspondant
+                const activeChannel = document.querySelector(`.channel-item[data-target="${visibleId}"]`);
+                
+                // 4. On l'active
+                if (activeChannel) {
+                    activeChannel.classList.add('active');
+                    // Optionnel : Scroll automatique de la sidebar si la liste est longue
+                    activeChannel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                }
+            }
         });
+    }, observerOptions);
+
+    // On observe chaque message
+    allMessages.forEach(msg => {
+        observer.observe(msg);
     });
+
+    // Fonction de clic manuel (modifiée pour ne pas passer "this" mais utiliser le data-target)
+    function scrollToMsg(id) {
+        const target = document.getElementById(id);
+        if(target) {
+            target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            // L'observateur fera le reste pour la classe active
+        }
+    }
 </script>
 
 </body>
