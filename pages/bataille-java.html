@@ -511,8 +511,8 @@
                 La gestion du paquet de cartes (la classe <code>Tas</code>) utilise une <code>LinkedList</code> issue de <code>java.util</code>. Ce choix est justifié par la nature du jeu (logique de file / FIFO : First In, First Out) : on retire les cartes du dessus et on ajoute les gains en dessous.
             </p>
             <ul class="list-unstyled text-muted">
-                <li class="mb-2">✅ <code>pollFirst()</code> : Complexité O(1) pour jouer la carte du dessus.</li>
-                <li class="mb-2">✅ <code>addLast()</code> : Complexité O(1) pour ranger les cartes gagnées en dessous.</li>
+                <li class="mb-2">✅ <code>pollFirst()</code> : Pour jouer la carte du dessus.</li>
+                <li class="mb-2">✅ <code>addLast()</code> : Pour ranger les cartes gagnées en dessous.</li>
                 <li class="mb-2">✅ <code>Collections.shuffle()</code> : Utilisé pour le mélange initial du paquet.</li>
             </ul>
         </div>
