@@ -5,9 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>MesAP – Système de Communication Sécurisé</title>
 
-    <!-- Bootstrap 5 -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
-    <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
     
@@ -153,7 +151,7 @@
             padding: 40px;
             display: flex;
             flex-direction: column;
-            gap: 50px; /* Augmenté un peu pour mieux voir l'effet de scroll */
+            gap: 50px; 
             scroll-behavior: smooth;
             position: relative;
         }
@@ -164,7 +162,6 @@
             flex-direction: column;
             max-width: 80%;
             animation: fadeIn 0.4s ease forwards;
-            /* Scroll Margin pour que le scroll s'arrête un peu avant le message */
             scroll-margin-top: 100px; 
         }
 
@@ -224,6 +221,18 @@
             margin-top: 12px;
             border: 1px solid rgba(255,255,255,0.05);
             color: var(--cyan);
+        }
+
+        .ticket-tag {
+            background: rgba(20, 184, 166, 0.1);
+            border: 1px solid var(--cyan);
+            color: var(--cyan);
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            margin-right: 5px;
+            display: inline-block;
+            margin-bottom: 5px;
         }
 
         /* THEME TOGGLE */
@@ -298,14 +307,12 @@
 </nav>
 
 <div class="messenger-wrapper">
-    <!-- Sidebar -->
     <aside class="sidebar">
         <div class="sidebar-header">
             <span class="mono small fw-bold text-uppercase opacity-50">Canaux_Dossier_E6</span>
             <i data-lucide="plus-square" size="18" class="text-muted"></i>
         </div>
         <div class="sidebar-scroll">
-            <!-- Ajout de data-target pour lier au JS -->
             <div class="channel-item active" data-target="msg-0" onclick="scrollToMsg('msg-0')">
                 <div class="d-flex justify-content-between mb-1">
                     <span class="fw-bold small"># mission-mesap</span>
@@ -318,14 +325,14 @@
                     <span class="fw-bold small"># gestion-acteurs</span>
                     <span class="mono opacity-50" style="font-size: 0.6rem">14:02</span>
                 </div>
-                <p class="mb-0 small text-truncate opacity-70">MOA (Nantes), MOE (Caen), OPS (Lille)</p>
+                <p class="mb-0 small text-truncate opacity-70">MOA, MOE & OPS</p>
             </div>
             <div class="channel-item" data-target="msg-2" onclick="scrollToMsg('msg-2')">
                 <div class="d-flex justify-content-between mb-1">
                     <span class="fw-bold small"># environnement-technique</span>
-                    <span class="mono opacity-50" style="font-size: 0.6rem">Hier</span>
+                    <span class="mono opacity-50" style="font-size: 0.6rem">14:05</span>
                 </div>
-                <p class="mb-0 small text-truncate opacity-70">Java 11, Vue.js, PostgreSQL 14.5</p>
+                <p class="mb-0 small text-truncate opacity-70">Java 11, Vue.js, PostgreSQL</p>
             </div>
             <div class="channel-item" data-target="msg-4" onclick="scrollToMsg('msg-4')">
                 <div class="d-flex justify-content-between mb-1">
@@ -333,6 +340,13 @@
                     <span class="mono opacity-50" style="font-size: 0.6rem">02/02</span>
                 </div>
                 <p class="mb-0 small text-truncate opacity-70">GitLab, Jira, Confluence</p>
+            </div>
+            <div class="channel-item" data-target="msg-tickets" onclick="scrollToMsg('msg-tickets')">
+                <div class="d-flex justify-content-between mb-1">
+                    <span class="fw-bold small"># tickets-jira</span>
+                    <span class="mono opacity-50" style="font-size: 0.6rem">Récents</span>
+                </div>
+                <p class="mb-0 small text-truncate opacity-70">Suivi des développements</p>
             </div>
             <div class="channel-item" data-target="msg-5" onclick="scrollToMsg('msg-5')">
                 <div class="d-flex justify-content-between mb-1">
@@ -344,7 +358,6 @@
         </div>
     </aside>
 
-    <!-- Chat Area -->
     <main class="chat-container">
         <header class="chat-header">
             <i data-lucide="hash" size="20" class="text-cyan"></i>
@@ -356,7 +369,6 @@
 
         <div class="messages-list" id="scrollContainer">
 
-            <!-- MSG 0: MISSION -->
             <div id="msg-0" class="message incoming">
                 <div class="message-info">
                     <span>DGFIP_SYSTEM</span>
@@ -368,7 +380,6 @@
                 </div>
             </div>
             
-            <!-- MSG 1: ACTEURS -->
             <div id="msg-1" class="message incoming">
                 <div class="message-info">
                     <span>MOA_BOT</span>
@@ -383,12 +394,11 @@
                     </ul>
                     <div class="code-block mono">
                         MODE_COLLABORATION: Distanciel<br>
-                        REUNIONS: Point mensuel ENSAP / COSUI (Comité de Suivi)
+                        REUNIONS: Point mensuel ENSAP / COSUI
                     </div>
                 </div>
             </div>
 
-            <!-- MSG 2: TECHNIQUE -->
             <div id="msg-2" class="message outgoing">
                 <div class="message-info">
                     <span>MAEL_RIBOT</span>
@@ -407,7 +417,6 @@
                 </div>
             </div>
 
-            <!-- MSG 4: OUTILS -->
             <div id="msg-4" class="message outgoing">
                 <div class="message-info">
                     <span>MAEL_RIBOT</span>
@@ -416,14 +425,40 @@
                 <div class="bubble">
                     <p><strong>Outils de gestion et collaboration :</strong></p>
                     <ul class="ps-3 small">
-                        <li><strong>GitLab :</strong> Gestion du code source (Git) pour un travail collaboratif sans impacter les autres.</li>
-                        <li><strong>Confluence :</strong> Stockage des documentations projet et informations critiques.</li>
-                        <li><strong>Jira :</strong> Suivi des tickets (nouvelles fonctionnalités et corrections de bugs).</li>
+                        <li><strong>GitLab :</strong> Gestion du code source (Git).</li>
+                        <li><strong>Confluence :</strong> Documentations projet.</li>
+                        <li><strong>Jira :</strong> Suivi des tickets et correctifs.</li>
                     </ul>
                 </div>
             </div>
 
-            <!-- MSG 5: FONCTIONNEL -->
+            <div id="msg-tickets" class="message outgoing">
+                <div class="message-info">
+                    <span>MAEL_RIBOT</span>
+                    <span>05/02, 09:15</span>
+                </div>
+                <div class="bubble">
+                    <p><strong>Historique des tickets Jira assignés :</strong></p>
+                    <div class="mt-2">
+                        <div class="mb-2">
+                            <span class="ticket-tag mono">MESAP-3385</span> 
+                            <span class="small"><strong>Restrictions usagers</strong></span>
+                        </div>
+                        <div class="mb-2">
+                            <span class="ticket-tag mono">MESAP-3393</span> 
+                            <span class="small"><strong>Limite de message</strong></span>
+                        </div>
+                        <div class="mb-2">
+                            <span class="ticket-tag mono">MESAP-2564</span> 
+                            <span class="small"><strong>Récupération de brouillon</strong></span>
+                        </div>
+                    </div>
+                    <div class="security-badge mt-3" style="background: rgba(20, 184, 166, 0.1); color: var(--cyan);">
+                        <i data-lucide="check-circle" size="10"></i> Statut: TERMINÉ
+                    </div>
+                </div>
+            </div>
+
             <div id="msg-5" class="message incoming">
                 <div class="message-info">
                     <span>FONCTIONNEL_EXP</span>
@@ -440,7 +475,7 @@
                         </div>
                         <div class="col-6">
                             <div class="p-2 border rounded small opacity-80">
-                                <strong>Côté Gestionnaire :</strong><br>Traitement des messages, écrans administratifs, gestion des référentiels.
+                                <strong>Côté Gestionnaire :</strong><br>Traitement des messages, écrans administratifs.
                             </div>
                         </div>
                     </div>
@@ -457,7 +492,6 @@
 <script>
     lucide.createIcons();
 
-    // --- GESTION DU THÈME ---
     const themeToggle = document.getElementById('themeToggle');
     const themeIcon = document.getElementById('themeIcon');
     const body = document.body;
@@ -478,18 +512,10 @@
     const savedTheme = localStorage.getItem('theme');
     if (savedTheme === 'light') setTheme(true);
 
-
-    // --- GESTION DU SCROLL ACTIF (SCROLLSPY) ---
-    
-    // On sélectionne le conteneur qui scroll (messages-list)
     const scrollContainer = document.querySelector('.messages-list');
     const allChannels = document.querySelectorAll('.channel-item');
     const allMessages = document.querySelectorAll('.message');
 
-    // On configure l'observateur
-    // root: null signifierait le viewport du navigateur, ici on veut le conteneur .messages-list
-    // rootMargin: '-50% 0px -50% 0px' crée une ligne invisible au milieu de l'écran. 
-    // L'événement se déclenche quand un élément croise cette ligne centrale.
     const observerOptions = {
         root: scrollContainer,
         rootMargin: '-45% 0px -45% 0px', 
@@ -499,36 +525,24 @@
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
-                // 1. On enlève la classe active de tous les canaux
                 allChannels.forEach(ch => ch.classList.remove('active'));
-
-                // 2. On récupère l'ID du message visible (ex: "msg-1")
                 const visibleId = entry.target.id;
-
-                // 3. On cherche le canal qui a le data-target correspondant
                 const activeChannel = document.querySelector(`.channel-item[data-target="${visibleId}"]`);
-                
-                // 4. On l'active
                 if (activeChannel) {
                     activeChannel.classList.add('active');
-                    // Optionnel : Scroll automatique de la sidebar si la liste est longue
-                    activeChannel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
                 }
             }
         });
     }, observerOptions);
 
-    // On observe chaque message
     allMessages.forEach(msg => {
         observer.observe(msg);
     });
 
-    // Fonction de clic manuel (modifiée pour ne pas passer "this" mais utiliser le data-target)
     function scrollToMsg(id) {
         const target = document.getElementById(id);
         if(target) {
             target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            // L'observateur fera le reste pour la classe active
         }
     }
 </script>
