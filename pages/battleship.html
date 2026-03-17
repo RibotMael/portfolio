@@ -12,10 +12,10 @@
 
 <style>
 :root {
-  --primary-color: #00f2ff; /* Cyan Néon */
-  --secondary-color: #0077cc; /* Bleu Océan */
+  --primary-color: #00f2ff; 
+  --secondary-color: #0077cc; 
   --text-color: #ffffff;
-  --glass-bg: rgba(0, 15, 30, 0.9); /* Fond très opaque pour la lisibilité */
+  --glass-bg: rgba(0, 15, 30, 0.9); 
   --glass-border: 1px solid rgba(0, 242, 255, 0.3);
 }
 
@@ -28,7 +28,6 @@ html, body {
   cursor: crosshair;
 }
 
-/* ===== FOND D'ÉCRAN FIXE ===== */
 body {
   background: url("../images/BackGroundAccueil.png") no-repeat center center fixed;
   background-size: cover;
@@ -36,7 +35,6 @@ body {
   position: relative;
 }
 
-/* ===== VIGNETTE SOMBRE FIXE (Correction du bug de scroll) ===== */
 body::before {
   content: "";
   position: fixed;
@@ -49,7 +47,6 @@ body::before {
   pointer-events: none;
 }
 
-/* ===== BARRE SUPÉRIEURE ===== */
 .top-bar {
   display: flex;
   justify-content: space-between;
@@ -79,7 +76,6 @@ body::before {
   box-shadow: 0 0 15px var(--primary-color);
 }
 
-/* ===== INFOS UTILISATEUR ===== */
 .user-info {
   display: flex;
   align-items: center;
@@ -114,7 +110,6 @@ body::before {
   object-fit: cover;
 }
 
-/* ===== MENU DÉROULANT ===== */
 .user-dropdown {
   position: absolute;
   top: 80px;
@@ -153,7 +148,6 @@ body::before {
   color: #ff5555;
 }
 
-/* ===== MENU CENTRAL ===== */
 .menu-container {
   display: flex;
   flex-direction: column;
@@ -178,7 +172,6 @@ body::before {
   animation: floatLogo 6s ease-in-out infinite;
 }
 
-/* ===== BOUTONS PRINCIPAUX ===== */
 .main-btn {
   width: 280px;
   padding: 1.2rem;
@@ -225,10 +218,9 @@ body::before {
 .btn-red { border-color: #e74c3c; border-left-color: #e74c3c; border-right-color: #e74c3c; }
 .btn-red:hover { background: rgba(231, 76, 60, 0.9); }
 
-/* ===== SECTIONS DE CONTENU ===== */
 .section {
   display: none;
-  max-width: 800px; /* Plus large pour accueillir les nouveaux textes */
+  max-width: 800px; 
   margin: 40px auto 80px auto;
   background: var(--glass-bg);
   backdrop-filter: blur(10px);
@@ -237,7 +229,7 @@ body::before {
   border-radius: 4px;
   box-shadow: 0 0 40px rgba(0, 0, 0, 0.9);
   animation: hologramIn 0.4s ease forwards;
-  text-align: justify; /* Texte justifié pour les longs paragraphes */
+  text-align: justify; 
   position: relative;
   z-index: 20;
 }
@@ -268,7 +260,7 @@ body::before {
   list-style: none;
   padding: 0;
   display: grid;
-  grid-template-columns: 1fr 1fr; /* Affichage en deux colonnes pour les listes */
+  grid-template-columns: 1fr 1fr; 
   gap: 10px;
 }
 
@@ -287,7 +279,6 @@ body::before {
   color: var(--primary-color);
 }
 
-/* ===== ANIMATIONS ===== */
 @keyframes fadeIn {
   from {opacity:0; transform: translateY(20px);}
   to {opacity:1; transform: translateY(0);}
@@ -304,7 +295,6 @@ body::before {
   100% { opacity: 1; transform: scale(1); filter: blur(0); }
 }
 
-/* ===== RESPONSIVE ===== */
 @media (max-width: 768px) {
   .section ul { grid-template-columns: 1fr; }
   .section { width: 90%; padding: 20px; }

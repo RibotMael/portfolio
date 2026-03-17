@@ -13,7 +13,6 @@
     
     <style>
         :root {
-            /* Mode Sombre (Défaut) */
             --cyan: #14b8a6;
             --cyan-glow: rgba(20, 184, 166, 0.3);
             --dark-bg: #0b1120;
@@ -26,7 +25,6 @@
         }
 
         body.light-theme {
-            /* Mode Clair Corrigé */
             --cyan: #0d9488; 
             --cyan-glow: rgba(13, 148, 136, 0.2);
             --dark-bg: #ffffff;
@@ -51,7 +49,6 @@
 
         .custom-muted { color: var(--text-muted); }
 
-        /* NAVBAR */
         .navbar {
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
@@ -72,7 +69,6 @@
         .nav-link:hover { color: var(--cyan) !important; }
         .nav-link.active { color: var(--cyan) !important; }
 
-        /* PROJECT CARDS */
         .project-card {
             background: var(--dark-card);
             border-radius: 20px;
@@ -128,7 +124,6 @@
             margin-bottom: 2rem;
         }
 
-        /* THEME TOGGLE */
         .theme-toggle-wrapper {
             position: fixed;
             bottom: 2rem;
@@ -151,7 +146,6 @@
 
         .theme-btn:hover { transform: scale(1.1) rotate(15deg); }
 
-        /* BUTTONS */
         .btn-outline-cyan {
             border: 2px solid var(--cyan);
             color: var(--cyan);

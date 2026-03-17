@@ -13,7 +13,6 @@
     
     <style>
         :root {
-            /* === MODE SOMBRE (Défaut) === */
             --cyan: #14b8a6;
             --cyan-glow: rgba(20, 184, 166, 0.3);
             --dark-bg: #0b1120;
@@ -23,7 +22,6 @@
             --nav-bg: rgba(11, 17, 32, 0.95);
             --border-color: rgba(255, 255, 255, 0.1);
 
-            /* Couleurs spécifiques au jeu (Fixes) */
             --felt-green: #35654d;
             --felt-border: #5c4033;
             --card-white: #fdfdfd;
@@ -32,7 +30,6 @@
         }
 
         body.light-theme {
-            /* === MODE CLAIR === */
             --cyan: #0d9488;
             --cyan-glow: rgba(13, 148, 136, 0.2);
             --dark-bg: #f8fafc;
@@ -58,7 +55,6 @@
         .mono { font-family: 'Fira Code', monospace; }
         .serif { font-family: 'Playfair Display', serif; }
 
-        /* Navigation */
         .navbar {
             background: var(--nav-bg);
             border-bottom: 1px solid var(--border-color);
@@ -84,7 +80,6 @@
             border-color: var(--cyan); 
         }
 
-        /* THEME TOGGLE */
         .theme-toggle-wrapper {
             position: fixed;
             bottom: 2rem;
@@ -106,7 +101,6 @@
         }
         .theme-btn:hover { transform: scale(1.1) rotate(15deg); }
 
-        /* MOCKUP TERMINAL */
         .terminal-mockup {
             background: #1e1e1e;
             border-radius: 10px;
@@ -131,15 +125,14 @@
         .terminal-body {
             padding: 15px;
             color: #d4d4d4;
-            height: 380px; /* Agrandi pour voir plus de tours */
+            height: 380px; 
             overflow-y: auto;
         }
         .term-cmd { color: #4ec9b0; }
-        .term-p1 { color: #569cd6; font-weight: bold; } /* Alice (Bleu) */
-        .term-p2 { color: #f472b6; font-weight: bold; } /* Bob (Rose) */
+        .term-p1 { color: #569cd6; font-weight: bold; } 
+        .term-p2 { color: #f472b6; font-weight: bold; } 
         .term-bataille { color: #ef4444; font-weight: bold; }
 
-        /* ZONE DE JEU (Hero Section) */
         .game-arena {
             background: radial-gradient(circle, #407a5d 0%, #2d5a27 100%);
             border: 10px solid var(--felt-border);
@@ -155,7 +148,6 @@
             margin-bottom: 4rem;
         }
 
-        /* Les Cartes Visuelles */
         .card-slot {
             width: 140px;
             height: 200px;
@@ -198,7 +190,6 @@
 
         .playing-card .corner-bottom { transform: rotate(180deg); }
 
-        /* Dos de carte */
         .card-back {
             background: repeating-linear-gradient(
                 45deg,
@@ -213,7 +204,6 @@
         .card-hidden { transform: rotateY(180deg); }
         .winner-glow { box-shadow: 0 0 30px #fbbf24; border: 2px solid #fbbf24; }
 
-        /* Interface Score */
         .score-board {
             background: rgba(0,0,0,0.4);
             backdrop-filter: blur(5px);
@@ -240,7 +230,6 @@
         .action-btn:active { transform: translateY(4px); box-shadow: none; }
         .action-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; box-shadow: none; }
 
-        /* Code Sections */
         .code-block {
             background: #1e1e1e;
             border-radius: 10px;
@@ -279,7 +268,6 @@
             width: fit-content;
         }
         
-        /* Titre */
         h1 span { color: var(--cyan); }
         h3 span { color: var(--cyan); }
     </style>

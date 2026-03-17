@@ -11,7 +11,6 @@
     
     <style>
         :root {
-            /* Palette Cyber / Secure Dark */
             --cyan: #14b8a6;
             --cyan-glow: rgba(20, 184, 166, 0.15);
             --dark-bg: #020617;
@@ -27,7 +26,6 @@
         }
 
         body.light-theme {
-            /* Palette Medical / Clean Light */
             --cyan: #0d9488; 
             --cyan-glow: rgba(13, 148, 136, 0.1);
             --dark-bg: #f1f5f9;
@@ -55,7 +53,6 @@
 
         .mono { font-family: 'Fira Code', monospace; }
 
-        /* NAVBAR */
         .navbar {
             backdrop-filter: blur(12px);
             background: var(--nav-bg);
@@ -84,7 +81,6 @@
             color: var(--cyan);
         }
 
-        /* LAYOUT */
         .messenger-wrapper {
             display: flex;
             flex: 1;
@@ -92,7 +88,6 @@
             overflow: hidden;
         }
 
-        /* SIDEBAR CHANNELS */
         .sidebar {
             width: 320px;
             background: var(--sidebar-bg);
@@ -127,7 +122,6 @@
             border-left-color: var(--cyan);
         }
 
-        /* CHAT AREA */
         .chat-container {
             flex: 1;
             display: flex;
@@ -156,7 +150,6 @@
             position: relative;
         }
 
-        /* MESSAGE BUBBLES */
         .message {
             display: flex;
             flex-direction: column;
@@ -212,7 +205,6 @@
             margin-top: 10px;
         }
 
-        /* DECORATIONS */
         .code-block {
             background: rgba(0,0,0,0.3);
             padding: 12px;
@@ -235,7 +227,6 @@
             margin-bottom: 5px;
         }
 
-        /* THEME TOGGLE */
         .theme-toggle-wrapper {
             position: fixed;
             bottom: 25px;
@@ -255,7 +246,6 @@
             box-shadow: 0 10px 25px var(--cyan-glow);
         }
 
-        /* RESPONSIVE */
         @media (max-width: 768px) {
             .sidebar { display: none; }
             .messages-list { padding: 20px; }
