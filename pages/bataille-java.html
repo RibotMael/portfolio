@@ -300,7 +300,7 @@
                 <h1 class="display-4 fw-bold mb-4">La Bataille <span>Java</span></h1>
                 
                 <p class="text-muted fs-5 mb-4">
-                    Une implémentation complète du célèbre jeu de cartes, développée de A à Z en <strong>Java</strong> avec un affichage interactif via la ligne de commande (Terminal).
+                    Une implémentation complète du célèbre jeu de cartes, développée de A à Z en <strong>Java</strong> avec un affichage via le terminal.
                 </p>
 
                 <div class="d-flex flex-column gap-3 mb-4">
@@ -308,7 +308,7 @@
                         <i data-lucide="terminal" class="mt-1" style="color: var(--cyan); flex-shrink: 0;"></i>
                         <div>
                             <h6 class="fw-bold mb-1">Rendu Terminal</h6>
-                            <p class="text-muted small mb-0">Le programme s'exécute dans la console. Il affiche le déroulé de chaque tour, gère les égalités (les fameuses "batailles"), accumule les pots et annonce le vainqueur final.</p>
+                            <p class="text-muted small mb-0">Le programme s'exécute dans la console. Il affiche le déroulé de chaque tour, gère les égalités ("batailles") et annonce le vainqueur final.</p>
                         </div>
                     </div>
                     
@@ -469,23 +469,23 @@
 
         <div class="col-md-8">
             <div class="code-block" data-filename="Carte.java">
-<pre><code class="language-java"><span class="kw">public class</span> Carte {
-    <span class="kw">private</span> Hauteur hauteur;
-    <span class="kw">private</span> Symbole symbole;
+                <pre><code class="language-java"><span class="kw">public class</span> Carte {
+                    <span class="kw">private</span> Hauteur hauteur;
+                    <span class="kw">private</span> Symbole symbole;
 
-    <span class="kw">public</span> Carte(Hauteur hauteur, Symbole symbole) {
-        <span class="kw">this</span>.hauteur = hauteur;
-        <span class="kw">this</span>.symbole = symbole;
-    }
+                    <span class="kw">public</span> Carte(Hauteur hauteur, Symbole symbole) {
+                        <span class="kw">this</span>.hauteur = hauteur;
+                        <span class="kw">this</span>.symbole = symbole;
+                    }
 
-    <span class="kw">public</span> Hauteur getHauteur() { <span class="kw">return</span> hauteur; }
-    <span class="kw">public</span> Symbole getSymbole() { <span class="kw">return</span> symbole; }
+                    <span class="kw">public</span> Hauteur getHauteur() { <span class="kw">return</span> hauteur; }
+                    <span class="kw">public</span> Symbole getSymbole() { <span class="kw">return</span> symbole; }
 
-    <span class="kw">@Override</span>
-    <span class="kw">public</span> String toString() {
-        <span class="kw">return</span> hauteur + <span class="str">" de "</span> + symbole.getNom();
-    }
-}</code></pre>
+                    <span class="kw">@Override</span>
+                    <span class="kw">public</span> String toString() {
+                        <span class="kw">return</span> hauteur + <span class="str">" de "</span> + symbole.getNom();
+                    }
+                }</code></pre>
             </div>
         </div>
     </div>
@@ -506,27 +506,27 @@
         </div>
         <div class="col-md-6 order-md-1">
             <div class="code-block" data-filename="Tas.java">
-<pre><code class="language-java"><span class="kw">import</span> java.util.LinkedList;
+                <pre><code class="language-java"><span class="kw">import</span> java.util.LinkedList;
 
-<span class="kw">public class</span> Tas {
-    <span class="kw">private</span> LinkedList&lt;Carte&gt; cartes;
+                <span class="kw">public class</span> Tas {
+                    <span class="kw">private</span> LinkedList&lt;Carte&gt; cartes;
 
-    <span class="kw">public</span> Tas() {
-        cartes = <span class="kw">new</span> LinkedList&lt;&gt;();
-    }
+                    <span class="kw">public</span> Tas() {
+                        cartes = <span class="kw">new</span> LinkedList&lt;&gt;();
+                    }
 
-    <span class="kw">public void</span> ajouterCarte(Carte c) {
-        cartes.addLast(c); <span class="com">// Ajout en dessous</span>
-    }
+                    <span class="kw">public void</span> ajouterCarte(Carte c) {
+                        cartes.addLast(c); <span class="com">// Ajout en dessous</span>
+                    }
 
-    <span class="kw">public</span> Carte retirerCarte() {
-        <span class="kw">return</span> cartes.pollFirst(); <span class="com">// Pioche au dessus</span>
-    }
-    
-    <span class="kw">public boolean</span> estVide() {
-        <span class="kw">return</span> cartes.isEmpty();
-    }
-}</code></pre>
+                    <span class="kw">public</span> Carte retirerCarte() {
+                        <span class="kw">return</span> cartes.pollFirst(); <span class="com">// Pioche au dessus</span>
+                    }
+                    
+                    <span class="kw">public boolean</span> estVide() {
+                        <span class="kw">return</span> cartes.isEmpty();
+                    }
+                }</code></pre>
             </div>
         </div>
     </div>
@@ -544,22 +544,22 @@
         </div>
         <div class="col-12">
             <div class="code-block" data-filename="Main.java">
-<pre><code class="language-java"><span class="com">// Ensemble des états déjà vus pour éviter les boucles</span>
-Set&lt;String&gt; etatsVus = <span class="kw">new</span> HashSet&lt;&gt;();
+                <pre><code class="language-java"><span class="com">// Ensemble des états déjà vus pour éviter les boucles</span>
+                Set&lt;String&gt; etatsVus = <span class="kw">new</span> HashSet&lt;&gt;();
 
-<span class="kw">while</span> (j1.aDesCartes() && j2.aDesCartes()) {
-    
-    <span class="com">// Sauvegarde de l'état actuel (String des deux decks)</span>
-    String etat = j1.getTas().getCartes().toString() + <span class="str">"|"</span> + j2.getTas().getCartes().toString();
-    
-    <span class="kw">if</span> (etatsVus.contains(etat)) {
-        System.out.println(<span class="str">"Partie bloquée ! Fin forcée."</span>);
-        <span class="kw">break</span>;
-    }
-    etatsVus.add(etat);
-    
-    <span class="com">// ... logique de comparaison des cartes ...</span>
-}</code></pre>
+                <span class="kw">while</span> (j1.aDesCartes() && j2.aDesCartes()) {
+                    
+                    <span class="com">// Sauvegarde de l'état actuel (String des deux decks)</span>
+                    String etat = j1.getTas().getCartes().toString() + <span class="str">"|"</span> + j2.getTas().getCartes().toString();
+                    
+                    <span class="kw">if</span> (etatsVus.contains(etat)) {
+                        System.out.println(<span class="str">"Partie bloquée ! Fin forcée."</span>);
+                        <span class="kw">break</span>;
+                    }
+                    etatsVus.add(etat);
+                    
+                    <span class="com">// ... logique de comparaison des cartes ...</span>
+                }</code></pre>
             </div>
         </div>
     </div>
@@ -576,7 +576,6 @@ Set&lt;String&gt; etatsVus = <span class="kw">new</span> HashSet&lt;&gt;();
 <script>
     lucide.createIcons();
 
-    /* --- THEME MANAGER --- */
     const themeToggle = document.getElementById('themeToggle');
     const themeIcon = document.getElementById('themeIcon');
     const body = document.body;
@@ -595,25 +594,21 @@ Set&lt;String&gt; etatsVus = <span class="kw">new</span> HashSet&lt;&gt;();
 
     themeToggle.addEventListener('click', () => setTheme(!body.classList.contains('light-theme')));
 
-    // Check saved theme
     const savedTheme = localStorage.getItem('theme');
     const prefersLight = window.matchMedia('(prefers-color-scheme: light)').matches;
     if (savedTheme === 'light' || (!savedTheme && prefersLight)) setTheme(true);
 
-    // Scroll automatically the terminal mockup to the bottom
     window.onload = function() {
         const termBody = document.getElementById('term-body');
         if(termBody) termBody.scrollTop = termBody.scrollHeight;
     };
 
-    /* --- JEU JS (Simulation web du résultat Java) --- */
     const suits = [
         { sym: '♠', col: 'black' }, { sym: '♣', col: 'black' },
         { sym: '♥', col: 'red' }, { sym: '♦', col: 'red' }
     ];
     const ranks = ['7','8','9','10','J','Q','K','A'];
     
-    // Fonction utilitaire pour les délais (promesse)
     const wait = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
     function getRandomCard() {
@@ -637,25 +632,21 @@ Set&lt;String&gt; etatsVus = <span class="kw">new</span> HashSet&lt;&gt;();
         const score1 = document.getElementById('p1-score');
         const score2 = document.getElementById('p2-score');
 
-        // Désactivation UI
         btn.disabled = true;
         btn.innerText = "En cours...";
         btn.style.opacity = "0.7";
 
-        // Reset Visuel
         battleMsg.classList.add('d-none');
         resultMsg.innerText = "Duel...";
         resultMsg.style.color = "var(--text-main)";
         cardAlice.classList.remove('winner-glow');
         cardBob.classList.remove('winner-glow');
 
-        // 1. Cacher les cartes (Animation de tirage)
         cardAlice.classList.add('card-hidden');
         cardBob.classList.add('card-hidden');
         
         await wait(300);
 
-        // 2. Tirer et afficher la première paire
         let c1 = getRandomCard();
         let c2 = getRandomCard();
         updateCardDOM(cardAlice, c1);
@@ -664,53 +655,45 @@ Set&lt;String&gt; etatsVus = <span class="kw">new</span> HashSet&lt;&gt;();
         cardAlice.classList.remove('card-hidden');
         cardBob.classList.remove('card-hidden');
 
-        let pot = 2; // Nombre de cartes en jeu (1 pour Alice, 1 pour Bob)
+        let pot = 2; 
 
-        // 3. Gestion de l'égalité (Boucle "While" pour les batailles multiples)
         while (c1.value === c2.value) {
-            // Affichage BATAILLE
             battleMsg.classList.remove('d-none');
             resultMsg.innerHTML = "ÉGALITÉ ! Carte cachée...";
             resultMsg.style.color = "#fbbf24";
             
-            // On laisse le temps de voir l'égalité
             await wait(1500);
 
-            // Simulation : On pose une carte face cachée
             cardAlice.classList.add('card-hidden');
             cardBob.classList.add('card-hidden');
             
-            pot += 2; // On ajoute les cartes cachées au pot
+            pot += 2; 
 
             await wait(800);
 
-            // Tirage des cartes décisives
             c1 = getRandomCard();
             c2 = getRandomCard();
             updateCardDOM(cardAlice, c1);
             updateCardDOM(cardBob, c2);
 
-            // Révélation des cartes décisives
             cardAlice.classList.remove('card-hidden');
             cardBob.classList.remove('card-hidden');
             
-            pot += 2; // On ajoute les cartes décisives au pot
+            pot += 2; 
         }
 
-        // 4. Détermination du vainqueur
         if (c1.value > c2.value) {
             resultMsg.innerHTML = `Alice gagne ${pot} cartes !`;
-            resultMsg.style.color = "#4ade80"; // Vert victoire
+            resultMsg.style.color = "#4ade80";
             cardAlice.classList.add('winner-glow');
             updateScore(score1, score2, pot / 2);
         } else {
             resultMsg.innerHTML = `Bob gagne ${pot} cartes !`;
-            resultMsg.style.color = "#f472b6"; // Rose victoire (Bob)
+            resultMsg.style.color = "#f472b6"; 
             cardBob.classList.add('winner-glow');
             updateScore(score2, score1, pot / 2);
         }
 
-        // Réactivation UI
         isAnimating = false;
         btn.disabled = false;
         btn.innerText = "Jouer un tour";
