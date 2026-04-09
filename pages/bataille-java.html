@@ -5,715 +5,786 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Jeu de Bataille (Java) – Ribot Maël</title>
 
-    <!-- Bootstrap 5 -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
-    <!-- Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Inter:wght@400;500;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
     
     <style>
         :root {
-            --cyan: #14b8a6;
-            --cyan-glow: rgba(20, 184, 166, 0.3);
-            --dark-bg: #0b1120;
-            --dark-card: #151f32;
-            --text-main: #f1f5f9;
-            --text-muted: #cbd5e1;
-            --nav-bg: rgba(11, 17, 32, 0.95);
-            --border-color: rgba(255, 255, 255, 0.1);
-
-            --felt-green: #35654d;
-            --felt-border: #5c4033;
-            --card-white: #fdfdfd;
-            --card-red: #e11d48;
-            --card-black: #1e293b;
+            --accent: #00e5b0;
+            --accent2: #ff6b6b;
+            --accent-glow: rgba(0, 229, 176, 0.2);
+            --bg: #080e1a;
+            --bg2: #0d1628;
+            --card: #111b30;
+            --card2: #162040;
+            --text: #e8f0fe;
+            --muted: #7b8fb0;
+            --border: rgba(255,255,255,0.07);
+            --nav-bg: rgba(8, 14, 26, 0.92);
+            --felt: #1a3a2a;
+            --felt2: #0f2419;
+            --felt-border: #3d2010;
         }
 
         body.light-theme {
-            --cyan: #0d9488;
-            --cyan-glow: rgba(13, 148, 136, 0.2);
-            --dark-bg: #f8fafc;
-            --dark-card: #ffffff;
-            --text-main: #0f172a;
-            --text-muted: #475569;
-            --nav-bg: rgba(255, 255, 255, 0.9);
-            --border-color: rgba(0, 0, 0, 0.1);
+            --accent: #00b38a;
+            --accent2: #e63946;
+            --accent-glow: rgba(0, 179, 138, 0.15);
+            --bg: #f0f4f8;
+            --bg2: #e4ecf7;
+            --card: #ffffff;
+            --card2: #f7faff;
+            --text: #111827;
+            --muted: #5a6a84;
+            --border: rgba(0,0,0,0.08);
+            --nav-bg: rgba(240, 244, 248, 0.95);
         }
+
+        * { box-sizing: border-box; }
 
         body {
-            background-color: var(--dark-bg);
-            color: var(--text-main);
-            font-family: 'Inter', sans-serif;
-            padding-top: 80px;
-            transition: background-color 0.3s ease, color 0.3s ease;
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'DM Sans', sans-serif;
+            padding-top: 72px;
+            transition: background 0.3s, color 0.3s;
+            overflow-x: hidden;
         }
 
-        .text-muted {
-            color: var(--text-muted) !important;
-        }
-
-        .mono { font-family: 'Fira Code', monospace; }
-        .serif { font-family: 'Playfair Display', serif; }
-
+        /* ── NAV ── */
         .navbar {
             background: var(--nav-bg);
-            border-bottom: 1px solid var(--border-color);
-            backdrop-filter: blur(10px);
-            transition: background-color 0.3s ease, border-color 0.3s ease;
+            border-bottom: 1px solid var(--border);
+            backdrop-filter: blur(14px);
         }
-        .navbar-text { color: var(--text-main) !important; }
-        
         .btn-back {
-            color: var(--text-main);
-            border: 1px solid var(--border-color);
+            color: var(--text);
+            border: 1px solid var(--border);
             border-radius: 8px;
-            padding: 5px 15px;
+            padding: 6px 16px;
             text-decoration: none;
-            transition: 0.3s;
-            display: inline-flex;
-            align-items: center;
-            gap: 5px;
+            font-size: 0.85rem;
+            display: inline-flex; align-items: center; gap: 6px;
+            transition: 0.2s;
         }
-        .btn-back:hover { 
-            background: var(--cyan); 
-            color: white; 
-            border-color: var(--cyan); 
-        }
+        .btn-back:hover { background: var(--accent); color: #000; border-color: var(--accent); }
+        .nav-label { font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; color: var(--muted); }
 
-        .theme-toggle-wrapper {
-            position: fixed;
-            bottom: 2rem;
-            right: 2rem;
-            z-index: 1000;
-        }
-
+        /* ── THEME TOGGLE ── */
         .theme-btn {
-            width: 56px; height: 56px;
-            border-radius: 18px;
-            border: none;
-            background: var(--cyan);
-            color: white;
-            cursor: pointer;
-            box-shadow: 0 8px 20px var(--cyan-glow);
-            display: flex;
-            align-items: center; justify-content: center;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: fixed; bottom: 2rem; right: 2rem; z-index: 1000;
+            width: 52px; height: 52px; border-radius: 16px; border: none;
+            background: var(--accent); color: #ffffff;
+            cursor: pointer; display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 6px 24px var(--accent-glow);
+            transition: transform 0.3s, box-shadow 0.3s;
         }
         .theme-btn:hover { transform: scale(1.1) rotate(15deg); }
 
-        .terminal-mockup {
-            background: #1e1e1e;
-            border-radius: 10px;
-            border: 1px solid #333;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
-            overflow: hidden;
-            font-family: 'Fira Code', monospace;
-            font-size: 0.85rem;
-            text-align: left;
-        }
-        .terminal-header {
-            background: #2d2d2d;
-            padding: 8px 15px;
-            display: flex;
-            gap: 6px;
-            align-items: center;
-        }
-        .terminal-dot { width: 12px; height: 12px; border-radius: 50%; }
-        .dot-red { background: #ff5f56; }
-        .dot-yellow { background: #ffbd2e; }
-        .dot-green { background: #27c93f; }
-        .terminal-body {
-            padding: 15px;
-            color: #d4d4d4;
-            height: 380px; 
-            overflow-y: auto;
-        }
-        .term-cmd { color: #4ec9b0; }
-        .term-p1 { color: #569cd6; font-weight: bold; } 
-        .term-p2 { color: #f472b6; font-weight: bold; } 
-        .term-bataille { color: #ef4444; font-weight: bold; }
+        /* ── HERO ── */
+        .hero-section { padding: 5rem 0 3rem; position: relative; }
 
-        .game-arena {
-            background: radial-gradient(circle, #407a5d 0%, #2d5a27 100%);
-            border: 10px solid var(--felt-border);
-            border-radius: 30px;
-            box-shadow: inset 0 0 80px rgba(0,0,0,0.6), 0 20px 40px rgba(0,0,0,0.2);
-            padding: 3rem;
-            position: relative;
-            overflow: hidden;
-            min-height: 500px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            margin-bottom: 4rem;
+        .hero-tag {
+            display: inline-flex; align-items: center; gap: 8px;
+            background: var(--accent-glow); border: 1px solid var(--accent);
+            color: var(--accent); border-radius: 50px; padding: 5px 14px;
+            font-family: 'JetBrains Mono', monospace; font-size: 0.75rem;
+            margin-bottom: 1.5rem;
         }
+        .hero-tag::before { content: ''; width: 7px; height: 7px; border-radius: 50%; background: var(--accent); }
+
+        h1.hero-title {
+            font-family: 'Syne', sans-serif;
+            font-size: clamp(2.5rem, 6vw, 4.5rem);
+            font-weight: 800;
+            line-height: 1.05;
+            letter-spacing: -2px;
+            margin-bottom: 1.5rem;
+        }
+        h1.hero-title em { font-style: normal; color: var(--accent); }
+
+        .hero-lead {
+            color: var(--muted); font-size: 1.05rem; line-height: 1.7;
+            max-width: 520px; margin-bottom: 2rem;
+        }
+
+        .pill-row { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 2rem; }
+        .pill {
+            font-family: 'JetBrains Mono', monospace; font-size: 0.75rem;
+            background: var(--card); border: 1px solid var(--border);
+            color: var(--muted); border-radius: 50px; padding: 4px 12px;
+            transition: 0.2s;
+        }
+        .pill:hover { border-color: var(--accent); color: var(--accent); }
+
+        /* ── STAT CARDS ── */
+        .stat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+        .stat-card {
+            background: var(--card); border: 1px solid var(--border); border-radius: 14px;
+            padding: 1.2rem; text-align: center; transition: 0.2s;
+        }
+        .stat-card:hover { border-color: var(--accent); transform: translateY(-2px); }
+        .stat-num {
+            font-family: 'Syne', sans-serif; font-size: 1.8rem; font-weight: 800;
+            color: var(--accent);
+        }
+        .stat-label { font-size: 0.75rem; color: var(--muted); margin-top: 2px; }
+
+        /* ── TERMINAL ── */
+        .terminal-wrap {
+            background: #060d18;
+            border-radius: 14px;
+            border: 1px solid rgba(255,255,255,0.1);
+            box-shadow: 0 30px 60px rgba(0,0,0,0.5), 0 0 0 1px rgba(0,229,176,0.05);
+            overflow: hidden;
+            font-family: 'JetBrains Mono', monospace;
+        }
+        .terminal-bar {
+            background: #0f1a2d;
+            padding: 10px 16px;
+            display: flex; align-items: center; gap: 8px;
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+        }
+        .dot { width: 12px; height: 12px; border-radius: 50%; }
+        .dot-r { background: #ff5f57; } .dot-y { background: #febc2e; } .dot-g { background: #28c840; }
+        .term-title { margin-left: auto; font-size: 0.7rem; color: #4a5a7a; }
+        .term-body {
+            padding: 20px; min-height: 420px; max-height: 420px;
+            overflow-y: auto; font-size: 0.82rem; line-height: 1.8;
+            color: #8ba0c0;
+            scrollbar-width: thin; scrollbar-color: #1e3a5f transparent;
+        }
+        .term-body::-webkit-scrollbar { width: 4px; }
+        .term-body::-webkit-scrollbar-track { background: transparent; }
+        .term-body::-webkit-scrollbar-thumb { background: #1e3a5f; border-radius: 4px; }
+
+        .t-cmd { color: var(--accent); }
+        .t-p1 { color: #60a5fa; font-weight: 600; }
+        .t-p2 { color: #f472b6; font-weight: 600; }
+        .t-win { color: #4ade80; }
+        .t-lose { color: #f472b6; }
+        .t-battle { color: #fbbf24; font-weight: 700; }
+        .t-info { color: #475569; }
+        .t-final { color: #fbbf24; font-weight: 700; font-size: 0.9rem; }
+        .t-winner { color: #fff; font-weight: 700; }
+        .t-card { color: #e2e8f0; }
+        .cursor {
+            display: inline-block; width: 8px; height: 14px;
+            background: var(--accent); vertical-align: middle;
+            animation: blink 1s step-end infinite;
+        }
+        @keyframes blink { 50% { opacity: 0; } }
+
+        .terminal-footer {
+            background: #0f1a2d;
+            padding: 10px 16px;
+            display: flex; align-items: center; gap: 12px;
+            border-top: 1px solid rgba(255,255,255,0.06);
+        }
+        .btn-run {
+            background: var(--accent); color: #000;
+            border: none; border-radius: 8px;
+            font-family: 'JetBrains Mono', monospace; font-size: 0.8rem;
+            padding: 7px 16px; cursor: pointer; font-weight: 700;
+            display: flex; align-items: center; gap: 6px;
+            transition: 0.2s;
+        }
+        .btn-run:hover { transform: scale(1.04); }
+        .btn-run:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+        .btn-reset {
+            background: transparent; color: var(--muted);
+            border: 1px solid var(--border); border-radius: 8px;
+            font-family: 'JetBrains Mono', monospace; font-size: 0.8rem;
+            padding: 7px 14px; cursor: pointer;
+            display: flex; align-items: center; gap: 6px;
+            transition: 0.2s;
+        }
+        .btn-reset:hover { border-color: var(--muted); color: var(--text); }
+        .run-status {
+            margin-left: auto; font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem; color: var(--muted);
+        }
+        .run-status.running { color: var(--accent); }
+
+        /* ── SECTION TITLE ── */
+        .section-sep {
+            border: none; border-top: 1px solid var(--border); margin: 4rem 0;
+        }
+        .section-label {
+            font-family: 'JetBrains Mono', monospace; font-size: 0.7rem;
+            color: var(--accent); letter-spacing: 3px; text-transform: uppercase;
+            margin-bottom: 0.5rem;
+        }
+        .section-title {
+            font-family: 'Syne', sans-serif; font-size: 2rem;
+            font-weight: 800; letter-spacing: -1px;
+        }
+
+        /* ── FEATURE CARDS ── */
+        .feat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; }
+        .feat-card {
+            background: var(--card); border: 1px solid var(--border); border-radius: 16px;
+            padding: 1.5rem; transition: 0.25s;
+            position: relative; overflow: hidden;
+        }
+        .feat-card::before {
+            content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+            background: linear-gradient(90deg, var(--accent), transparent);
+            opacity: 0; transition: 0.25s;
+        }
+        .feat-card:hover { border-color: rgba(0,229,176,0.3); transform: translateY(-3px); }
+        .feat-card:hover::before { opacity: 1; }
+        .feat-icon {
+            width: 42px; height: 42px; border-radius: 12px;
+            background: var(--accent-glow); border: 1px solid rgba(0,229,176,0.2);
+            display: flex; align-items: center; justify-content: center;
+            color: var(--accent); margin-bottom: 1rem;
+        }
+        .feat-title { font-family: 'Syne', sans-serif; font-size: 0.95rem; font-weight: 700; margin-bottom: 0.4rem; }
+        .feat-desc { font-size: 0.85rem; color: var(--muted); line-height: 1.6; }
+
+        /* ── GAME ARENA ── */
+        .arena {
+            background: radial-gradient(ellipse at center, #1e4a30 0%, #0d2418 60%, #07160e 100%);
+            border: 8px solid var(--felt-border);
+            border-radius: 28px;
+            padding: 2.5rem 2rem;
+            box-shadow: inset 0 0 80px rgba(0,0,0,0.7), 0 24px 48px rgba(0,0,0,0.3);
+            position: relative;
+        }
+        .arena::before {
+            content: '';
+            position: absolute; inset: 12px;
+            border-radius: 20px;
+            border: 1px solid rgba(255,255,255,0.04);
+            pointer-events: none;
+        }
+
+        .scoreboard {
+            background: rgba(0,0,0,0.5);
+            border: 1px solid rgba(255,255,255,0.08);
+            backdrop-filter: blur(8px);
+            border-radius: 50px; padding: 8px 24px;
+            font-family: 'JetBrains Mono', monospace; font-size: 0.85rem;
+            color: white; display: inline-block; margin-bottom: 2rem;
+        }
+        .score-accent { color: #fbbf24; font-weight: 700; }
 
         .card-slot {
-            width: 140px;
-            height: 200px;
-            border: 2px dashed rgba(255,255,255,0.3);
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            width: 120px; height: 175px;
+            border: 2px dashed rgba(255,255,255,0.15); border-radius: 10px;
+            display: flex; align-items: center; justify-content: center;
             position: relative;
         }
-
         .playing-card {
-            width: 140px;
-            height: 200px;
-            background: var(--card-white);
-            border-radius: 10px;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+            width: 120px; height: 175px;
+            background: #fdfdfd; border-radius: 10px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.4);
             position: absolute;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            padding: 10px;
-            font-family: 'Playfair Display', serif;
-            font-weight: bold;
-            font-size: 1.5rem;
-            transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: flex; flex-direction: column;
+            justify-content: space-between; padding: 8px;
+            font-family: 'Syne', sans-serif; font-weight: 700; font-size: 1.3rem;
+            transition: transform 0.5s cubic-bezier(0.175,0.885,0.32,1.275);
             backface-visibility: hidden;
-            color: var(--card-black);
         }
-
-        .playing-card.red { color: var(--card-red); }
-        .playing-card.black { color: var(--card-black); }
-
-        .playing-card .center-suit {
-            font-size: 3rem;
-            position: absolute;
-            top: 50%; left: 50%;
-            transform: translate(-50%, -50%);
-        }
-
-        .playing-card .corner-bottom { transform: rotate(180deg); }
-
+        .playing-card.red { color: #e11d48; }
+        .playing-card.black { color: #1e293b; }
+        .playing-card .center-suit { font-size: 2.5rem; position: absolute; top:50%; left:50%; transform: translate(-50%,-50%); }
+        .playing-card .corner-bottom { transform: rotate(180deg); display: block; }
         .card-back {
-            background: repeating-linear-gradient(
-                45deg,
-                #1e3a8a,
-                #1e3a8a 10px,
-                #172554 10px,
-                #172554 20px
-            );
-            border: 4px solid white;
+            background: repeating-linear-gradient(45deg, #1e3a8a, #1e3a8a 10px, #172554 10px, #172554 20px);
+            border: 3px solid white;
         }
-
         .card-hidden { transform: rotateY(180deg); }
-        .winner-glow { box-shadow: 0 0 30px #fbbf24; border: 2px solid #fbbf24; }
-
-        .score-board {
-            background: rgba(0,0,0,0.4);
-            backdrop-filter: blur(5px);
-            padding: 1rem 2rem;
-            border-radius: 50px;
-            color: white;
-            font-family: 'Fira Code', monospace;
-            display: inline-block;
-            margin-bottom: 2rem;
-            border: 1px solid rgba(255,255,255,0.1);
-        }
+        .winner-glow { box-shadow: 0 0 30px #fbbf24, 0 0 60px rgba(251,191,36,0.3); border: 2px solid #fbbf24; }
 
         .action-btn {
-            background: #fbbf24;
-            color: #451a03;
-            font-weight: bold;
-            border: none;
-            padding: 12px 30px;
-            border-radius: 50px;
-            font-size: 1.1rem;
-            box-shadow: 0 4px 0 #b45309;
-            transition: transform 0.1s;
+            background: #fbbf24; color: #451a03; font-weight: 700;
+            border: none; padding: 10px 24px; border-radius: 50px; font-size: 1rem;
+            box-shadow: 0 4px 0 #b45309; transition: transform 0.1s;
+            font-family: 'DM Sans', sans-serif;
         }
         .action-btn:active { transform: translateY(4px); box-shadow: none; }
-        .action-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; box-shadow: none; }
+        .action-btn:disabled { opacity: 0.5; cursor: not-allowed; }
 
-        .code-block {
-            background: #1e1e1e;
-            border-radius: 10px;
-            padding: 1.5rem;
-            border: 1px solid var(--border-color);
-            margin-bottom: 2rem;
-            position: relative;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-            overflow-x: auto;
-        }
-        
-        .code-block::before {
-            content: attr(data-filename);
-            position: absolute;
-            top: 0; right: 0;
-            background: #333;
-            color: #aaa;
-            font-size: 0.8rem;
-            padding: 4px 10px;
-            border-bottom-left-radius: 10px;
-            font-family: 'Fira Code', monospace;
-        }
+        .player-label { font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; color: rgba(255,255,255,0.5); margin-top: 10px; }
 
-        pre { margin: 0; color: #d4d4d4; }
-        .kw { color: #569cd6; } 
-        .type { color: #4ec9b0; } 
-        .str { color: #ce9178; } 
-        .com { color: #6a9955; } 
-
-        .feature-icon {
-            background: var(--cyan-glow);
-            padding: 10px;
-            border-radius: 10px;
-            color: var(--cyan);
-            margin-bottom: 1rem;
-            width: fit-content;
-        }
-        
-        h1 span { color: var(--cyan); }
-        h3 span { color: var(--cyan); }
+        @keyframes slideUp { from { opacity:0; transform: translateY(20px); } to { opacity:1; transform: translateY(0); } }
+        .animate-in { animation: slideUp 0.5s ease forwards; }
     </style>
 </head>
 <body>
 
-<!-- Bouton Thème -->
-<div class="theme-toggle-wrapper">
-    <button id="themeToggle" class="theme-btn" title="Changer de mode">
-        <i id="themeIcon" data-lucide="moon"></i>
-    </button>
-</div>
+<button class="theme-btn" id="themeToggle" title="Changer de mode">
+    <i id="themeIcon" data-lucide="moon" style="width:20px;height:20px;"></i>
+</button>
 
-<!-- Navigation -->
-<nav class="navbar navbar-expand-lg fixed-top">
-    <div class="container">
-        <a href="../e6.html" class="btn-back me-3">
-            <i data-lucide="arrow-left" style="width:16px;"></i> Retour
+<nav class="navbar fixed-top">
+    <div class="container d-flex align-items-center">
+        <a href="../e6.html" class="btn-back">
+            <i data-lucide="arrow-left" style="width:14px;height:14px;"></i> Retour
         </a>
-        <span class="navbar-text fw-bold mono">Projet: Bataille Java</span>
+        <span class="nav-label ms-3">Projet / Bataille Java</span>
     </div>
 </nav>
 
-<main class="container py-5">
-    
-    <!-- INTRODUCTION MODIFIÉE -->
-    <div class="row align-items-center mb-5 pb-4">
-        <div class="col-lg-6 mb-5 mb-lg-0">
-            <div class="pe-lg-4">
-                <h1 class="display-4 fw-bold mb-4">La Bataille <span>Java</span></h1>
-                
-                <p class="text-muted fs-5 mb-4">
-                    Une implémentation complète du célèbre jeu de cartes, développée de A à Z en <strong>Java</strong> avec un affichage via le terminal.
+<main class="container">
+
+    <!-- ── HERO ── -->
+    <section class="hero-section">
+        <div class="row align-items-center g-5">
+            <div class="col-lg-5">
+                <div class="hero-tag">Projet Java · IUT</div>
+                <h1 class="hero-title">La <em>Bataille</em><br>en Java</h1>
+                <p class="hero-lead">
+                    Implémentation complète du jeu de cartes classique, développée de A à Z en Java. 
+                    Orientée objet, jouée en terminal, avec gestion des boucles infinies et détection d'égalités.
                 </p>
+                <div class="pill-row">
+                    <span class="pill">Java 17</span>
+                    <span class="pill">POO</span>
+                    <span class="pill">Collections</span>
+                    <span class="pill">LinkedList</span>
+                    <span class="pill">HashSet</span>
+                    <span class="pill">Terminal</span>
+                </div>
+                <div class="stat-grid">
+                    <div class="stat-card">
+                        <div class="stat-num">52</div>
+                        <div class="stat-label">cartes</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-num">4</div>
+                        <div class="stat-label">classes</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-num">∞</div>
+                        <div class="stat-label">parties</div>
+                    </div>
+                </div>
+            </div>
 
-                <div class="d-flex flex-column gap-3 mb-4">
-                    <div class="d-flex align-items-start gap-3">
-                        <i data-lucide="terminal" class="mt-1" style="color: var(--cyan); flex-shrink: 0;"></i>
-                        <div>
-                            <h6 class="fw-bold mb-1">Rendu Terminal</h6>
-                            <p class="text-muted small mb-0">Le programme s'exécute dans la console. Il affiche le déroulé de chaque tour, gère les égalités ("batailles") et annonce le vainqueur final.</p>
+            <!-- ── TERMINAL ── -->
+            <div class="col-lg-7">
+                <div class="terminal-wrap">
+                    <div class="terminal-bar">
+                        <div class="dot dot-r"></div>
+                        <div class="dot dot-y"></div>
+                        <div class="dot dot-g"></div>
+                        <span class="term-title">java Main — bataille</span>
+                    </div>
+                    <div class="term-body" id="term-body">
+                        <span class="t-info"># Cliquez sur "Lancer" pour simuler une partie complète</span><br>
+                        <span class="t-cmd">❯ java Main</span><span class="cursor"></span>
+                    </div>
+                    <div class="terminal-footer">
+                        <button class="btn-run" id="btn-run" onclick="startSimulation()">
+                            <i data-lucide="play" style="width:14px;height:14px;"></i> Lancer
+                        </button>
+                        <button class="btn-reset" onclick="resetTerminal()">
+                            <i data-lucide="rotate-ccw" style="width:12px;height:12px;"></i> Reset
+                        </button>
+                        <span class="run-status" id="run-status">prêt</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <hr class="section-sep">
+
+    <!-- ── PRÉSENTATION PROJET ── -->
+    <section class="pb-5">
+        <div class="mb-4">
+            <p class="section-label">Présentation</p>
+            <h2 class="section-title">Un jeu conçu comme<br>une vraie application</h2>
+        </div>
+
+        <div class="feat-grid">
+            <div class="feat-card">
+                <div class="feat-icon"><i data-lucide="layers" style="width:20px;height:20px;"></i></div>
+                <div class="feat-title">Architecture modulaire</div>
+                <div class="feat-desc">Chaque concept du jeu est une entité autonome : Carte, Tas, Joueur. Aucune logique ne fuit d'une classe à l'autre.</div>
+            </div>
+            <div class="feat-card">
+                <div class="feat-icon"><i data-lucide="shuffle" style="width:20px;height:20px;"></i></div>
+                <div class="feat-title">Distribution équitable</div>
+                <div class="feat-desc">Le paquet de 52 cartes est mélangé via <code>Collections.shuffle()</code> avant d'être distribué en deux tas égaux de 26 cartes.</div>
+            </div>
+            <div class="feat-card">
+                <div class="feat-icon"><i data-lucide="zap" style="width:20px;height:20px;"></i></div>
+                <div class="feat-title">Gestion des batailles</div>
+                <div class="feat-desc">En cas d'égalité, chaque joueur pose une carte face cachée, puis révèle la suivante. Le gagnant rafle l'ensemble du pot.</div>
+            </div>
+            <div class="feat-card">
+                <div class="feat-icon"><i data-lucide="shield" style="width:20px;height:20px;"></i></div>
+                <div class="feat-title">Anti-boucle infinie</div>
+                <div class="feat-desc">Un <code>HashSet</code> mémorise chaque état de jeu. Si un état se répète, la partie est déclarée nulle. Plus de plantage possible.</div>
+            </div>
+            <div class="feat-card">
+                <div class="feat-icon"><i data-lucide="terminal" style="width:20px;height:20px;"></i></div>
+                <div class="feat-title">Rendu terminal clair</div>
+                <div class="feat-desc">Chaque tour est affiché avec lisibilité : qui joue quoi, qui gagne, le score en temps réel, et le vainqueur final en évidence.</div>
+            </div>
+            <div class="feat-card">
+                <div class="feat-icon"><i data-lucide="cpu" style="width:20px;height:20px;"></i></div>
+                <div class="feat-title">Logique FIFO native</div>
+                <div class="feat-desc">La <code>LinkedList</code> impose naturellement la règle : on joue depuis le dessus (<code>pollFirst</code>), on gagne par le dessous (<code>addLast</code>).</div>
+            </div>
+        </div>
+    </section>
+
+    <hr class="section-sep">
+
+    <!-- ── SIMULATION GRAPHIQUE ── -->
+    <section class="pb-5">
+        <div class="text-center mb-4">
+            <p class="section-label">Démo visuelle</p>
+            <h2 class="section-title">Simulation graphique du moteur</h2>
+            <p style="color:var(--muted); font-size:0.9rem;">Représentation interactive de la logique Java, tour par tour.</p>
+        </div>
+
+        <div class="arena text-center">
+            <div class="scoreboard mb-4">
+                <span id="p1-name">Alice</span>&nbsp;
+                <span class="score-accent" id="p1-score">26</span>
+                &nbsp;<span style="color:rgba(255,255,255,0.3)">|</span>&nbsp;
+                <span id="p2-name">Bob</span>&nbsp;
+                <span class="score-accent" id="p2-score">26</span>
+                &nbsp;<span style="color:rgba(255,255,255,0.3); font-size:0.7rem;">cartes</span>
+            </div>
+
+            <div class="row align-items-center justify-content-center g-3">
+                <div class="col-auto d-flex flex-column align-items-center">
+                    <div class="playing-card card-back" style="position:relative;transform:rotate(-4deg);"></div>
+                    <div class="player-label">Tas Alice</div>
+                </div>
+
+                <div class="col d-flex flex-column align-items-center" style="max-width:320px;">
+                    <div class="d-flex justify-content-center gap-3 mb-4">
+                        <div class="card-slot">
+                            <div id="card-alice" class="playing-card card-hidden">
+                                <span class="corner-top">A</span>
+                                <span class="center-suit">♠</span>
+                                <span class="corner-bottom">A</span>
+                            </div>
+                        </div>
+                        <div class="card-slot">
+                            <div id="card-bob" class="playing-card card-hidden">
+                                <span class="corner-top">K</span>
+                                <span class="center-suit">♥</span>
+                                <span class="corner-bottom">K</span>
+                            </div>
                         </div>
                     </div>
-                    
-                    <div class="d-flex align-items-start gap-3">
-                        <i data-lucide="code-2" class="mt-1" style="color: var(--cyan); flex-shrink: 0;"></i>
-                        <div>
-                            <h6 class="fw-bold mb-1">Architecture POO Stricte</h6>
-                            <p class="text-muted small mb-0">Le projet est construit de manière modulaire autour d'entités claires : <code>Carte</code> (composée d'une <code>Hauteur</code> et d'un <code>Symbole</code>), <code>Tas</code> (deck du joueur) et <code>Joueur</code>.</p>
-                        </div>
+
+                    <div id="battle-badge" class="d-none mb-2"
+                         style="background:#fbbf24;color:#451a03;font-weight:700;font-size:0.8rem;
+                                border-radius:50px;padding:4px 14px;font-family:'JetBrains Mono',monospace;">
+                        ⚔ BATAILLE !
                     </div>
+                    <div id="result-msg" style="color:white;font-weight:600;min-height:24px;font-size:0.95rem;
+                                               text-shadow:0 2px 8px rgba(0,0,0,0.6);margin-bottom:1rem;">
+                        En attente...
+                    </div>
+                    <button onclick="playTurn()" class="action-btn">Jouer un tour</button>
+                </div>
+
+                <div class="col-auto d-flex flex-column align-items-center">
+                    <div class="playing-card card-back" style="position:relative;transform:rotate(4deg);"></div>
+                    <div class="player-label">Tas Bob</div>
                 </div>
             </div>
         </div>
-        
-        <!-- Simulation Terminal -->
-        <div class="col-lg-6">
-            <div class="terminal-mockup">
-                <div class="terminal-header">
-                    <div class="terminal-dot dot-red"></div>
-                    <div class="terminal-dot dot-yellow"></div>
-                    <div class="terminal-dot dot-green"></div>
-                    <span class="ms-2 text-muted" style="font-size: 0.75rem;">java Main</span>
-                </div>
-                <div class="terminal-body" id="term-body">
-                    <div class="mb-4"><span class="term-cmd">PS C:\Projets\Bataille></span> java Main</div>
-                    
-                    <div class="mb-3">
-                        <div class="text-muted">--- Tour 473 ---</div>
-                        <div><span class="term-p1">Alice</span> joue <span class="text-white">As de Cœur</span></div>
-                        <div><span class="term-p2">Bob</span> joue <span class="text-white">Valet de Pique</span></div>
-                        <div class="text-success">> Alice remporte la manche !</div>
-                        <div class="small opacity-75">Alice (3 cartes)<br>Bob (29 cartes)</div>
-                    </div>
-
-                    <div class="mb-3">
-                        <div class="text-muted">--- Tour 474 ---</div>
-                        <div><span class="term-p1">Alice</span> joue <span class="text-white">10 de Carreau</span></div>
-                        <div><span class="term-p2">Bob</span> joue <span class="text-white">As de Pique</span></div>
-                        <div style="color: #f472b6;">> Bob remporte la manche !</div>
-                        <div class="small opacity-75">Alice (2 cartes)<br>Bob (30 cartes)</div>
-                    </div>
-
-                    <div class="mb-3">
-                        <div class="text-muted">--- Tour 475 ---</div>
-                        <div><span class="term-p1">Alice</span> joue <span class="text-white">As de Cœur</span></div>
-                        <div><span class="term-p2">Bob</span> joue <span class="text-white">9 de Trèfle</span></div>
-                        <div class="text-success">> Alice remporte la manche !</div>
-                        <div class="small opacity-75">Alice (3 cartes)<br>Bob (29 cartes)</div>
-                    </div>
-
-                    <div class="mb-3">
-                        <div class="text-muted">--- Tour 476 ---</div>
-                        <div><span class="term-p1">Alice</span> joue <span class="text-white">Valet de Pique</span></div>
-                        <div><span class="term-p2">Bob</span> joue <span class="text-white">Valet de Trèfle</span></div>
-                        <div class="term-bataille mt-1">Égalité ! Bataille !</div>
-                        <div class="text-muted"> → Chaque joueur pose une carte face cachée…</div>
-                        <div><span class="term-p1">Alice</span> révèle <span class="text-white">9 de Trèfle</span></div>
-                        <div><span class="term-p2">Bob</span> révèle <span class="text-white">Roi de Pique</span></div>
-                        <div style="color: #f472b6; font-weight: bold;">> Bob remporte la bataille !</div>
-                        <div class="small opacity-75">Alice (0 cartes)<br>Bob (32 cartes)</div>
-                    </div>
-
-                    <div class="mt-4 mb-2" style="color: #fbbf24; font-weight: bold;">===== FIN DE LA PARTIE =====</div>
-                    <div class="text-white fw-bold fs-6">🏆 Bob gagne la partie !</div>
-                    
-                    <div class="mt-4"><span class="term-cmd">PS C:\Projets\Bataille></span> <span style="animation: blink 1s step-end infinite;">█</span></div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Animation curseur terminal -->
-    <style>
-        @keyframes blink { 50% { opacity: 0; } }
-    </style>
-
-    <!-- Séparateur -->
-    <div class="text-center mb-5 mt-5">
-        <h4 class="fw-bold text-muted">Simulation Web du Moteur Java</h4>
-        <p class="small text-muted">Voici une représentation graphique interactive de la logique exécutée par l'algorithme Java.</p>
-    </div>
-
-    <!-- VISUAL DEMO -->
-    <div class="game-arena text-center">
-        <div class="score-board">
-            <span id="p1-name">Alice</span>: <span id="p1-score" style="color: #fbbf24">26</span> cartes 
-            <span class="mx-3">|</span> 
-            <span id="p2-name">Bob</span>: <span id="p2-score" style="color: #fbbf24">26</span> cartes
-        </div>
-
-        <div class="row align-items-center justify-content-center g-4">
-            <!-- Alice -->
-            <div class="col-4 d-flex flex-column align-items-center">
-                <div class="playing-card card-back" style="position: relative; transform: rotate(-5deg);"></div>
-                <div class="mt-3 mono small text-white opacity-75">Tas Alice</div>
-            </div>
-
-            <!-- Battle Zone -->
-            <div class="col-4">
-                <div class="d-flex justify-content-center gap-4 mb-4">
-                    <!-- Slot Carte Alice -->
-                    <div class="card-slot">
-                        <div id="card-alice" class="playing-card card-hidden">
-                            <div class="corner-top">A</div>
-                            <div class="center-suit">♠</div>
-                            <div class="corner-bottom">A</div>
-                        </div>
-                    </div>
-                    
-                    <!-- Slot Carte Bob -->
-                    <div class="card-slot">
-                        <div id="card-bob" class="playing-card card-hidden">
-                            <div class="corner-top">K</div>
-                            <div class="center-suit">♥</div>
-                            <div class="corner-bottom">K</div>
-                        </div>
-                    </div>
-                </div>
-
-                <div id="battle-message" class="badge bg-danger mb-3 d-none">BATAILLE !</div>
-                <div id="result-message" class="text-white fw-bold mb-3" style="min-height: 24px; text-shadow: 0 2px 4px rgba(0,0,0,0.5);">En attente...</div>
-                
-                <button onclick="playTurn()" class="action-btn">
-                    Jouer un tour
-                </button>
-            </div>
-
-            <!-- Bob -->
-            <div class="col-4 d-flex flex-column align-items-center">
-                <div class="playing-card card-back" style="position: relative; transform: rotate(5deg);"></div>
-                <div class="mt-3 mono small text-white opacity-75">Tas Bob</div>
-            </div>
-        </div>
-    </div>
-
-    <!-- DOCUMENTATION TECHNIQUE -->
-    <div class="row mt-5">
-        <div class="col-md-4">
-            <h3 class="mono mb-4"><span>01.</span> Structure POO</h3>
-            <p class="text-muted">Comme évoqué, le projet repose sur une architecture objet stricte. Chaque élément de la vie réelle correspond à un objet Java.</p>
-            
-            <div class="d-flex gap-3 mb-3">
-                <div class="feature-icon"><i data-lucide="box"></i></div>
-                <div>
-                    <h5 class="fw-bold">Classe Carte</h5>
-                    <p class="small text-muted">La classe <code>Carte</code> n'utilise pas de simples variables textuelles, mais fait appel à des sous-objets <code>Hauteur</code> (ex: Valet, rang 11) et <code>Symbole</code> (ex: Coeur, rouge).</p>
-                </div>
-            </div>
-
-            <div class="d-flex gap-3">
-                <div class="feature-icon"><i data-lucide="users"></i></div>
-                <div>
-                    <h5 class="fw-bold">Classe Joueur</h5>
-                    <p class="small text-muted">Un <code>Joueur</code> possède un nom et son propre <code>Tas</code> (sa main). Il encapsule la logique de jouer une carte.</p>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-8">
-            <div class="code-block" data-filename="Carte.java">
-                <pre><code class="language-java"><span class="kw">public class</span> Carte {
-                    <span class="kw">private</span> Hauteur hauteur;
-                    <span class="kw">private</span> Symbole symbole;
-
-                    <span class="kw">public</span> Carte(Hauteur hauteur, Symbole symbole) {
-                        <span class="kw">this</span>.hauteur = hauteur;
-                        <span class="kw">this</span>.symbole = symbole;
-                    }
-
-                    <span class="kw">public</span> Hauteur getHauteur() { <span class="kw">return</span> hauteur; }
-                    <span class="kw">public</span> Symbole getSymbole() { <span class="kw">return</span> symbole; }
-
-                    <span class="kw">@Override</span>
-                    <span class="kw">public</span> String toString() {
-                        <span class="kw">return</span> hauteur + <span class="str">" de "</span> + symbole.getNom();
-                    }
-                }</code></pre>
-            </div>
-        </div>
-    </div>
-
-    <hr class="my-5" style="border-color: var(--border-color); opacity: 0.5;">
-
-    <div class="row">
-        <div class="col-md-6 order-md-2">
-            <h3 class="mono mb-4"><span>02.</span> Logique de Collection</h3>
-            <p class="text-muted">
-                La gestion du paquet de cartes (la classe <code>Tas</code>) utilise une <code>LinkedList</code> issue de <code>java.util</code>. Ce choix est justifié par la nature du jeu (logique de file / FIFO : First In, First Out) : on retire les cartes du dessus et on ajoute les gains en dessous.
-            </p>
-            <ul class="list-unstyled text-muted">
-                <li class="mb-2">✅ <code>pollFirst()</code> : Pour jouer la carte du dessus.</li>
-                <li class="mb-2">✅ <code>addLast()</code> : Pour ranger les cartes gagnées en dessous.</li>
-                <li class="mb-2">✅ <code>Collections.shuffle()</code> : Utilisé pour le mélange initial du paquet.</li>
-            </ul>
-        </div>
-        <div class="col-md-6 order-md-1">
-            <div class="code-block" data-filename="Tas.java">
-                <pre><code class="language-java"><span class="kw">import</span> java.util.LinkedList;
-
-                <span class="kw">public class</span> Tas {
-                    <span class="kw">private</span> LinkedList&lt;Carte&gt; cartes;
-
-                    <span class="kw">public</span> Tas() {
-                        cartes = <span class="kw">new</span> LinkedList&lt;&gt;();
-                    }
-
-                    <span class="kw">public void</span> ajouterCarte(Carte c) {
-                        cartes.addLast(c); <span class="com">// Ajout en dessous</span>
-                    }
-
-                    <span class="kw">public</span> Carte retirerCarte() {
-                        <span class="kw">return</span> cartes.pollFirst(); <span class="com">// Pioche au dessus</span>
-                    }
-                    
-                    <span class="kw">public boolean</span> estVide() {
-                        <span class="kw">return</span> cartes.isEmpty();
-                    }
-                }</code></pre>
-            </div>
-        </div>
-    </div>
-
-    <hr class="my-5" style="border-color: var(--border-color); opacity: 0.5;">
-
-    <!-- Algorithme -->
-    <div class="row">
-        <div class="col-12">
-            <h3 class="mono mb-4"><span>03.</span> Algorithme Principal & Sécurité</h3>
-            <p class="text-muted">
-                Le coeur du jeu réside dans la boucle principale. Une particularité importante est la gestion des <strong>boucles infinies</strong>. 
-                Dans la bataille, il arrive que les joueurs échangent les mêmes cartes indéfiniment. J'ai implémenté un <code>HashSet</code> pour mémoriser les états du jeu.
-            </p>
-        </div>
-        <div class="col-12">
-            <div class="code-block" data-filename="Main.java">
-                <pre><code class="language-java"><span class="com">// Ensemble des états déjà vus pour éviter les boucles</span>
-                Set&lt;String&gt; etatsVus = <span class="kw">new</span> HashSet&lt;&gt;();
-
-                <span class="kw">while</span> (j1.aDesCartes() && j2.aDesCartes()) {
-                    
-                    <span class="com">// Sauvegarde de l'état actuel (String des deux decks)</span>
-                    String etat = j1.getTas().getCartes().toString() + <span class="str">"|"</span> + j2.getTas().getCartes().toString();
-                    
-                    <span class="kw">if</span> (etatsVus.contains(etat)) {
-                        System.out.println(<span class="str">"Partie bloquée ! Fin forcée."</span>);
-                        <span class="kw">break</span>;
-                    }
-                    etatsVus.add(etat);
-                    
-                    <span class="com">// ... logique de comparaison des cartes ...</span>
-                }</code></pre>
-            </div>
-        </div>
-    </div>
+    </section>
 
 </main>
 
 <footer class="text-center py-5">
-    <div class="container">
-        <p class="small mono opacity-50" style="color: var(--text-muted)">&copy; 2024 Maël Ribot • Dossier E6</p>
-    </div>
+    <p style="font-family:'JetBrains Mono',monospace;font-size:0.72rem;color:var(--muted);">&copy; 2024 Maël Ribot &nbsp;·&nbsp; Dossier E6</p>
 </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>
+lucide.createIcons();
+
+// ── THEME ──
+const themeToggle = document.getElementById('themeToggle');
+const themeIcon   = document.getElementById('themeIcon');
+const body        = document.body;
+
+function setTheme(isLight) {
+    body.classList.toggle('light-theme', isLight);
+    themeIcon.setAttribute('data-lucide', isLight ? 'sun' : 'moon');
     lucide.createIcons();
+    localStorage.setItem('theme', isLight ? 'light' : 'dark');
+}
 
-    const themeToggle = document.getElementById('themeToggle');
-    const themeIcon = document.getElementById('themeIcon');
-    const body = document.body;
+themeToggle.addEventListener('click', () => setTheme(!body.classList.contains('light-theme')));
 
-    const updateIcon = (isLight) => {
-        const iconName = isLight ? 'sun' : 'moon';
-        themeIcon.setAttribute('data-lucide', iconName);
-        lucide.createIcons();
-    };
+const saved = localStorage.getItem('theme');
+if (saved === 'light' || (!saved && window.matchMedia('(prefers-color-scheme: light)').matches)) setTheme(true);
 
-    const setTheme = (isLight) => {
-        body.classList.toggle('light-theme', isLight);
-        updateIcon(isLight);
-        localStorage.setItem('theme', isLight ? 'light' : 'dark');
-    };
+// ── SIMULATION TERMINAL ──
+const CARDS = {
+    ranks: ['2','3','4','5','6','7','8','9','10','Valet','Dame','Roi','As'],
+    suits: ['Cœur','Carreau','Pique','Trèfle'],
+    values: { '2':2,'3':3,'4':4,'5':5,'6':6,'7':7,'8':8,'9':9,'10':10,'Valet':11,'Dame':12,'Roi':13,'As':14 }
+};
 
-    themeToggle.addEventListener('click', () => setTheme(!body.classList.contains('light-theme')));
+function randomCard() {
+    const r = CARDS.ranks[Math.floor(Math.random() * 13)];
+    const s = CARDS.suits[Math.floor(Math.random() * 4)];
+    return { name: `${r} de ${s}`, value: CARDS.values[r] };
+}
 
-    const savedTheme = localStorage.getItem('theme');
-    const prefersLight = window.matchMedia('(prefers-color-scheme: light)').matches;
-    if (savedTheme === 'light' || (!savedTheme && prefersLight)) setTheme(true);
-
-    window.onload = function() {
-        const termBody = document.getElementById('term-body');
-        if(termBody) termBody.scrollTop = termBody.scrollHeight;
-    };
-
-    const suits = [
-        { sym: '♠', col: 'black' }, { sym: '♣', col: 'black' },
-        { sym: '♥', col: 'red' }, { sym: '♦', col: 'red' }
-    ];
-    const ranks = ['7','8','9','10','J','Q','K','A'];
-    
-    const wait = (ms) => new Promise(resolve => setTimeout(resolve, ms));
-
-    function getRandomCard() {
-        const s = suits[Math.floor(Math.random() * suits.length)];
-        const r = ranks[Math.floor(Math.random() * ranks.length)];
-        const val = ranks.indexOf(r);
-        return { rank: r, suit: s.sym, color: s.col, value: val };
+function buildDeck() {
+    const deck = [];
+    for (const r of CARDS.ranks) for (const s of CARDS.suits) deck.push({ name: `${r} de ${s}`, value: CARDS.values[r] });
+    for (let i = deck.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [deck[i], deck[j]] = [deck[j], deck[i]];
     }
+    return deck;
+}
 
-    let isAnimating = false;
+let simRunning = false;
+let simStop = false;
 
-    async function playTurn() {
-        if (isAnimating) return;
-        isAnimating = true;
+function resetTerminal() {
+    simStop = true;
+    simRunning = false;
+    const tb = document.getElementById('term-body');
+    tb.innerHTML = `<span class="t-info"># Cliquez sur "Lancer" pour simuler une partie complète</span><br>
+<span class="t-cmd">❯ java Main</span><span class="cursor"></span>`;
+    document.getElementById('run-status').textContent = 'prêt';
+    document.getElementById('run-status').className = 'run-status';
+    document.getElementById('btn-run').disabled = false;
+}
 
-        const btn = document.querySelector('.action-btn');
-        const cardAlice = document.getElementById('card-alice');
-        const cardBob = document.getElementById('card-bob');
-        const resultMsg = document.getElementById('result-message');
-        const battleMsg = document.getElementById('battle-message');
-        const score1 = document.getElementById('p1-score');
-        const score2 = document.getElementById('p2-score');
+function appendLine(html) {
+    const tb = document.getElementById('term-body');
+    // remove cursor if exists
+    const cur = tb.querySelector('.cursor');
+    if (cur) cur.remove();
+    const line = document.createElement('div');
+    line.innerHTML = html;
+    tb.appendChild(line);
+    tb.scrollTop = tb.scrollHeight;
+}
 
-        btn.disabled = true;
-        btn.innerText = "En cours...";
-        btn.style.opacity = "0.7";
+const wait = ms => new Promise(r => setTimeout(r, ms));
 
-        battleMsg.classList.add('d-none');
-        resultMsg.innerText = "Duel...";
-        resultMsg.style.color = "var(--text-main)";
-        cardAlice.classList.remove('winner-glow');
-        cardBob.classList.remove('winner-glow');
+async function startSimulation() {
+    if (simRunning) return;
+    simStop = false;
+    simRunning = true;
 
-        cardAlice.classList.add('card-hidden');
-        cardBob.classList.add('card-hidden');
-        
-        await wait(300);
+    const runBtn = document.getElementById('btn-run');
+    const statusEl = document.getElementById('run-status');
+    runBtn.disabled = true;
+    statusEl.textContent = '● en cours';
+    statusEl.className = 'run-status running';
 
-        let c1 = getRandomCard();
-        let c2 = getRandomCard();
-        updateCardDOM(cardAlice, c1);
-        updateCardDOM(cardBob, c2);
-        
-        cardAlice.classList.remove('card-hidden');
-        cardBob.classList.remove('card-hidden');
+    const tb = document.getElementById('term-body');
+    tb.innerHTML = '';
 
-        let pot = 2; 
+    appendLine(`<span class="t-cmd">❯ java Main</span>`);
+    await wait(400);
+    appendLine(`<br><span class="t-info">Création du paquet de 52 cartes...</span>`);
+    await wait(600);
+    appendLine(`<span class="t-info">Mélange aléatoire...</span>`);
+    await wait(500);
+    appendLine(`<span class="t-info">Distribution — Alice : 26 cartes · Bob : 26 cartes</span>`);
+    await wait(600);
+    appendLine(`<span class="t-info">═══════════════════════════════════</span>`);
+    await wait(300);
 
+    const deck = buildDeck();
+    let aliceDeck = deck.slice(0, 26);
+    let bobDeck   = deck.slice(26, 52);
+    const seen = new Set();
+    let turn = 1;
+    const MAX_TURNS = 200;
+
+    while (aliceDeck.length > 0 && bobDeck.length > 0 && turn <= MAX_TURNS) {
+        if (simStop) return;
+
+        const stateKey = aliceDeck.map(c=>c.name).join(',') + '|' + bobDeck.map(c=>c.name).join(',');
+        if (seen.has(stateKey)) {
+            await wait(100);
+            appendLine(`<br><span class="t-battle">⚠ Boucle détectée — fin forcée (HashSet)</span>`);
+            appendLine(`<span class="t-info">Partie déclarée nulle.</span>`);
+            break;
+        }
+        seen.add(stateKey);
+
+        appendLine(`<br><span class="t-info">─── Tour ${turn} ─── (Alice: ${aliceDeck.length} · Bob: ${bobDeck.length})</span>`);
+
+        const pot = [];
+        let c1 = aliceDeck.shift();
+        let c2 = bobDeck.shift();
+        pot.push(c1, c2);
+
+        appendLine(`<span class="t-p1">Alice</span> joue <span class="t-card">${c1.name}</span>`);
+        await wait(120);
+        appendLine(`<span class="t-p2">Bob</span>   joue <span class="t-card">${c2.name}</span>`);
+        await wait(180);
+
+        // Battle loop
         while (c1.value === c2.value) {
-            battleMsg.classList.remove('d-none');
-            resultMsg.innerHTML = "ÉGALITÉ ! Carte cachée...";
-            resultMsg.style.color = "#fbbf24";
-            
-            await wait(1500);
+            appendLine(`<span class="t-battle">⚔  Égalité ! Bataille !</span>`);
+            if (aliceDeck.length === 0 || bobDeck.length === 0) break;
 
-            cardAlice.classList.add('card-hidden');
-            cardBob.classList.add('card-hidden');
-            
-            pot += 2; 
+            const hidden1 = aliceDeck.shift();
+            const hidden2 = bobDeck.shift();
+            pot.push(hidden1, hidden2);
 
-            await wait(800);
+            appendLine(`<span class="t-info">   → Cartes cachées posées...</span>`);
+            await wait(200);
 
-            c1 = getRandomCard();
-            c2 = getRandomCard();
-            updateCardDOM(cardAlice, c1);
-            updateCardDOM(cardBob, c2);
+            if (aliceDeck.length === 0 || bobDeck.length === 0) break;
 
-            cardAlice.classList.remove('card-hidden');
-            cardBob.classList.remove('card-hidden');
-            
-            pot += 2; 
+            c1 = aliceDeck.shift();
+            c2 = bobDeck.shift();
+            pot.push(c1, c2);
+
+            appendLine(`<span class="t-p1">Alice</span> révèle <span class="t-card">${c1.name}</span>`);
+            await wait(100);
+            appendLine(`<span class="t-p2">Bob</span>   révèle <span class="t-card">${c2.name}</span>`);
+            await wait(150);
         }
 
         if (c1.value > c2.value) {
-            resultMsg.innerHTML = `Alice gagne ${pot} cartes !`;
-            resultMsg.style.color = "#4ade80";
-            cardAlice.classList.add('winner-glow');
-            updateScore(score1, score2, pot / 2);
-        } else {
-            resultMsg.innerHTML = `Bob gagne ${pot} cartes !`;
-            resultMsg.style.color = "#f472b6"; 
-            cardBob.classList.add('winner-glow');
-            updateScore(score2, score1, pot / 2);
+            // shuffle pot and give to alice
+            for (let i = pot.length-1; i > 0; i--) { const j=Math.floor(Math.random()*(i+1)); [pot[i],pot[j]]=[pot[j],pot[i]]; }
+            aliceDeck = aliceDeck.concat(pot);
+            appendLine(`<span class="t-win">▶ Alice remporte ${pot.length} cartes !</span>`);
+        } else if (c2.value > c1.value) {
+            for (let i = pot.length-1; i > 0; i--) { const j=Math.floor(Math.random()*(i+1)); [pot[i],pot[j]]=[pot[j],pot[i]]; }
+            bobDeck = bobDeck.concat(pot);
+            appendLine(`<span class="t-lose">▶ Bob remporte ${pot.length} cartes !</span>`);
         }
 
-        isAnimating = false;
-        btn.disabled = false;
-        btn.innerText = "Jouer un tour";
-        btn.style.opacity = "1";
+        // Dynamic speed: fast in the middle, slow at start/end
+        const speed = turn < 5 ? 350 : (aliceDeck.length < 5 || bobDeck.length < 5 ? 400 : 60);
+        await wait(speed);
+        turn++;
     }
 
-    function updateScore(winnerEl, loserEl, gain) {
-        const wScore = parseInt(winnerEl.innerText) + gain;
-        const lScore = parseInt(loserEl.innerText) - gain;
-        winnerEl.innerText = wScore;
-        loserEl.innerText = lScore;
+    if (simStop) return;
+
+    await wait(300);
+    appendLine(`<span class="t-info">═══════════════════════════════════</span>`);
+    await wait(200);
+    appendLine(`<span class="t-final">══════ FIN DE PARTIE ══════</span>`);
+    await wait(200);
+
+    if (aliceDeck.length > bobDeck.length) {
+        appendLine(`<span class="t-winner">🏆  Alice remporte la partie ! (${aliceDeck.length} cartes)</span>`);
+    } else if (bobDeck.length > aliceDeck.length) {
+        appendLine(`<span class="t-winner">🏆  Bob remporte la partie ! (${bobDeck.length} cartes)</span>`);
+    } else {
+        appendLine(`<span class="t-winner">🤝 Match nul après ${MAX_TURNS} tours !</span>`);
     }
 
-    function updateCardDOM(el, cardData) {
-        el.className = `playing-card ${cardData.color}`;
-        el.querySelector('.corner-top').innerText = cardData.rank;
-        el.querySelector('.corner-bottom').innerText = cardData.rank;
-        el.querySelector('.center-suit').innerText = cardData.suit;
+    appendLine(`<br><span class="t-cmd">❯ </span><span class="cursor"></span>`);
+    statusEl.textContent = 'terminé';
+    statusEl.className = 'run-status';
+    runBtn.disabled = false;
+    simRunning = false;
+}
+
+// ── GAME DEMO ──
+const suits = [
+    {sym:'♠',col:'black'},{sym:'♣',col:'black'},
+    {sym:'♥',col:'red'}, {sym:'♦',col:'red'}
+];
+const ranks = ['7','8','9','10','J','Q','K','A'];
+
+function getRandomCard() {
+    const s = suits[Math.floor(Math.random()*4)];
+    const r = ranks[Math.floor(Math.random()*8)];
+    return { rank: r, suit: s.sym, color: s.col, value: ranks.indexOf(r) };
+}
+
+let isAnimating = false;
+const wait2 = ms => new Promise(r => setTimeout(r, ms));
+
+async function playTurn() {
+    if (isAnimating) return;
+    isAnimating = true;
+
+    const cardAlice = document.getElementById('card-alice');
+    const cardBob   = document.getElementById('card-bob');
+    const resultMsg = document.getElementById('result-msg');
+    const battleBadge = document.getElementById('battle-badge');
+    const s1 = document.getElementById('p1-score');
+    const s2 = document.getElementById('p2-score');
+
+    battleBadge.classList.add('d-none');
+    resultMsg.textContent = 'Duel...';
+    resultMsg.style.color = 'white';
+    cardAlice.classList.remove('winner-glow');
+    cardBob.classList.remove('winner-glow');
+    cardAlice.classList.add('card-hidden');
+    cardBob.classList.add('card-hidden');
+
+    await wait2(300);
+
+    let c1 = getRandomCard();
+    let c2 = getRandomCard();
+    updateCardDOM(cardAlice, c1);
+    updateCardDOM(cardBob, c2);
+    cardAlice.classList.remove('card-hidden');
+    cardBob.classList.remove('card-hidden');
+
+    let pot = 2;
+
+    while (c1.value === c2.value) {
+        battleBadge.classList.remove('d-none');
+        resultMsg.textContent = 'ÉGALITÉ ! Carte cachée…';
+        resultMsg.style.color = '#fbbf24';
+        await wait2(1400);
+        cardAlice.classList.add('card-hidden');
+        cardBob.classList.add('card-hidden');
+        pot += 2;
+        await wait2(700);
+        c1 = getRandomCard(); c2 = getRandomCard();
+        updateCardDOM(cardAlice, c1);
+        updateCardDOM(cardBob, c2);
+        cardAlice.classList.remove('card-hidden');
+        cardBob.classList.remove('card-hidden');
+        pot += 2;
     }
+
+    if (c1.value > c2.value) {
+        resultMsg.textContent = `Alice gagne ${pot} cartes !`;
+        resultMsg.style.color = '#4ade80';
+        cardAlice.classList.add('winner-glow');
+        updateScore(s1, s2, pot/2);
+    } else {
+        resultMsg.textContent = `Bob gagne ${pot} cartes !`;
+        resultMsg.style.color = '#f472b6';
+        cardBob.classList.add('winner-glow');
+        updateScore(s2, s1, pot/2);
+    }
+
+    isAnimating = false;
+}
+
+function updateScore(winEl, loseEl, gain) {
+    winEl.textContent  = Math.max(0, parseInt(winEl.textContent)  + gain);
+    loseEl.textContent = Math.max(0, parseInt(loseEl.textContent) - gain);
+}
+
+function updateCardDOM(el, c) {
+    el.className = `playing-card ${c.color}`;
+    el.querySelector('.corner-top').textContent  = c.rank;
+    el.querySelector('.corner-bottom').textContent = c.rank;
+    el.querySelector('.center-suit').textContent = c.suit;
+}
 </script>
-
 </body>
 </html>
