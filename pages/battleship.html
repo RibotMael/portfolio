@@ -5,299 +5,564 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Projet Battleship – BTS SIO</title>
 
-<!-- Import Polices Google (Look Militaire & Tech) -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Black+Ops+One&family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Black+Ops+One&family=Rajdhani:wght@400;500;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
 
 <style>
 :root {
-  --primary-color: #00f2ff; 
-  --secondary-color: #0077cc; 
-  --text-color: #ffffff;
-  --glass-bg: rgba(0, 15, 30, 0.9); 
-  --glass-border: 1px solid rgba(0, 242, 255, 0.3);
+  --primary: #00f2ff;
+  --secondary: #0077cc;
+  --accent: #ff6b35;
+  --green: #1abc9c;
+  --red: #e74c3c;
+  --gold: #f0c040;
+  --glass-bg: rgba(0, 10, 22, 0.92);
+  --glass-border: rgba(0, 242, 255, 0.25);
+  --text: #e0f7ff;
 }
 
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
 html, body {
-  margin: 0;
-  padding: 0;
   min-height: 100%;
   font-family: 'Rajdhani', sans-serif;
   overflow-x: hidden;
   cursor: crosshair;
+  color: var(--text);
 }
 
 body {
   background: url("../images/BackGroundAccueil.png") no-repeat center center fixed;
   background-size: cover;
-  color: var(--text-color);
   position: relative;
 }
 
 body::before {
   content: "";
   position: fixed;
-  top: 0; 
-  left: 0; 
-  width: 100%; 
-  height: 100%;
-  background: radial-gradient(circle, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.9) 100%);
+  inset: 0;
+  background: radial-gradient(ellipse at 50% 30%, rgba(0,30,60,0.5) 0%, rgba(0,0,0,0.92) 100%);
   z-index: -1;
-  pointer-events: none;
 }
 
+/* Scanline overlay */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.07) 2px, rgba(0,0,0,0.07) 4px);
+  pointer-events: none;
+  z-index: 9999;
+}
+
+/* ─── TOP BAR ─────────────────────────────────── */
 .top-bar {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1.5rem 2rem;
-  z-index: 100;
+  padding: 1.2rem 2rem;
   position: relative;
+  z-index: 200;
+  border-bottom: 1px solid rgba(0,242,255,0.1);
+  background: rgba(0,0,0,0.4);
+  backdrop-filter: blur(8px);
 }
+
+.top-left { display: flex; gap: 0.7rem; align-items: center; }
 
 .hud-btn {
-  background: rgba(0, 0, 0, 0.7);
-  border: 1px solid var(--secondary-color);
-  padding: 0.5rem 1.2rem;
-  border-radius: 4px;
-  color: var(--primary-color);
+  background: rgba(0,0,0,0.7);
+  border: 1px solid var(--secondary);
+  padding: 0.45rem 1rem;
+  border-radius: 3px;
+  color: var(--primary);
   font-family: 'Black Ops One', cursive;
+  font-size: 0.78rem;
   letter-spacing: 1px;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.25s;
   text-transform: uppercase;
-  text-shadow: 0 0 5px rgba(0,0,0,1);
 }
-
 .hud-btn:hover {
-  background: var(--secondary-color);
-  color: white;
-  box-shadow: 0 0 15px var(--primary-color);
+  background: var(--secondary);
+  color: #fff;
+  box-shadow: 0 0 12px var(--primary);
 }
 
 .user-info {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  cursor: pointer;
-  padding: 5px 15px;
-  border-radius: 30px;
-  border: 1px solid transparent;
-  transition: 0.3s;
-  background: rgba(0,0,0,0.6);
+  display: flex; align-items: center; gap: 0.9rem;
+  cursor: pointer; padding: 5px 15px;
+  border-radius: 30px; border: 1px solid transparent;
+  transition: 0.3s; background: rgba(0,0,0,0.5);
+  position: relative;
 }
+.user-info:hover { border-color: var(--primary); background: rgba(0,0,0,0.85); }
 
-.user-info:hover {
-  border-color: var(--primary-color);
-  background: rgba(0,0,0,0.9);
-}
-
-.user-text {
-  font-weight: 700;
-  font-size: 1.2rem;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  text-shadow: 1px 1px 2px black;
-}
+.user-text { font-weight: 700; font-size: 1.1rem; text-transform: uppercase; letter-spacing: 1px; }
 
 .avatar {
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  border: 2px solid var(--primary-color);
-  box-shadow: 0 0 10px var(--primary-color);
+  width: 46px; height: 46px; border-radius: 50%;
+  border: 2px solid var(--primary);
+  box-shadow: 0 0 10px var(--primary);
   object-fit: cover;
+  background: #001428;
 }
 
 .user-dropdown {
-  position: absolute;
-  top: 80px;
-  right: 2rem;
-  background: var(--glass-bg);
-  backdrop-filter: blur(12px);
-  border: var(--glass-border);
-  border-radius: 8px;
-  overflow: hidden;
-  display: none;
-  flex-direction: column;
-  min-width: 180px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.9);
-  z-index: 1000;
+  position: absolute; top: calc(100% + 10px); right: 0;
+  background: var(--glass-bg); backdrop-filter: blur(14px);
+  border: 1px solid var(--glass-border); border-radius: 8px;
+  overflow: hidden; display: none; flex-direction: column;
+  min-width: 190px; box-shadow: 0 12px 40px rgba(0,0,0,0.95); z-index: 1000;
 }
-
 .user-dropdown button {
-  background: none;
-  border: none;
-  border-bottom: 1px solid rgba(255,255,255,0.1);
-  color: white;
-  padding: 15px;
-  text-align: left;
-  cursor: pointer;
-  font-family: 'Rajdhani', sans-serif;
-  font-size: 1.1rem;
-  font-weight: bold;
-  transition: 0.2s;
-  display: flex;
-  align-items: center;
-  gap: 10px;
+  background: none; border: none; border-bottom: 1px solid rgba(255,255,255,0.08);
+  color: white; padding: 14px 18px; text-align: left; cursor: pointer;
+  font-family: 'Rajdhani', sans-serif; font-size: 1rem; font-weight: 700;
+  transition: 0.2s; display: flex; align-items: center; gap: 10px;
 }
+.user-dropdown button:hover { background: rgba(255,50,50,0.18); color: #ff7070; }
 
-.user-dropdown button:hover {
-  background: rgba(255, 50, 50, 0.2);
-  color: #ff5555;
-}
-
+/* ─── MAIN LAYOUT ─────────────────────────────── */
 .menu-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  min-height: calc(100vh - 100px);
+  display: flex; flex-direction: column; align-items: center;
+  min-height: calc(100vh - 68px);
 }
 
 .menu-buttons {
-  text-align: center;
-  margin-top: 20px;
-  animation: fadeIn 1s ease;
-  position: relative;
-  z-index: 10;
-  width: 100%;
+  text-align: center; margin-top: 25px;
+  animation: fadeIn 0.8s ease; position: relative; z-index: 10; width: 100%;
 }
 
 .menu-logo {
-  width: 900px;
-  max-width: 85%;
-  margin-bottom: 30px;
-  filter: drop-shadow(0 0 25px rgba(0, 242, 255, 0.4));
-  animation: floatLogo 6s ease-in-out infinite;
+  width: 820px; max-width: 82%;
+  filter: drop-shadow(0 0 28px rgba(0,242,255,0.45));
+  animation: floatLogo 6s ease-in-out infinite; margin-bottom: 28px;
 }
 
-.main-btn {
-  width: 280px;
-  padding: 1.2rem;
-  margin: 15px auto;
-  border: none;
-  background: rgba(0, 20, 40, 0.85); 
-  border: 1px solid rgba(0, 242, 255, 0.3);
-  border-left: 4px solid var(--secondary-color);
-  border-right: 4px solid var(--secondary-color);
-  color: #ffffff;
+/* ─── NAV GRID ────────────────────────────────── */
+.nav-grid {
+  display: flex; flex-wrap: wrap; justify-content: center;
+  gap: 12px; padding: 0 20px; max-width: 820px; margin: 0 auto;
+}
+
+.nav-card {
+  width: 180px; padding: 1rem 0.8rem;
+  background: rgba(0,15,32,0.88);
+  border: 1px solid rgba(0,242,255,0.2);
+  border-bottom: 3px solid var(--secondary);
+  border-radius: 4px;
+  cursor: pointer; transition: all 0.28s;
   font-family: 'Black Ops One', cursive;
-  font-size: 1.4rem;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  cursor: pointer;
-  transition: all 0.3s;
-  position: relative;
-  overflow: hidden;
-  text-shadow: 2px 2px 4px #000000; 
+  font-size: 0.82rem; letter-spacing: 1.5px;
+  text-transform: uppercase; color: #fff;
+  display: flex; flex-direction: column; align-items: center; gap: 8px;
+  position: relative; overflow: hidden;
 }
-
-.main-btn::before {
-  content: '';
-  position: absolute;
-  top: 0; left: -100%; width: 100%; height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
-  transition: 0.5s;
+.nav-card .card-icon { font-size: 1.8rem; }
+.nav-card::before {
+  content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.07), transparent);
+  transition: 0.45s;
 }
-
-.main-btn:hover::before {
-  left: 100%;
+.nav-card:hover::before { left: 100%; }
+.nav-card:hover {
+  border-bottom-color: var(--primary);
+  box-shadow: 0 0 22px rgba(0,242,255,0.3);
+  transform: translateY(-3px);
 }
+.nav-card.green { border-bottom-color: var(--green); }
+.nav-card.green:hover { border-bottom-color: #0ef0c0; box-shadow: 0 0 22px rgba(26,188,156,0.3); }
+.nav-card.red { border-bottom-color: var(--red); }
+.nav-card.gold { border-bottom-color: var(--gold); }
+.nav-card.gold:hover { box-shadow: 0 0 22px rgba(240,192,64,0.35); }
 
-.main-btn:hover {
-  background: rgba(0, 119, 204, 0.9);
-  border-color: var(--primary-color);
-  box-shadow: 0 0 20px rgba(0, 242, 255, 0.5);
-  transform: scale(1.05);
-}
-
-.btn-green { border-color: #1abc9c; border-left-color: #1abc9c; border-right-color: #1abc9c; }
-.btn-green:hover { background: rgba(26, 188, 156, 0.9); }
-
-.btn-red { border-color: #e74c3c; border-left-color: #e74c3c; border-right-color: #e74c3c; }
-.btn-red:hover { background: rgba(231, 76, 60, 0.9); }
-
+/* ─── SECTIONS ────────────────────────────────── */
 .section {
   display: none;
-  max-width: 800px; 
-  margin: 40px auto 80px auto;
-  background: var(--glass-bg);
-  backdrop-filter: blur(10px);
-  padding: 40px;
-  border: 1px solid var(--primary-color);
-  border-radius: 4px;
-  box-shadow: 0 0 40px rgba(0, 0, 0, 0.9);
-  animation: hologramIn 0.4s ease forwards;
-  text-align: justify; 
-  position: relative;
-  z-index: 20;
+  max-width: 860px; width: 92%;
+  margin: 36px auto 60px;
+  background: var(--glass-bg); backdrop-filter: blur(12px);
+  padding: 40px; border: 1px solid var(--glass-border);
+  border-top: 2px solid var(--primary);
+  border-radius: 4px; box-shadow: 0 0 60px rgba(0,0,0,0.9);
+  animation: hologramIn 0.35s ease forwards;
+  position: relative; z-index: 20;
 }
+
+.section-close {
+  position: absolute; top: 14px; right: 16px;
+  background: none; border: 1px solid rgba(255,255,255,0.15);
+  color: rgba(255,255,255,0.5); font-size: 1rem; cursor: pointer;
+  border-radius: 3px; padding: 2px 9px; transition: 0.2s;
+  font-family: 'Share Tech Mono', monospace;
+}
+.section-close:hover { border-color: var(--red); color: var(--red); }
 
 .section h3 {
   font-family: 'Black Ops One', cursive;
-  color: var(--primary-color);
-  font-size: 2rem;
-  text-align: center;
+  color: var(--primary); font-size: 1.8rem;
+  text-align: center; text-transform: uppercase;
+  border-bottom: 1px solid rgba(0,242,255,0.25);
+  padding-bottom: 14px; margin-bottom: 24px;
+  letter-spacing: 3px;
+}
+
+.section p {
+  font-size: 1.12rem; line-height: 1.65; color: var(--text);
+  margin-bottom: 14px; text-align: justify;
+}
+.section strong { color: var(--primary); }
+
+/* ─── TAG GRID ────────────────────────────────── */
+.tag-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 16px 0;
+}
+.tag {
+  padding: 10px 12px; background: rgba(0,242,255,0.06);
+  border: 1px solid rgba(0,242,255,0.2); border-radius: 4px;
+  display: flex; align-items: center; gap: 8px;
+  font-size: 1rem; font-weight: 700; color: var(--text);
+}
+.tag::before { content: '⚓'; color: var(--primary); font-size: 0.85rem; }
+
+/* ─── VIDEO SECTION ───────────────────────────── */
+.video-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-top: 8px;
+}
+.video-slot {
+  background: rgba(0,0,0,0.6); border: 1px solid rgba(0,242,255,0.2);
+  border-radius: 4px; overflow: hidden; position: relative;
+  aspect-ratio: 16/9;
+  display: flex; align-items: center; justify-content: center;
+  flex-direction: column; gap: 10px;
+  cursor: pointer; transition: 0.3s;
+}
+.video-slot:hover { border-color: var(--primary); box-shadow: 0 0 20px rgba(0,242,255,0.2); }
+.video-slot video { width: 100%; height: 100%; object-fit: cover; position: absolute; inset: 0; }
+.video-slot .video-overlay {
+  position: absolute; inset: 0; background: rgba(0,10,25,0.6);
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  transition: 0.3s;
+}
+.video-slot:hover .video-overlay { background: rgba(0,10,25,0.3); }
+.play-icon {
+  width: 52px; height: 52px; border-radius: 50%;
+  background: rgba(0,242,255,0.15); border: 2px solid var(--primary);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.4rem; box-shadow: 0 0 20px rgba(0,242,255,0.4);
+  transition: 0.3s;
+}
+.video-slot:hover .play-icon { transform: scale(1.1); background: rgba(0,242,255,0.3); }
+.video-label {
+  font-family: 'Black Ops One', cursive; font-size: 0.78rem;
+  letter-spacing: 2px; color: var(--primary); text-transform: uppercase;
+  margin-top: 8px; text-shadow: 0 0 8px rgba(0,242,255,0.8);
+}
+.video-placeholder-text {
+  font-family: 'Share Tech Mono', monospace; font-size: 0.7rem;
+  color: rgba(255,255,255,0.3); letter-spacing: 1px; margin-top: 4px;
+}
+
+/* Uploader */
+.video-upload-hint {
+  text-align: center; margin-top: 14px;
+  font-family: 'Share Tech Mono', monospace; font-size: 0.78rem;
+  color: rgba(0,242,255,0.45); letter-spacing: 1px;
+}
+.upload-btn {
+  background: none; border: 1px dashed rgba(0,242,255,0.35);
+  color: rgba(0,242,255,0.6); padding: 6px 14px; border-radius: 3px;
+  cursor: pointer; font-family: 'Share Tech Mono', monospace; font-size: 0.78rem;
+  transition: 0.2s; margin-top: 8px;
+}
+.upload-btn:hover { border-color: var(--primary); color: var(--primary); }
+
+/* ─── LOGIN SECTION ───────────────────────────── */
+.login-tabs {
+  display: flex; gap: 0; margin-bottom: 24px; border-radius: 3px; overflow: hidden;
+  border: 1px solid rgba(0,242,255,0.2);
+}
+.login-tab {
+  flex: 1; padding: 10px; background: rgba(0,0,0,0.5);
+  border: none; color: rgba(255,255,255,0.5);
+  font-family: 'Black Ops One', cursive; font-size: 0.85rem;
+  letter-spacing: 1px; cursor: pointer; transition: 0.25s;
   text-transform: uppercase;
-  border-bottom: 1px solid rgba(0, 242, 255, 0.3);
-  padding-bottom: 15px;
-  margin-bottom: 25px;
+}
+.login-tab.active { background: rgba(0,119,204,0.4); color: var(--primary); }
+.login-tab:hover:not(.active) { background: rgba(255,255,255,0.05); color: #fff; }
+
+.login-form { display: flex; flex-direction: column; gap: 14px; }
+.form-group { display: flex; flex-direction: column; gap: 6px; }
+.form-group label {
+  font-family: 'Share Tech Mono', monospace; font-size: 0.78rem;
+  color: var(--primary); letter-spacing: 2px; text-transform: uppercase;
+}
+.form-input {
+  background: rgba(0,242,255,0.05); border: 1px solid rgba(0,242,255,0.25);
+  border-radius: 3px; padding: 10px 14px; color: white;
+  font-family: 'Rajdhani', sans-serif; font-size: 1.05rem;
+  font-weight: 500; transition: 0.25s; outline: none;
+}
+.form-input:focus { border-color: var(--primary); box-shadow: 0 0 10px rgba(0,242,255,0.15); }
+.form-input::placeholder { color: rgba(255,255,255,0.25); }
+
+.submit-btn {
+  padding: 12px; margin-top: 6px;
+  background: rgba(0,119,204,0.3); border: 1px solid var(--primary);
+  border-radius: 3px; color: white;
+  font-family: 'Black Ops One', cursive; font-size: 1rem; letter-spacing: 2px;
+  cursor: pointer; transition: all 0.3s; text-transform: uppercase;
+}
+.submit-btn:hover { background: var(--secondary); box-shadow: 0 0 20px rgba(0,242,255,0.4); }
+
+.form-divider {
+  text-align: center; font-family: 'Share Tech Mono', monospace;
+  font-size: 0.72rem; color: rgba(255,255,255,0.25); letter-spacing: 2px;
+  margin: 4px 0; display: flex; align-items: center; gap: 12px;
+}
+.form-divider::before, .form-divider::after {
+  content: ''; flex: 1; height: 1px; background: rgba(255,255,255,0.1);
+}
+.forgot-link {
+  text-align: center; font-family: 'Share Tech Mono', monospace;
+  font-size: 0.75rem; color: rgba(0,242,255,0.5); cursor: pointer;
+  transition: 0.2s; letter-spacing: 1px;
+}
+.forgot-link:hover { color: var(--primary); }
+
+/* ─── PROFILE SECTION ─────────────────────────── */
+.profile-header {
+  display: flex; align-items: center; gap: 24px; margin-bottom: 28px;
+  padding-bottom: 24px; border-bottom: 1px solid rgba(0,242,255,0.15);
+}
+.profile-avatar-wrap { position: relative; }
+.profile-avatar {
+  width: 90px; height: 90px; border-radius: 50%;
+  border: 3px solid var(--primary); box-shadow: 0 0 20px rgba(0,242,255,0.5);
+  background: #001428; display: flex; align-items: center; justify-content: center;
+  font-size: 2.5rem; overflow: hidden;
+}
+.profile-avatar img { width: 100%; height: 100%; object-fit: cover; }
+.avatar-badge {
+  position: absolute; bottom: 2px; right: 2px;
+  background: var(--gold); color: #000; font-family: 'Share Tech Mono', monospace;
+  font-size: 0.6rem; padding: 2px 5px; border-radius: 8px; font-weight: 700;
+}
+.profile-info h4 {
+  font-family: 'Black Ops One', cursive; font-size: 1.6rem;
+  color: #fff; letter-spacing: 2px;
+}
+.profile-rank {
+  color: var(--gold); font-family: 'Share Tech Mono', monospace;
+  font-size: 0.82rem; letter-spacing: 2px; margin: 4px 0;
+}
+.profile-joined { color: rgba(255,255,255,0.4); font-size: 0.88rem; }
+
+.stats-grid {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 24px;
+}
+.stat-card {
+  background: rgba(0,0,0,0.5); border: 1px solid rgba(0,242,255,0.15);
+  border-radius: 4px; padding: 14px 10px; text-align: center;
+}
+.stat-value {
+  font-family: 'Black Ops One', cursive; font-size: 1.8rem; color: var(--primary);
+  line-height: 1;
+}
+.stat-label {
+  font-family: 'Share Tech Mono', monospace; font-size: 0.65rem;
+  color: rgba(255,255,255,0.4); letter-spacing: 2px; margin-top: 5px;
 }
 
-.section p, .section li {
-  font-size: 1.15rem;
-  line-height: 1.6;
-  color: #e0f7ff;
-  margin-bottom: 15px;
+.cosmetics-title {
+  font-family: 'Black Ops One', cursive; font-size: 0.9rem; letter-spacing: 2px;
+  color: var(--gold); margin-bottom: 12px; text-transform: uppercase;
+}
+.cosmetics-grid {
+  display: grid; grid-template-columns: repeat(6, 1fr); gap: 8px;
+}
+.cosmetic-item {
+  aspect-ratio: 1; background: rgba(0,0,0,0.6);
+  border: 1px solid rgba(255,255,255,0.1); border-radius: 4px;
+  display: flex; align-items: center; justify-content: center; font-size: 1.5rem;
+  transition: 0.2s; cursor: pointer;
+}
+.cosmetic-item:hover { border-color: var(--gold); box-shadow: 0 0 10px rgba(240,192,64,0.3); }
+.cosmetic-item.locked { opacity: 0.3; filter: grayscale(1); cursor: default; }
+
+/* ─── FRIENDS SECTION ─────────────────────────── */
+.friends-search {
+  display: flex; gap: 10px; margin-bottom: 20px;
+}
+.friends-search .form-input { flex: 1; }
+.search-btn {
+  background: rgba(0,119,204,0.3); border: 1px solid var(--secondary);
+  border-radius: 3px; color: var(--primary); padding: 0 18px;
+  font-family: 'Black Ops One', cursive; font-size: 0.78rem;
+  letter-spacing: 1px; cursor: pointer; transition: 0.25s;
+}
+.search-btn:hover { background: var(--secondary); color: #fff; }
+
+.friends-tabs { display: flex; gap: 6px; margin-bottom: 18px; }
+.ftab {
+  padding: 6px 16px; background: rgba(0,0,0,0.4);
+  border: 1px solid rgba(255,255,255,0.1); border-radius: 20px;
+  color: rgba(255,255,255,0.45); font-family: 'Black Ops One', cursive;
+  font-size: 0.72rem; letter-spacing: 1px; cursor: pointer; transition: 0.2s;
+}
+.ftab.active { background: rgba(0,119,204,0.35); border-color: var(--primary); color: var(--primary); }
+
+.friend-list { display: flex; flex-direction: column; gap: 8px; }
+.friend-card {
+  display: flex; align-items: center; gap: 14px;
+  background: rgba(0,0,0,0.45); border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 4px; padding: 12px 16px; transition: 0.2s;
+}
+.friend-card:hover { border-color: rgba(0,242,255,0.2); background: rgba(0,15,32,0.7); }
+.friend-avatar {
+  width: 42px; height: 42px; border-radius: 50%; border: 2px solid rgba(255,255,255,0.2);
+  background: #001428; display: flex; align-items: center; justify-content: center;
+  font-size: 1.2rem; flex-shrink: 0;
+}
+.friend-avatar.online { border-color: var(--green); box-shadow: 0 0 6px rgba(26,188,156,0.5); }
+.friend-avatar.in-game { border-color: var(--gold); box-shadow: 0 0 6px rgba(240,192,64,0.4); }
+.friend-info { flex: 1; }
+.friend-name { font-weight: 700; font-size: 1.05rem; color: #fff; }
+.friend-status {
+  font-family: 'Share Tech Mono', monospace; font-size: 0.68rem; letter-spacing: 1px;
+}
+.status-online { color: var(--green); }
+.status-ingame { color: var(--gold); }
+.status-offline { color: rgba(255,255,255,0.3); }
+.friend-actions { display: flex; gap: 6px; }
+.fa-btn {
+  background: rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 3px; padding: 5px 10px; color: rgba(255,255,255,0.6);
+  font-size: 0.8rem; cursor: pointer; transition: 0.2s;
+}
+.fa-btn:hover { border-color: var(--primary); color: var(--primary); }
+.fa-btn.danger:hover { border-color: var(--red); color: var(--red); }
+
+/* Pending requests */
+.pending-badge {
+  background: var(--red); color: #fff; font-family: 'Share Tech Mono', monospace;
+  font-size: 0.65rem; padding: 1px 6px; border-radius: 10px; margin-left: 6px;
 }
 
-.section strong {
-  color: var(--primary-color);
+/* ─── GAME SECTION ────────────────────────────── */
+.game-modes-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 28px;
+}
+.mode-card {
+  background: rgba(0,0,0,0.55); border: 1px solid rgba(0,242,255,0.15);
+  border-radius: 5px; padding: 22px 16px; text-align: center;
+  cursor: pointer; transition: all 0.28s; position: relative; overflow: hidden;
+}
+.mode-card::before {
+  content: ''; position: absolute; bottom: 0; left: 0; right: 0;
+  height: 3px; background: var(--secondary); transition: 0.3s;
+}
+.mode-card:hover::before { height: 5px; background: var(--primary); }
+.mode-card:hover {
+  border-color: var(--primary); transform: translateY(-4px);
+  box-shadow: 0 8px 30px rgba(0,0,0,0.6), 0 0 20px rgba(0,242,255,0.15);
+}
+.mode-card.selected { border-color: var(--primary); background: rgba(0,119,204,0.2); }
+.mode-card.selected::before { height: 4px; background: var(--primary); }
+.mode-icon { font-size: 2.4rem; margin-bottom: 10px; }
+.mode-title {
+  font-family: 'Black Ops One', cursive; font-size: 1rem; letter-spacing: 2px;
+  color: #fff; text-transform: uppercase; margin-bottom: 6px;
+}
+.mode-desc { font-size: 0.85rem; color: rgba(255,255,255,0.45); line-height: 1.4; }
+.mode-badge {
+  position: absolute; top: 8px; right: 8px;
+  background: var(--accent); color: #fff; font-family: 'Share Tech Mono', monospace;
+  font-size: 0.58rem; padding: 2px 7px; border-radius: 10px; letter-spacing: 1px;
 }
 
-.section ul {
-  list-style: none;
-  padding: 0;
-  display: grid;
-  grid-template-columns: 1fr 1fr; 
-  gap: 10px;
+/* Team size picker */
+.team-config {
+  display: none; background: rgba(0,0,0,0.4); border: 1px solid rgba(0,242,255,0.15);
+  border-radius: 4px; padding: 20px; margin-bottom: 20px;
+  animation: hologramIn 0.3s ease;
 }
-
-.section li {
-  margin: 0;
-  padding: 10px;
-  background: rgba(255,255,255,0.05);
-  border-radius: 5px;
-  display: flex;
-  align-items: center;
+.team-config.show { display: block; }
+.config-label {
+  font-family: 'Share Tech Mono', monospace; font-size: 0.75rem; letter-spacing: 2px;
+  color: var(--primary); text-transform: uppercase; margin-bottom: 12px;
 }
-
-.section li::before {
-  content: '⚓';
-  margin-right: 10px;
-  color: var(--primary-color);
+.size-picker { display: flex; gap: 10px; flex-wrap: wrap; }
+.size-opt {
+  padding: 8px 18px; background: rgba(0,0,0,0.5);
+  border: 1px solid rgba(255,255,255,0.1); border-radius: 3px;
+  font-family: 'Black Ops One', cursive; font-size: 0.85rem;
+  cursor: pointer; transition: 0.22s; color: rgba(255,255,255,0.6);
 }
+.size-opt:hover, .size-opt.active { border-color: var(--primary); color: var(--primary); background: rgba(0,119,204,0.2); }
 
+/* Version picker */
+.version-picker-row {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin: 20px 0;
+}
+.version-card {
+  border: 1px solid rgba(255,255,255,0.1); border-radius: 5px;
+  padding: 16px; cursor: pointer; transition: all 0.25s;
+  background: rgba(0,0,0,0.4); text-align: center;
+}
+.version-card:hover { border-color: var(--primary); background: rgba(0,119,204,0.1); }
+.version-card.active { border-color: var(--primary); background: rgba(0,119,204,0.25); }
+.version-flag { font-size: 2rem; margin-bottom: 8px; }
+.version-name {
+  font-family: 'Black Ops One', cursive; font-size: 1rem; letter-spacing: 2px;
+  text-transform: uppercase; color: #fff;
+}
+.version-detail { font-family: 'Share Tech Mono', monospace; font-size: 0.7rem; color: rgba(255,255,255,0.4); margin-top: 5px; }
+
+/* Launch button */
+.launch-row { text-align: center; margin-top: 20px; }
+.launch-btn {
+  padding: 14px 60px; background: rgba(26,188,156,0.2);
+  border: 2px solid var(--green); border-radius: 4px; color: #fff;
+  font-family: 'Black Ops One', cursive; font-size: 1.2rem;
+  letter-spacing: 3px; cursor: pointer; transition: all 0.3s;
+  text-transform: uppercase; position: relative; overflow: hidden;
+}
+.launch-btn::before {
+  content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+  transition: 0.5s;
+}
+.launch-btn:hover::before { left: 100%; }
+.launch-btn:hover { background: rgba(26,188,156,0.5); box-shadow: 0 0 30px rgba(26,188,156,0.5); transform: scale(1.03); }
+
+/* ─── KEYFRAMES ───────────────────────────────── */
 @keyframes fadeIn {
-  from {opacity:0; transform: translateY(20px);}
-  to {opacity:1; transform: translateY(0);}
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
-
 @keyframes floatLogo {
-  0% { transform: translateY(0px); }
-  50% { transform: translateY(-15px); }
-  100% { transform: translateY(0px); }
+  0%   { transform: translateY(0); }
+  50%  { transform: translateY(-14px); }
+  100% { transform: translateY(0); }
 }
-
 @keyframes hologramIn {
-  0% { opacity: 0; transform: scale(0.98); filter: blur(5px); }
+  0%   { opacity: 0; transform: scale(0.97); filter: blur(4px); }
   100% { opacity: 1; transform: scale(1); filter: blur(0); }
 }
 
-@media (max-width: 768px) {
-  .section ul { grid-template-columns: 1fr; }
-  .section { width: 90%; padding: 20px; }
+/* ─── RESPONSIVE ──────────────────────────────── */
+@media (max-width: 700px) {
+  .tag-grid { grid-template-columns: 1fr 1fr; }
+  .video-grid { grid-template-columns: 1fr; }
+  .stats-grid { grid-template-columns: repeat(2, 1fr); }
+  .game-modes-grid { grid-template-columns: 1fr; }
+  .cosmetics-grid { grid-template-columns: repeat(4, 1fr); }
+  .version-picker-row { grid-template-columns: 1fr; }
+  .profile-header { flex-direction: column; text-align: center; }
 }
 </style>
 </head>
@@ -305,128 +570,447 @@ body::before {
 <body>
 
 <header class="top-bar">
-  <div>
+  <div class="top-left">
     <button class="hud-btn" onclick="showSection('teamSection')">👥 RQM Studio</button>
   </div>
 
   <div class="user-info" onclick="toggleUserMenu()">
-    <img src="../images/ppHomme.png" class="avatar" alt="Avatar">
+    <img src="../images/ppHomme.png" class="avatar" alt="Avatar" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+    <span style="display:none;width:46px;height:46px;border-radius:50%;border:2px solid var(--primary);box-shadow:0 0 10px var(--primary);align-items:center;justify-content:center;font-size:1.4rem;background:#001428;">⚓</span>
     <span class="user-text">Projet BTS SIO</span>
-
     <div class="user-dropdown" id="userMenu">
+      <button onclick="showSection('profileSection')">👤 Mon Profil</button>
+      <button onclick="showSection('friendsSection')">🤝 Amis</button>
+      <button onclick="showSection('loginSection')">🔑 Connexion</button>
       <button onclick="quitPage()">⚠️ Déconnexion</button>
     </div>
   </div>
 </header>
 
 <div class="menu-container">
-  
   <div class="menu-buttons">
-    <img src="../images/BATTLESHIPLOGO.png" class="menu-logo" alt="Logo Battleship">
+    <img src="../images/BATTLESHIPLOGO.png" class="menu-logo" alt="Logo Battleship"
+         onerror="this.style.cssText='font-size:3rem;display:block;text-align:center;margin-bottom:28px;'">
 
-    <div id="mainMenu">
-      <button class="main-btn btn-green" onclick="showPlayOptions()">DÉCOUVRIR</button>
-      <button class="main-btn" onclick="showSection('competencesSection')">TECH & SKILLS</button>
-    </div>
-
-    <div id="playOptions" style="display:none;">
-      <button class="main-btn btn-green" onclick="showSection('presentationSection')">PROJET</button>
-      <button class="main-btn" onclick="showSection('conditionsSection')">DÉTAILS</button>
-      <button class="main-btn btn-red" onclick="goBack()">RETOUR</button>
+    <div class="nav-grid">
+      <div class="nav-card green" onclick="showSection('presentationSection')">
+        <span class="card-icon">📋</span>PROJET
+      </div>
+      <div class="nav-card" onclick="showSection('competencesSection')">
+        <span class="card-icon">⚙️</span>TECH & SKILLS
+      </div>
+      <div class="nav-card" onclick="showSection('conditionsSection')">
+        <span class="card-icon">🎯</span>OBJECTIFS
+      </div>
+      <div class="nav-card gold" onclick="showSection('gameSection')">
+        <span class="card-icon">⚔️</span>JOUER
+      </div>
+      <div class="nav-card" onclick="showSection('loginSection')">
+        <span class="card-icon">🔑</span>CONNEXION
+      </div>
+      <div class="nav-card" onclick="showSection('friendsSection')">
+        <span class="card-icon">🤝</span>AMIS
+      </div>
+      <div class="nav-card" onclick="showSection('profileSection')">
+        <span class="card-icon">👤</span>PROFIL
+      </div>
+      <div class="nav-card" onclick="showSection('videoSection')">
+        <span class="card-icon">🎬</span>VIDÉOS
+      </div>
     </div>
   </div>
 
-  <!-- Sections -->
+  <!-- ── PRÉSENTATION ── -->
   <div id="presentationSection" class="section">
+    <button class="section-close" onclick="hideSection('presentationSection')">✕ FERMER</button>
     <h3>Présentation du projet</h3>
-    <p>Le projet <strong>Bataille Navale</strong> est une création de <strong>RQM Studio</strong>, une équipe de trois développeurs passionnés. L’objectif est de moderniser ce classique pour proposer une expérience multijoueur riche, accessible sur tout type d’ordinateur et prochainement sur mobiles.</p>
+    <p>Le projet <strong>Bataille Navale</strong> est une création de <strong>RQM Studio</strong>, une équipe de trois développeurs passionnés. L'objectif est de moderniser ce classique pour proposer une expérience multijoueur riche, accessible sur tout type d'ordinateur et prochainement sur mobiles.</p>
     <p>Le jeu propose des modes variés : du <strong>1v1 classique</strong> aux combats en <strong>équipe (2v2, 3v3, 4v4)</strong>, jusqu'au mode <strong>Battle Royale</strong> réunissant plusieurs flottes simultanément.</p>
-    <p>Le système de jeu intègre deux variantes de règles : la <strong>version française</strong> (5 bateaux) et la <strong>version belge</strong> (10 bateaux), avec un rythme dynamique imposant 7 secondes de réflexion par tour.</p>
+    <p>Le système de jeu intègre deux variantes de règles : la <strong>version française</strong> (5 bateaux) et la <strong>version belge</strong> (10 bateaux), avec un rythme dynamique imposant <strong>7 secondes</strong> de réflexion par tour.</p>
   </div>
 
+  <!-- ── COMPÉTENCES ── -->
   <div id="competencesSection" class="section">
+    <button class="section-close" onclick="hideSection('competencesSection')">✕ FERMER</button>
     <h3>Stack Technique & Fonctions</h3>
-    <p>L'architecture repose sur une séparation claire entre l'interface utilisateur et la logique métier :</p>
-    <ul>
-      <li><strong>Vue.js, Node.js, Express</strong></li>
-      <li><strong>Base MySQL</strong></li>
-      <li><strong>Chiffrement</strong></li>
-      <li><strong>Responsive</strong></li>
-      <li><strong>GitHub</strong></li>
-      <li><strong>Méthode Cycle en V</strong></li>
-    </ul>
-    <p style="margin-top:20px; text-align:center">Le projet est structuré en deux parties : <strong>Battleship-ui</strong> et <strong>Battleship-api</strong>.</p>
+    <p>L'architecture repose sur une séparation claire entre l'interface utilisateur et la logique métier. Le projet est structuré en deux dépôts distincts : <strong>Battleship-ui</strong> et <strong>Battleship-api</strong>.</p>
+    <div class="tag-grid">
+      <div class="tag"><strong>Vue.js</strong> — Frontend</div>
+      <div class="tag"><strong>Node.js</strong> — Runtime</div>
+      <div class="tag"><strong>Express</strong> — API REST</div>
+      <div class="tag"><strong>MySQL</strong> — Base de données</div>
+      <div class="tag"><strong>Chiffrement</strong> — Sécurité</div>
+      <div class="tag"><strong>Responsive</strong> — UI/UX</div>
+      <div class="tag"><strong>GitHub</strong> — Versionning</div>
+      <div class="tag"><strong>Cycle en V</strong> — Méthode</div>
+      <div class="tag"><strong>WebSocket</strong> — Temps réel</div>
+    </div>
   </div>
 
+  <!-- ── OBJECTIFS ── -->
   <div id="conditionsSection" class="section">
+    <button class="section-close" onclick="hideSection('conditionsSection')">✕ FERMER</button>
     <h3>Périmètre & Objectifs</h3>
     <p>Le projet vise à offrir une plateforme stable avec une interface intuitive. Les joueurs peuvent gérer leur profil, une liste d'amis et débloquer des <strong>récompenses cosmétiques</strong>.</p>
-    <ul>
-      <li>Parties publiques & privées</li>
-      <li>Système d'amis & social</li>
-      <li>Chiffrement des données</li>
-      <li>Conformité RGPD</li>
-      <li>Multiplateforme (Win/Lin/Mac)</li>
-      <li>Éléments cosmétiques</li>
-      <li>Mode Battle Royale</li>
-      <li>Temps de jeu limité (7s)</li>
-    </ul>
+    <div class="tag-grid">
+      <div class="tag">Parties publiques & privées</div>
+      <div class="tag">Système d'amis & social</div>
+      <div class="tag">Chiffrement des données</div>
+      <div class="tag">Conformité RGPD</div>
+      <div class="tag">Éléments cosmétiques</div>
+      <div class="tag">Différents modes de jeu</div>
+      <div class="tag">Temps de jeu limité (7s)</div>
+    </div>
     <p style="margin-top:20px;">Développement interne sur une durée estimée à <strong>2 ans</strong>, incluant des phases de bêta fermée et de tests intensifs avant le déploiement officiel.</p>
   </div>
 
+  <!-- ── ÉQUIPE ── -->
   <div id="teamSection" class="section">
+    <button class="section-close" onclick="hideSection('teamSection')">✕ FERMER</button>
     <h3>Équipe RQM Studio</h3>
-    <p>L’ensemble du développement est réalisé en interne par les trois membres fondateurs de <strong>RQM Studio</strong> dans le cadre du cursus <strong>BTS SIO</strong>, chacun utilisant un langage différent.</p>
-    <p>Le public cible : des joueurs occasionnels cherchant une partie rapide aux fans de stratégie désirant une version modernisée avec un aspect compétitif.</p>
+    <p>L'ensemble du développement est réalisé en interne par les trois membres fondateurs de <strong>RQM Studio</strong> dans le cadre du cursus <strong>BTS SIO</strong>, chacun utilisant un langage différent.</p>
+    <p>Le public cible : des joueurs occasionnels cherchant une partie rapide aux fans de stratégie désirant une version modernisée avec un aspect compétitif fort.</p>
   </div>
 
-</div>
+  <!-- ── VIDÉOS ── -->
+  <div id="videoSection" class="section">
+    <button class="section-close" onclick="hideSection('videoSection')">✕ FERMER</button>
+    <h3>Vidéos de présentation</h3>
+    <p>Découvrez le projet en vidéo. Glissez-déposez vos fichiers vidéo ou cliquez sur un emplacement pour en ajouter une.</p>
+    <div class="video-grid" id="videoGrid">
+
+      <div class="video-slot" id="vslot-0" onclick="triggerVideoUpload(0)">
+        <div class="video-overlay">
+          <div class="play-icon">▶</div>
+          <div class="video-label">Présentation générale</div>
+          <div class="video-placeholder-text">Cliquer pour ajouter une vidéo</div>
+        </div>
+      </div>
+
+      <div class="video-slot" id="vslot-1" onclick="triggerVideoUpload(1)">
+        <div class="video-overlay">
+          <div class="play-icon">▶</div>
+          <div class="video-label">Gameplay 1v1</div>
+          <div class="video-placeholder-text">Cliquer pour ajouter une vidéo</div>
+        </div>
+      </div>
+
+      <div class="video-slot" id="vslot-2" onclick="triggerVideoUpload(2)">
+        <div class="video-overlay">
+          <div class="play-icon">▶</div>
+          <div class="video-label">Battle Royale</div>
+          <div class="video-placeholder-text">Cliquer pour ajouter une vidéo</div>
+        </div>
+      </div>
+
+      <div class="video-slot" id="vslot-3" onclick="triggerVideoUpload(3)">
+        <div class="video-overlay">
+          <div class="play-icon">▶</div>
+          <div class="video-label">Interface & Profil</div>
+          <div class="video-placeholder-text">Cliquer pour ajouter une vidéo</div>
+        </div>
+      </div>
+
+    </div>
+    <div class="video-upload-hint">
+      Formats supportés : MP4, WebM, MOV — Taille recommandée : 16:9
+    </div>
+    <!-- Hidden file inputs -->
+    <input type="file" id="videoInput0" accept="video/*" style="display:none" onchange="loadVideo(0,this)">
+    <input type="file" id="videoInput1" accept="video/*" style="display:none" onchange="loadVideo(1,this)">
+    <input type="file" id="videoInput2" accept="video/*" style="display:none" onchange="loadVideo(2,this)">
+    <input type="file" id="videoInput3" accept="video/*" style="display:none" onchange="loadVideo(3,this)">
+  </div>
+
+  <!-- ── CONNEXION ── -->
+  <div id="loginSection" class="section" style="max-width:480px">
+    <button class="section-close" onclick="hideSection('loginSection')">✕ FERMER</button>
+    <h3>Connexion</h3>
+    <div class="login-tabs">
+      <button class="login-tab active" onclick="switchLoginTab('login',this)">Se connecter</button>
+      <button class="login-tab" onclick="switchLoginTab('register',this)">S'inscrire</button>
+    </div>
+
+    <!-- Login form -->
+    <div id="loginForm" class="login-form">
+      <div class="form-group">
+        <label>Identifiant ou e-mail</label>
+        <input class="form-input" type="text" placeholder="commandant@rqm.io">
+      </div>
+      <div class="form-group">
+        <label>Mot de passe</label>
+        <input class="form-input" type="password" placeholder="••••••••">
+      </div>
+      <button class="submit-btn">⚓ SE CONNECTER</button>
+      <div class="forgot-link">Mot de passe oublié ?</div>
+    </div>
+
+    <!-- Register form -->
+    <div id="registerForm" class="login-form" style="display:none">
+      <div class="form-group">
+        <label>Nom d'amiral (pseudo)</label>
+        <input class="form-input" type="text" placeholder="Ex: Commandant_Wolf">
+      </div>
+      <div class="form-group">
+        <label>Adresse e-mail</label>
+        <input class="form-input" type="email" placeholder="exemple@mail.com">
+      </div>
+      <div class="form-group">
+        <label>Mot de passe</label>
+        <input class="form-input" type="password" placeholder="Min. 8 caractères">
+      </div>
+      <div class="form-group">
+        <label>Confirmer le mot de passe</label>
+        <input class="form-input" type="password" placeholder="••••••••">
+      </div>
+      <button class="submit-btn">⚓ CRÉER MON COMPTE</button>
+    </div>
+  </div>
+
+  <!-- ── PROFIL ── -->
+  <div id="profileSection" class="section">
+    <button class="section-close" onclick="hideSection('profileSection')">✕ FERMER</button>
+    <h3>Profil du joueur</h3>
+
+    <div class="profile-header">
+      <div class="profile-avatar-wrap">
+        <div class="profile-avatar">⚓</div>
+        <div class="avatar-badge">LVL 12</div>
+      </div>
+      <div class="profile-info">
+        <h4>COMMANDANT_WOLF</h4>
+        <div class="profile-rank">⭐ AMIRAL DE DIVISION</div>
+        <div class="profile-joined">Membre depuis Septembre 2024 · BTS SIO</div>
+      </div>
+    </div>
+
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-value" style="color:#1abc9c">87</div>
+        <div class="stat-label">Victoires</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" style="color:var(--red)">34</div>
+        <div class="stat-label">Défaites</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">72%</div>
+        <div class="stat-label">Win Rate</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value" style="color:var(--gold)">121</div>
+        <div class="stat-label">Parties</div>
+      </div>
+    </div>
+
+    <div class="cosmetics-title">🏆 Récompenses cosmétiques</div>
+    <div class="cosmetics-grid">
+      <div class="cosmetic-item" title="Drapeau Naval">🚢</div>
+      <div class="cosmetic-item" title="Médaille d'Or">🥇</div>
+      <div class="cosmetic-item" title="Torpille Dorée">🎖️</div>
+      <div class="cosmetic-item locked" title="Verrouillé">🔒</div>
+      <div class="cosmetic-item locked" title="Verrouillé">🔒</div>
+      <div class="cosmetic-item locked" title="Verrouillé">🔒</div>
+    </div>
+  </div>
+
+  <!-- ── AMIS ── -->
+  <div id="friendsSection" class="section">
+    <button class="section-close" onclick="hideSection('friendsSection')">✕ FERMER</button>
+    <h3>Système d'amis</h3>
+
+    <div class="friends-search">
+      <input class="form-input" type="text" placeholder="Rechercher un joueur...">
+      <button class="search-btn">CHERCHER</button>
+    </div>
+
+    <div class="friends-tabs">
+      <div class="ftab active" onclick="switchFriendsTab('online',this)">En ligne (3)</div>
+      <div class="ftab" onclick="switchFriendsTab('all',this)">Tous (8)</div>
+      <div class="ftab" onclick="switchFriendsTab('pending',this)">En attente <span class="pending-badge">2</span></div>
+    </div>
+
+    <div class="friend-list" id="friendsList">
+      <!-- Populated by JS -->
+    </div>
+  </div>
+
+  <!-- ── JEUX ── -->
+  <div id="gameSection" class="section">
+    <button class="section-close" onclick="hideSection('gameSection')">✕ FERMER</button>
+    <h3>Choisir un mode de jeu</h3>
+
+    <div class="game-modes-grid">
+      <div class="mode-card" onclick="selectMode('1v1',this)">
+        <div class="mode-icon">⚔️</div>
+        <div class="mode-title">1 VS 1</div>
+        <div class="mode-desc">Duel classique deux joueurs face à face</div>
+      </div>
+      <div class="mode-card" onclick="selectMode('team',this)">
+        <div class="mode-badge">BÊTA</div>
+        <div class="mode-icon">🚢</div>
+        <div class="mode-title">ÉQUIPE</div>
+        <div class="mode-desc">Affrontements 2v2 · 3v3 · 4v4 en coordination</div>
+      </div>
+      <div class="mode-card" onclick="selectMode('royale',this)">
+        <div class="mode-badge">NOUVEAU</div>
+        <div class="mode-icon">💥</div>
+        <div class="mode-title">BATTLE ROYALE</div>
+        <div class="mode-desc">Plusieurs flottes simultanées – dernier debout gagne</div>
+      </div>
+    </div>
+
+    <!-- Version picker -->
+    <div class="config-label" style="margin-bottom:12px">Version des règles</div>
+    <div class="version-picker-row">
+      <div class="version-card active" onclick="pickVersion(this)">
+        <div class="version-flag">🇫🇷</div>
+        <div class="version-name">Version Française</div>
+        <div class="version-detail">5 bateaux · Règles standards</div>
+      </div>
+      <div class="version-card" onclick="pickVersion(this)">
+        <div class="version-flag">🇧🇪</div>
+        <div class="version-name">Version Belge</div>
+        <div class="version-detail">10 bateaux · Grille étendue</div>
+      </div>
+    </div>
+
+    <div style="background:rgba(0,0,0,0.35);border:1px solid rgba(0,242,255,0.1);border-radius:4px;padding:14px 18px;margin-bottom:16px;display:flex;align-items:center;gap:12px;">
+      <span style="font-size:1.4rem">⏱️</span>
+      <div>
+        <div style="font-family:'Black Ops One',cursive;font-size:0.9rem;letter-spacing:1px;">Temps de réflexion</div>
+        <div style="font-family:'Share Tech Mono',monospace;font-size:0.72rem;color:rgba(255,255,255,0.45);margin-top:3px;">7 secondes par tour · Tir automatique si dépassé</div>
+      </div>
+    </div>
+
+  </div>
+
+</div><!-- end menu-container -->
 
 <script>
-function showPlayOptions() {
-  document.getElementById("mainMenu").style.display = "none";
-  document.getElementById("playOptions").style.display = "block";
-}
-
-function goBack() {
-  document.getElementById("playOptions").style.display = "none";
-  document.getElementById("mainMenu").style.display = "block";
-  hideAllSections();
-}
-
+// ─── SECTION MANAGEMENT ─────────────────────────
 function showSection(id) {
-  const section = document.getElementById(id);
-  const isAlreadyVisible = (section.style.display === "block");
+  const el = document.getElementById(id);
+  const visible = el.style.display === 'block';
   hideAllSections();
-  if (!isAlreadyVisible) {
-    section.style.display = "block";
-    setTimeout(() => {
-      section.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    }, 50);
+  if (!visible) {
+    el.style.display = 'block';
+    setTimeout(() => el.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 60);
   }
 }
+function hideSection(id) { document.getElementById(id).style.display = 'none'; }
+function hideAllSections() { document.querySelectorAll('.section').forEach(s => s.style.display = 'none'); }
 
-function hideAllSections() {
-  document.querySelectorAll(".section").forEach(s => s.style.display = "none");
-}
-
+// ─── USER MENU ───────────────────────────────────
 function toggleUserMenu() {
-  const menu = document.getElementById("userMenu");
-  menu.style.display = menu.style.display === "flex" ? "none" : "flex";
+  const m = document.getElementById('userMenu');
+  m.style.display = m.style.display === 'flex' ? 'none' : 'flex';
+}
+document.addEventListener('click', e => {
+  const ui = document.querySelector('.user-info');
+  if (!ui.contains(e.target)) document.getElementById('userMenu').style.display = 'none';
+});
+function quitPage() { window.location.href = '../e6.html'; }
+
+// ─── LOGIN TABS ──────────────────────────────────
+function switchLoginTab(tab, btn) {
+  document.querySelectorAll('.login-tab').forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('loginForm').style.display    = tab === 'login'    ? 'flex' : 'none';
+  document.getElementById('registerForm').style.display = tab === 'register' ? 'flex' : 'none';
 }
 
-document.addEventListener('click', function(event) {
-  const userInfo = document.querySelector('.user-info');
-  const menu = document.getElementById("userMenu");
-  if (!userInfo.contains(event.target)) {
-    menu.style.display = "none";
-  }
-});
+// ─── FRIENDS ────────────────────────────────────
+const friendsData = {
+  online: [
+    { name: 'Le_Torpilleur', status: 'online', icon: '🎖️', statusLabel: 'En ligne' },
+    { name: 'CorvetteX', status: 'in-game', icon: '⚓', statusLabel: 'En partie – Battle Royale' },
+    { name: 'AdmiralDev', status: 'online', icon: '🚢', statusLabel: 'En ligne' }
+  ],
+  all: [
+    { name: 'Le_Torpilleur', status: 'online', icon: '🎖️', statusLabel: 'En ligne' },
+    { name: 'CorvetteX', status: 'in-game', icon: '⚓', statusLabel: 'En partie – Battle Royale' },
+    { name: 'AdmiralDev', status: 'online', icon: '🚢', statusLabel: 'En ligne' },
+    { name: 'NautikSeb', status: 'offline', icon: '🔱', statusLabel: 'Hors ligne' },
+    { name: 'FleetMaster', status: 'offline', icon: '⚡', statusLabel: 'Hors ligne' }
+  ],
+  pending: [
+    { name: 'GhostFleet99', status: 'offline', icon: '👻', statusLabel: 'Demande reçue' },
+    { name: 'Torpille_FR', status: 'offline', icon: '💫', statusLabel: 'Demande envoyée' }
+  ]
+};
 
-function quitPage() {
-    window.location.href = "../e6.html";
+function switchFriendsTab(tab, btn) {
+  document.querySelectorAll('.ftab').forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+  renderFriends(tab);
+}
+
+function renderFriends(tab = 'online') {
+  const list = document.getElementById('friendsList');
+  const data = friendsData[tab] || [];
+  list.innerHTML = data.map(f => `
+    <div class="friend-card">
+      <div class="friend-avatar ${f.status}">${f.icon}</div>
+      <div class="friend-info">
+        <div class="friend-name">${f.name}</div>
+        <div class="friend-status status-${f.status === 'in-game' ? 'ingame' : f.status}">${f.statusLabel}</div>
+      </div>
+      <div class="friend-actions">
+        ${tab === 'pending' ? `<button class="fa-btn" title="Accepter" style="border-color:var(--green);color:var(--green)">✓</button>` : ''}
+        <button class="fa-btn danger" title="Supprimer">✕</button>
+      </div>
+    </div>`).join('');
+}
+renderFriends('online');
+
+// ─── GAME MODES ──────────────────────────────────
+function selectMode(mode, card) {
+  document.querySelectorAll('.mode-card').forEach(c => c.classList.remove('selected'));
+  card.classList.add('selected');
+  document.getElementById('teamConfig').classList.toggle('show', mode === 'team');
+}
+
+function pickSize(el) {
+  document.querySelectorAll('.size-opt').forEach(s => s.classList.remove('active'));
+  el.classList.add('active');
+}
+
+function pickVersion(el) {
+  document.querySelectorAll('.version-card').forEach(v => v.classList.remove('active'));
+  el.classList.add('active');
+}
+
+// ─── VIDEO UPLOAD ─────────────────────────────────
+const videoLabels = ['Présentation générale', 'Gameplay 1v1', 'Battle Royale', 'Interface & Profil'];
+
+function triggerVideoUpload(idx) {
+  const slot = document.getElementById('vslot-' + idx);
+  const videoEl = slot.querySelector('video');
+  // If video already playing, toggle play/pause
+  if (videoEl) { videoEl.paused ? videoEl.play() : videoEl.pause(); return; }
+  document.getElementById('videoInput' + idx).click();
+}
+
+function loadVideo(idx, input) {
+  if (!input.files[0]) return;
+  const url = URL.createObjectURL(input.files[0]);
+  const slot = document.getElementById('vslot-' + idx);
+  slot.innerHTML = `
+    <video src="${url}" loop playsinline style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0;"></video>
+    <div class="video-overlay" style="background:rgba(0,0,0,0)">
+      <div class="video-label" style="position:absolute;bottom:10px;left:12px;margin:0">${videoLabels[idx]}</div>
+    </div>`;
+  slot.onclick = () => triggerVideoUpload(idx);
+  const v = slot.querySelector('video');
+  v.play();
+  // Re-attach hidden input
+  const inp = document.createElement('input');
+  inp.type = 'file'; inp.accept = 'video/*'; inp.style.display = 'none';
+  inp.id = 'videoInput' + idx;
+  inp.onchange = () => loadVideo(idx, inp);
+  slot.appendChild(inp);
 }
 </script>
-
 </body>
 </html>
