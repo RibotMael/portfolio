@@ -494,7 +494,10 @@
 
     const setTheme = (isLight) => {
         body.classList.toggle('light-theme', isLight);
-        updateIcon(isLight);
+
+        themeToggle.innerHTML = `<i data-lucide="${isLight ? 'sun' : 'moon'}"></i>`;
+        lucide.createIcons();
+
         localStorage.setItem('theme', isLight ? 'light' : 'dark');
     };
 
