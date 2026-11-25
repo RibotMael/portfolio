@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bastion – Ribot Maël</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <style>
+        :root {
+            --accent: #00e5b0;
+            --accent2: #ff6b6b;
+            --accent-glow: rgba(0, 229, 176, 0.2);
+            --bg: #080e1a;
+            --bg2: #0d1628;
+            --card: #111b30;
+            --card2: #162040;
+            --text: #e8f0fe;
+            --muted: #7b8fb0;
+            --border: rgba(255,255,255,0.07);
+            --nav-bg: rgba(8, 14, 26, 0.92);
+            --felt: #1a3a2a;
+            --felt2: #0f2419;
+            --felt-border: #3d2010;
+        }
+
+        body.light-theme {
+            --accent: #00b38a;
+            --accent2: #e63946;
+            --accent-glow: rgba(0, 179, 138, 0.15);
+            --bg: #f0f4f8;
+            --bg2: #e4ecf7;
+            --card: #ffffff;
+            --card2: #f7faff;
+            --text: #111827;
+            --muted: #5a6a84;
+            --border: rgba(0,0,0,0.08);
+            --nav-bg: rgba(240, 244, 248, 0.95);
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'DM Sans', sans-serif;
+            padding-top: 72px;
+            transition: background 0.3s, color 0.3s;
+            overflow-x: hidden;
+        }
+
+        /* ── NAV ── */
+        .navbar {
+            background: var(--nav-bg);
+            border-bottom: 1px solid var(--border);
+            backdrop-filter: blur(14px);
+        }
+        .btn-back {
+            color: var(--text);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 6px 16px;
+            text-decoration: none;
+            font-size: 0.85rem;
+            display: inline-flex; align-items: center; gap: 6px;
+            transition: 0.2s;
+        }
+        .btn-back:hover { background: var(--accent); color: #000; border-color: var(--accent); }
+        .nav-label { font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; color: var(--muted); }
+
+        /* ── THEME TOGGLE ── */
+        .theme-btn {
+            position: fixed; bottom: 2rem; right: 2rem; z-index: 1000;
+            width: 52px; height: 52px; border-radius: 16px; border: none;
+            background: var(--accent); color: #ffffff;
+            cursor: pointer; display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 6px 24px var(--accent-glow);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .theme-btn:hover { transform: scale(1.1) rotate(15deg); }
+
+        /* ── HERO ── */
+        .hero-section { padding: 5rem 0 3rem; position: relative; }
+
+        .hero-tag {
+            display: inline-flex; align-items: center; gap: 8px;
+            background: var(--accent-glow); border: 1px solid var(--accent);
+            color: var(--accent); border-radius: 50px; padding: 5px 14px;
+            font-family: 'JetBrains Mono', monospace; font-size: 0.75rem;
+            margin-bottom: 1.5rem;
+        }
+        .hero-tag::before { content: ''; width: 7px; height: 7px; border-radius: 50%; background: var(--accent); }
+
+        h1.hero-title {
+            font-family: 'Syne', sans-serif;
+            font-size: clamp(2.5rem, 6vw, 4.5rem);
+            font-weight: 800;
+            line-height: 1.05;
+            letter-spacing: -2px;
+            margin-bottom: 1.5rem;
+        }
+        h1.hero-title em { font-style: normal; color: var(--accent); }
+
+        .hero-lead {
+            color: var(--muted); font-size: 1.05rem; line-height: 1.7;
+            max-width: 520px; margin-bottom: 2rem;
+        }
+
+        .pill-row { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 2rem; }
+        .pill {
+            font-family: 'JetBrains Mono', monospace; font-size: 0.75rem;
+            background: var(--card); border: 1px solid var(--border);
+            color: var(--muted); border-radius: 50px; padding: 4px 12px;
+            transition: 0.2s;
+        }
+        .pill:hover { border-color: var(--accent); color: var(--accent); }
+
+        /* ── STAT CARDS ── */
+        .stat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+        .stat-card {
+            background: var(--card); border: 1px solid var(--border); border-radius: 14px;
+            padding: 1.2rem; text-align: center; transition: 0.2s;
+        }
+        .stat-card:hover { border-color: var(--accent); transform: translateY(-2px); }
+        .stat-num {
+            font-family: 'Syne', sans-serif; font-size: 1.8rem; font-weight: 800;
+            color: var(--accent);
+        }
+        .stat-label { font-size: 0.75rem; color: var(--muted); margin-top: 2px; }
+
+        /* ── TERMINAL ── */
+        .terminal-wrap {
+            background: #060d18;
+            border-radius: 14px;
+            border: 1px solid rgba(255,255,255,0.1);
+            box-shadow: 0 30px 60px rgba(0,0,0,0.5), 0 0 0 1px rgba(0,229,176,0.05);
+            overflow: hidden;
+            font-family: 'JetBrains Mono', monospace;
+        }
+        .terminal-bar {
+            background: #0f1a2d;
+            padding: 10px 16px;
+            display: flex; align-items: center; gap: 8px;
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+        }
+        .dot { width: 12px; height: 12px; border-radius: 50%; }
+        .dot-r { background: #ff5f57; } .dot-y { background: #febc2e; } .dot-g { background: #28c840; }
+        .term-title { margin-left: auto; font-size: 0.7rem; color: #4a5a7a; }
+        .term-body {
+            padding: 20px; min-height: 420px; max-height: 420px;
+            overflow-y: auto; font-size: 0.82rem; line-height: 1.8;
+            color: #8ba0c0;
+            scrollbar-width: thin; scrollbar-color: #1e3a5f transparent;
+        }
+        .term-body::-webkit-scrollbar { width: 4px; }
+        .term-body::-webkit-scrollbar-track { background: transparent; }
+        .term-body::-webkit-scrollbar-thumb { background: #1e3a5f; border-radius: 4px; }
+
+        .t-cmd { color: var(--accent); }
+        .t-p1 { color: #60a5fa; font-weight: 600; }
+        .t-p2 { color: #f472b6; font-weight: 600; }
+        .t-win { color: #4ade80; }
+        .t-lose { color: #f472b6; }
+        .t-battle { color: #fbbf24; font-weight: 700; }
+        .t-info { color: #475569; }
+        .t-final { color: #fbbf24; font-weight: 700; font-size: 0.9rem; }
+        .t-winner { color: #fff; font-weight: 700; }
+        .t-card { color: #e2e8f0; }
+        .cursor {
+            display: inline-block; width: 8px; height: 14px;
+            background: var(--accent); vertical-align: middle;
+            animation: blink 1s step-end infinite;
+        }
+        @keyframes blink { 50% { opacity: 0; } }
+
+        .terminal-footer {
+            background: #0f1a2d;
+            padding: 10px 16px;
+            display: flex; align-items: center; gap: 12px;
+            border-top: 1px solid rgba(255,255,255,0.06);
+        }
+        .btn-run {
+            background: var(--accent); color: #000;
+            border: none; border-radius: 8px;
+            font-family: 'JetBrains Mono', monospace; font-size: 0.8rem;
+            padding: 7px 16px; cursor: pointer; font-weight: 700;
+            display: flex; align-items: center; gap: 6px;
+            transition: 0.2s;
+        }
+        .btn-run:hover { transform: scale(1.04); }
+        .btn-run:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+        .btn-reset {
+            background: transparent; color: var(--muted);
+            border: 1px solid var(--border); border-radius: 8px;
+            font-family: 'JetBrains Mono', monospace; font-size: 0.8rem;
+            padding: 7px 14px; cursor: pointer;
+            display: flex; align-items: center; gap: 6px;
+            transition: 0.2s;
+        }
+        .btn-reset:hover { border-color: var(--muted); color: var(--text); }
+        .run-status {
+            margin-left: auto; font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem; color: var(--muted);
+        }
+        .run-status.running { color: var(--accent); }
+
+        /* ── SECTION TITLE ── */
+        .section-sep {
+            border: none; border-top: 1px solid var(--border); margin: 4rem 0;
+        }
+        .section-label {
+            font-family: 'JetBrains Mono', monospace; font-size: 0.7rem;
+            color: var(--accent); letter-spacing: 3px; text-transform: uppercase;
+            margin-bottom: 0.5rem;
+        }
+        .section-title {
+            font-family: 'Syne', sans-serif; font-size: 2rem;
+            font-weight: 800; letter-spacing: -1px;
+        }
+
+        /* ── FEATURE CARDS ── */
+        .feat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; }
+        .feat-card {
+            background: var(--card); border: 1px solid var(--border); border-radius: 16px;
+            padding: 1.5rem; transition: 0.25s;
+            position: relative; overflow: hidden;
+        }
+        .feat-card::before {
+            content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+            background: linear-gradient(90deg, var(--accent), transparent);
+            opacity: 0; transition: 0.25s;
+        }
+        .feat-card:hover { border-color: rgba(0,229,176,0.3); transform: translateY(-3px); }
+        .feat-card:hover::before { opacity: 1; }
+        .feat-icon {
+            width: 42px; height: 42px; border-radius: 12px;
+            background: var(--accent-glow); border: 1px solid rgba(0,229,176,0.2);
+            display: flex; align-items: center; justify-content: center;
+            color: var(--accent); margin-bottom: 1rem;
+        }
+        .feat-title { font-family: 'Syne', sans-serif; font-size: 0.95rem; font-weight: 700; margin-bottom: 0.4rem; }
+        .feat-desc { font-size: 0.85rem; color: var(--muted); line-height: 1.6; }
+
+        /* ── GAME ARENA ── */
+        .arena {
+            background: radial-gradient(ellipse at center, #1e4a30 0%, #0d2418 60%, #07160e 100%);
+            border: 8px solid var(--felt-border);
+            border-radius: 28px;
+            padding: 2.5rem 2rem;
+            box-shadow: inset 0 0 80px rgba(0,0,0,0.7), 0 24px 48px rgba(0,0,0,0.3);
+            position: relative;
+        }
+        .arena::before {
+            content: '';
+            position: absolute; inset: 12px;
+            border-radius: 20px;
+            border: 1px solid rgba(255,255,255,0.04);
+            pointer-events: none;
+        }
+
+        .scoreboard {
+            background: rgba(0,0,0,0.5);
+            border: 1px solid rgba(255,255,255,0.08);
+            backdrop-filter: blur(8px);
+            border-radius: 50px; padding: 8px 24px;
+            font-family: 'JetBrains Mono', monospace; font-size: 0.85rem;
+            color: white; display: inline-block; margin-bottom: 2rem;
+        }
+        .score-accent { color: #fbbf24; font-weight: 700; }
+
+        .card-slot {
+            width: 120px; height: 175px;
+            border: 2px dashed rgba(255,255,255,0.15); border-radius: 10px;
+            display: flex; align-items: center; justify-content: center;
+            position: relative;
+        }
+        .playing-card {
+            width: 120px; height: 175px;
+            background: #fdfdfd; border-radius: 10px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+            position: absolute;
+            display: flex; flex-direction: column;
+            justify-content: space-between; padding: 8px;
+            font-family: 'Syne', sans-serif; font-weight: 700; font-size: 1.3rem;
+            transition: transform 0.5s cubic-bezier(0.175,0.885,0.32,1.275);
+            backface-visibility: hidden;
+        }
+        .playing-card.red { color: #e11d48; }
+        .playing-card.black { color: #1e293b; }
+        .playing-card .center-suit { font-size: 2.5rem; position: absolute; top:50%; left:50%; transform: translate(-50%,-50%); }
+        .playing-card .corner-bottom { transform: rotate(180deg); display: block; }
+        .card-back {
+            background: repeating-linear-gradient(45deg, #1e3a8a, #1e3a8a 10px, #172554 10px, #172554 20px);
+            border: 3px solid white;
+        }
+        .card-hidden { transform: rotateY(180deg); }
+        .winner-glow { box-shadow: 0 0 30px #fbbf24, 0 0 60px rgba(251,191,36,0.3); border: 2px solid #fbbf24; }
+
+        .action-btn {
+            background: #fbbf24; color: #451a03; font-weight: 700;
+            border: none; padding: 10px 24px; border-radius: 50px; font-size: 1rem;
+            box-shadow: 0 4px 0 #b45309; transition: transform 0.1s;
+            font-family: 'DM Sans', sans-serif;
+        }
+        .action-btn:active { transform: translateY(4px); box-shadow: none; }
+        .action-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+        .player-label { font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; color: rgba(255,255,255,0.5); margin-top: 10px; }
+
+        @keyframes slideUp { from { opacity:0; transform: translateY(20px); } to { opacity:1; transform: translateY(0); } }
+        .animate-in { animation: slideUp 0.5s ease forwards; }
+
+        .code-block{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:1.25rem 1.4rem;font-family:'JetBrains Mono',monospace;font-size:.78rem;line-height:1.7;overflow-x:auto;color:var(--text);white-space:pre;}
+        .code-block .c{color:var(--muted)} .code-block .k{color:var(--accent)}
+        .note-box{background:var(--card2);border:1px solid var(--border);border-left:3px solid var(--accent2);border-radius:12px;padding:1rem 1.25rem;color:var(--muted);font-size:.92rem;}
+        .flow{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px;counter-reset:s;}
+        .flow-step{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:1rem 1.1rem;position:relative;counter-increment:s;}
+        .flow-step::before{content:counter(s);font-family:'JetBrains Mono',monospace;font-weight:700;color:var(--accent);font-size:.8rem;display:block;margin-bottom:.4rem;}
+        .flow-step b{display:block;margin-bottom:.25rem;} .flow-step span{color:var(--muted);font-size:.88rem;}
+        .tbl-wrap{overflow-x:auto;border:1px solid var(--border);border-radius:14px;background:var(--card);}
+        .tbl{width:100%;border-collapse:collapse;font-size:.9rem;}
+        .tbl th,.tbl td{padding:.7rem 1rem;text-align:left;border-bottom:1px solid var(--border);}
+        .tbl th{font-family:'JetBrains Mono',monospace;font-size:.72rem;text-transform:uppercase;letter-spacing:.08em;color:var(--accent);}
+        .tbl td{color:var(--muted);} .tbl td:first-child{color:var(--text);font-weight:500;white-space:nowrap;} .tbl tr:last-child td{border-bottom:none;}
+    </style>
+</head>
+<body>
+
+<button class="theme-btn" id="themeToggle" title="Changer de mode">
+    <i id="themeIcon" data-lucide="moon" style="width:20px;height:20px;"></i>
+</button>
+
+<nav class="navbar fixed-top">
+    <div class="container d-flex align-items-center">
+        <a href="../e6.html" class="btn-back">
+            <i data-lucide="arrow-left" style="width:14px;height:14px;"></i> Retour
+        </a>
+        <span class="nav-label ms-3">Projet / Bastion</span>
+    </div>
+</nav>
+
+<main class="container">
+
+    <section class="hero-section">
+        <div class="row align-items-center g-5">
+            <div class="col-lg-7">
+                <div class="hero-tag">Jeu web · IA adaptative</div>
+                <h1 class="hero-title"><em>Bastion</em><br>Tower defense</h1>
+                <p class="hero-lead">Un jeu de tower defense dans le navigateur où l'adversaire observe votre façon de jouer et compose des vagues d'ennemis pour contrer votre stratégie. Plus vous vous répétez, plus il s'adapte.</p>
+                <div class="pill-row"><span class="pill">JavaScript</span><span class="pill">Canvas 2D</span><span class="pill">IA adaptative</span><span class="pill">Firebase Auth</span><span class="pill">Firestore</span><span class="pill">localStorage</span></div>
+                <a href="https://ribotmael.github.io/Bastion/" target="_blank" rel="noopener noreferrer" class="btn-run mt-4 d-inline-flex text-decoration-none"><i data-lucide="external-link" style="width:14px;height:14px;"></i> Jouer à Bastion</a>
+            </div>
+            <div class="col-lg-5">
+                <div class="stat-grid"><div class="stat-card"><div class="stat-num">7</div><div class="stat-label">cartes</div></div><div class="stat-card"><div class="stat-num">3</div><div class="stat-label">types de tours</div></div><div class="stat-card"><div class="stat-num">6</div><div class="stat-label">spécialisations</div></div><div class="stat-card"><div class="stat-num">5</div><div class="stat-label">types d'ennemis</div></div></div>
+            </div>
+        </div>
+    </section>
+    <hr class="section-sep">
+
+    <section class="pb-5">
+        <div class="mb-4">
+            <p class="section-label">Présentation</p>
+            <h2 class="section-title">Ce que l'on trouve dans le jeu</h2>
+            
+        </div>
+        <div class="feat-grid">            <div class="feat-card">
+                <div class="feat-icon"><i data-lucide="swords" style="width:20px;height:20px;"></i></div>
+                <div class="feat-title">Trois tours, quatre niveaux</div>
+                <div class="feat-desc">Archer (tir rapide), Canon (dégâts de zone) et Givre (ralentissement). Chaque tour s'améliore jusqu'au niveau 3, puis le niveau 4 impose le choix d'une spécialisation.</div>
+            </div>
+            <div class="feat-card">
+                <div class="feat-icon"><i data-lucide="git-branch" style="width:20px;height:20px;"></i></div>
+                <div class="feat-title">Six spécialisations</div>
+                <div class="feat-desc">Deux par tour : Tireur d'élite et Volée, Mortier et Canon lourd, Gel profond et Blizzard. Chacune change réellement le comportement de la tour.</div>
+            </div>
+            <div class="feat-card">
+                <div class="feat-icon"><i data-lucide="map" style="width:20px;height:20px;"></i></div>
+                <div class="feat-title">Sept cartes</div>
+                <div class="feat-desc">La Vallée, le Serpentin, la Spirale, le Nœud, le Lac, le Défilé et le Labyrinthe : chemins, obstacles et croisements différents, avec un record par carte.</div>
+            </div>
+            <div class="feat-card">
+                <div class="feat-icon"><i data-lucide="skull" style="width:20px;height:20px;"></i></div>
+                <div class="feat-title">Cinq ennemis</div>
+                <div class="feat-desc">Soldats, coureurs, brutes blindées, saboteurs qui neutralisent une tour, et un boss toutes les 5 vagues. Un bestiaire en jeu détaille chacun.</div>
+            </div>
+            <div class="feat-card">
+                <div class="feat-icon"><i data-lucide="flame" style="width:20px;height:20px;"></i></div>
+                <div class="feat-title">Carte de chaleur</div>
+                <div class="feat-desc">Un bouton « Chaleur » affiche où les ennemis passent et tombent, pour repérer les brèches de la défense.</div>
+            </div>
+            <div class="feat-card">
+                <div class="feat-icon"><i data-lucide="sliders-horizontal" style="width:20px;height:20px;"></i></div>
+                <div class="feat-title">Confort de jeu</div>
+                <div class="feat-desc">Vitesse ×1 à ×3, affichage de la grille et de la portée, conseils après chaque vague, priorités de ciblage (premier, dernier, plus fort, plus rapide).</div>
+            </div>
+</div>
+    </section>
+    <hr class="section-sep">
+
+    <section class="pb-5">
+        <div class="mb-4">
+            <p class="section-label">IA adaptative</p>
+            <h2 class="section-title">Une boucle d'observation et d'adaptation</h2>
+            <p style="color:var(--muted)">Ce n'est pas un jeu où les vagues sont écrites à l'avance : elles sont générées à partir de ce que fait le joueur.</p>
+        </div>
+        <div class="flow"><div class="flow-step"><b>Observer</b><span>Pendant la vague, le jeu mesure les tours posées, les éliminations, les fuites, les cases non couvertes et les tours inactives.</span></div><div class="flow-step"><b>Analyser</b><span>L'Analyste produit des observations, des faiblesses et des étiquettes (tags) comme « spam d'archers » ou « brèche à gauche ».</span></div><div class="flow-step"><b>S'adapter</b><span>L'Adversaire modifie le poids de chaque type d'ennemi, son agressivité, sa pression et l'armure.</span></div><div class="flow-step"><b>Composer</b><span>La vague suivante est construite avec un budget de menace réparti selon ces nouveaux poids.</span></div><div class="flow-step"><b>Expliquer</b><span>Le joueur voit en clair ce que l'IA a compris et pourquoi elle change de tactique.</span></div></div><div style="height:1.5rem"></div><div class="tbl-wrap"><table class="tbl"><thead><tr><th>Ce que vous faites</th><th>Comment l'IA répond</th></tr></thead><tbody><tr><td>Beaucoup d'archers</td><td>Plus de brutes blindées, et +1 d'armure pour tous les ennemis (jusqu'à +3).</td></tr><tr><td>Beaucoup de canons</td><td>Plus de coureurs, difficiles à toucher avec un tir lent.</td></tr><tr><td>Aucune tour de Givre</td><td>Plus de coureurs, qui ne sont jamais ralentis.</td></tr><tr><td>Un tronçon du chemin non couvert</td><td>Les coureurs foncent par cette brèche.</td></tr><tr><td>Tout tuer très tôt</td><td>La vie des ennemis est multipliée (difficulté dynamique plafonnée, boss limités à ×1,5).</td></tr><tr><td>Une tour qui tue presque tout</td><td>Des saboteurs arrivent pour la neutraliser.</td></tr><tr><td>Un ennemi passe la défense</td><td>L'IA en envoie davantage de ce type.</td></tr></tbody></table></div>
+    </section>
+    <hr class="section-sep">
+
+    <section class="pb-5">
+        <div class="mb-4">
+            <p class="section-label">Extrait</p>
+            <h2 class="section-title">Comment une vague est composée</h2>
+            <p style="color:var(--muted)">Chaque ennemi a un coût en points de menace. L'IA dépense son budget en piochant dans les types disponibles, selon des poids qui évoluent après chaque vague.</p>
+        </div>
+        <div class="code-block"><span class="k">const</span> ENEMY_COST = { grunt: 10, runner: 12, brute: 35, saboteur: 30 };
+
+<span class="c">// Budget de menace : il grandit de 25 % par vague</span>
+budget(n) { <span class="k">return</span> Math.round(55 * Math.pow(1.25, n - 1) * <span class="k">this</span>.aggression); }
+
+<span class="c">// Tirage pondéré : plus un poids est élevé, plus le type revient</span>
+<span class="k">const</span> w = options.map(t => ENEMY_BASE[t] * <span class="k">this</span>.weights[t]);
+
+<span class="c">// Contre-mesure : le poids monte, puis s'estompe lentement (oubli)</span>
+<span class="k">if</span> (tags.dominantTower === <span class="k">'cannon'</span>)
+  counter(<span class="k">'runner'</span>, 0.4, <span class="k">'Votre canon tire lentement : plus de coureurs.'</span>);
+<span class="k">for</span> (<span class="k">const</span> k <span class="k">in</span> <span class="k">this</span>.weights)
+  <span class="k">this</span>.weights[k] = 1 + (<span class="k">this</span>.weights[k] - 1) * 0.92;</div>
+    </section>
+    <hr class="section-sep">
+
+    <section class="pb-5">
+        <div class="mb-4">
+            <p class="section-label">Mémoire</p>
+            <h2 class="section-title">Une IA qui se souvient</h2>
+            
+        </div>
+        <div class="feat-grid">            <div class="feat-card">
+                <div class="feat-icon"><i data-lucide="brain" style="width:20px;height:20px;"></i></div>
+                <div class="feat-title">Entre les parties</div>
+                <div class="feat-desc">À la fin d'une partie, les préférences apprises (poids par type d'ennemi) sont enregistrées dans le profil et reprises à moitié au départ de la suivante.</div>
+            </div>
+            <div class="feat-card">
+                <div class="feat-icon"><i data-lucide="users" style="width:20px;height:20px;"></i></div>
+                <div class="feat-title">L'IA d'un autre joueur</div>
+                <div class="feat-desc">Un joueur peut choisir d'affronter l'IA entraînée par quelqu'un d'autre, en partie amicale hors classement. Le partage est facultatif et désactivé par défaut.</div>
+            </div>
+            <div class="feat-card">
+                <div class="feat-icon"><i data-lucide="hourglass" style="width:20px;height:20px;"></i></div>
+                <div class="feat-title">Oubli progressif</div>
+                <div class="feat-desc">Les poids reviennent vers la normale de 8 % à chaque vague : l'IA ne reste pas figée sur une seule habitude du joueur.</div>
+            </div>
+</div>
+    </section>
+    <hr class="section-sep">
+
+    <section class="pb-5">
+        <div class="mb-4">
+            <p class="section-label">Mode en ligne</p>
+            <h2 class="section-title">Comptes, classement et profil</h2>
+            
+        </div>
+        <div class="feat-grid">            <div class="feat-card">
+                <div class="feat-icon"><i data-lucide="user-round" style="width:20px;height:20px;"></i></div>
+                <div class="feat-title">Compte facultatif</div>
+                <div class="feat-desc">Inscription par email avec pseudo unique, connexion, mot de passe oublié. Sans compte, tout reste dans le navigateur et le jeu est entièrement jouable.</div>
+            </div>
+            <div class="feat-card">
+                <div class="feat-icon"><i data-lucide="trophy" style="width:20px;height:20px;"></i></div>
+                <div class="feat-title">Classement par carte</div>
+                <div class="feat-desc">Top 50 de chaque carte. Le score classe d'abord par vague atteinte, puis par vies restantes, puis par rapidité.</div>
+            </div>
+            <div class="feat-card">
+                <div class="feat-icon"><i data-lucide="refresh-cw" style="width:20px;height:20px;"></i></div>
+                <div class="feat-title">Synchronisation</div>
+                <div class="feat-desc">Au login, le profil local et le profil en ligne sont fusionnés en gardant les meilleurs records, puis les scores sont envoyés au classement.</div>
+            </div>
+            <div class="feat-card">
+                <div class="feat-icon"><i data-lucide="shield-check" style="width:20px;height:20px;"></i></div>
+                <div class="feat-title">Données maîtrisées</div>
+                <div class="feat-desc">Page de confidentialité détaillée, export du profil en JSON, changement de pseudo, d'email et de mot de passe, suppression complète du compte.</div>
+            </div>
+</div>
+    </section>
+    <hr class="section-sep">
+
+    <section class="pb-5">
+        <div class="mb-4">
+            <p class="section-label">Technique</p>
+            <h2 class="section-title">Architecture du projet</h2>
+            
+        </div>
+        <div class="tbl-wrap"><table class="tbl"><thead><tr><th>Fichier</th><th>Rôle</th></tr></thead><tbody><tr><td>game.js</td><td>Moteur du jeu : cartes, tours, ennemis, boucle de rendu sur Canvas, statistiques de partie.</td></tr><tr><td>ai.js</td><td>L'Analyste (lecture de la partie) et l'Adversaire (composition et adaptation des vagues).</td></tr><tr><td>online.js</td><td>Authentification, classement et IA partagée via Firebase (Auth + Firestore).</td></tr><tr><td>settings.js</td><td>Réglages, profil local et formule de score.</td></tr><tr><td>main.js</td><td>Menus, profil, classement, paramètres et liaison avec le jeu.</td></tr><tr><td>style.css</td><td>Interface et thème visuel.</td></tr></tbody></table></div>
+    </section>
+    <hr class="section-sep">
+
+    <section class="pb-5">
+        <div class="mb-4">
+            <p class="section-label">Limites</p>
+            <h2 class="section-title">Points d'amélioration</h2>
+            
+        </div>
+        <div class="note-box">L'adaptation repose sur des règles écrites à la main (heuristiques) et non sur de l'apprentissage automatique : l'IA réagit à des motifs que j'ai définis. Une évolution possible serait d'apprendre ces réponses à partir des parties enregistrées. Côté en ligne, la sécurité des données dépend des règles Firestore, qui doivent rester strictes puisque la configuration Firebase est visible côté navigateur.</div>
+    </section>
+</main>
+
+<footer class="text-center py-5">
+    <p style="font-family:'JetBrains Mono',monospace;font-size:0.72rem;color:var(--muted);">&copy; 2024–2026 Maël Ribot &nbsp;·&nbsp; Dossier E6</p>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+lucide.createIcons();
+const themeToggle = document.getElementById('themeToggle');
+const themeIcon   = document.getElementById('themeIcon');
+function setTheme(isLight) {
+    document.body.classList.toggle('light-theme', isLight);
+    themeIcon.setAttribute('data-lucide', isLight ? 'sun' : 'moon');
+    lucide.createIcons();
+    localStorage.setItem('theme', isLight ? 'light' : 'dark');
+}
+themeToggle.addEventListener('click', () => setTheme(!document.body.classList.contains('light-theme')));
+const saved = localStorage.getItem('theme');
+if (saved === 'light' || (!saved && window.matchMedia('(prefers-color-scheme: light)').matches)) setTheme(true);
+</script>
+</body>
+</html>
